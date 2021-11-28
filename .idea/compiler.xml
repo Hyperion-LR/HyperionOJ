@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="common" />
+        <module name="admin" />
+        <module name="judge" />
+        <module name="page" />
+        <module name="config" />
+        <module name="oss" />
+        <module name="gateway" />
+        <module name="order" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="admin" target="8" />
+      <module name="common" target="8" />
+      <module name="config" target="8" />
+      <module name="gateway" target="8" />
+      <module name="HyperionOJ" target="8" />
+      <module name="judge" target="8" />
+      <module name="order" target="8" />
+      <module name="oss" target="8" />
+      <module name="page" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
