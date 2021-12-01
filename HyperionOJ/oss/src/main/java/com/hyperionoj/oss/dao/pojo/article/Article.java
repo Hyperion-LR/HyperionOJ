@@ -2,7 +2,6 @@ package com.hyperionoj.oss.dao.pojo.article;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
 /**

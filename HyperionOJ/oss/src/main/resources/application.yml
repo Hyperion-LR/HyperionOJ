@@ -10,8 +10,8 @@ spring:
       server-addr: localhost:8848
       discovery:
         cluster-name: HyperionOJ
-        namespace: beec702e-19ab-441b-840c-e0f67a42b0f5
         ephemeral: true
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
   redis:
     host: 127.0.0.1
     port: 6379
@@ -31,7 +31,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: Hyperion_LR@foxmail.com
-    password: xxxxxx
+    password: sggplcgucwxxdhfi
     default-encoding: UTF-8
 mybatis-plus:
   mapper-locations: classpath:com/hyperionoj/dao/mapper/*.xml

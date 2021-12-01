@@ -10,24 +10,19 @@ spring:
       server-addr: localhost:8848
       discovery:
         cluster-name: HyperionOJ
-        namespace: beec702e-19ab-441b-840c-e0f67a42b0f5
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
         ephemeral: true
     gateway:
       routes:
-        - id: ping-consumer-service
-          uri: lb://consumer
+        - id: oss-service
+          uri: lb://oss
           predicates:
-            - Path=/ping/**
+            - Path=/ping, /login/*, /register/*
             #- After=
             #- Befor=
             #- Cookie=
             #filters:
             #- AddRequestHeader
-
-        - id: oss-service
-          uri: lb://oss
-          predicates:
-            - Path=/login, /register
 
         - id: finduser-service
           uri: lb://consumer

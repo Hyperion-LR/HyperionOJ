@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2021/11/30
  */
 @Data
-public class SysUser{
+public class SysUser {
 
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;

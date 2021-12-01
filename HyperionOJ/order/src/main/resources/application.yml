@@ -34,7 +34,7 @@ spring:
     password: xxxxxx
     default-encoding: UTF-8
 mybatis-plus:
-  mapper-locations:  classpath:com/hyperionoj/dao/mapper/*.xml
+  mapper-locations: classpath:com/hyperionoj/dao/mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
