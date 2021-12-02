@@ -17,13 +17,16 @@ spring:
         - id: oss-service
           uri: lb://oss
           predicates:
-            - Path=/ping, /login/*, /register/*
+            - Path=/ping, /login/*, /register/*, /vercode/*
             #- After=
             #- Befor=
             #- Cookie=
             #filters:
             #- AddRequestHeader
-
+        - id: page-service
+          uri: lb://page
+          predicates:
+            - Path=/test/*
         - id: finduser-service
           uri: lb://consumer
           predicates:

@@ -12,7 +12,7 @@
         <!-- 定义日志存储的路径，不要配置相对路径 -->
         <property name="FILE_PATH" value="D:/WorkSpace/Java_Works/IDEA_Works/HyperionOJ/log"/>
         <!--项目名称-->
-        <property name="FILE_NAME" value="HyperionOJ"/>
+        <property name="FILE_NAME" value="HyperionOJ_PAGE"/>
     </Properties>
 
     <appenders>

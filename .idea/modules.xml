@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/HyperionOJ-master.iml" filepath="$PROJECT_DIR$/.idea/HyperionOJ-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/admin/admin.iml" filepath="$PROJECT_DIR$/HyperionOJ/admin/admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/common/common.iml" filepath="$PROJECT_DIR$/HyperionOJ/common/common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/HyperionOJ/config/config.iml" filepath="$PROJECT_DIR$/HyperionOJ/config/config.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/gateway/gateway.iml" filepath="$PROJECT_DIR$/HyperionOJ/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/judge/judge.iml" filepath="$PROJECT_DIR$/HyperionOJ/judge/judge.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/order/order.iml" filepath="$PROJECT_DIR$/HyperionOJ/order/order.iml" />

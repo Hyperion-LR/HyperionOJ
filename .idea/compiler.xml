@@ -11,7 +11,6 @@
         <module name="admin" />
         <module name="judge" />
         <module name="page" />
-        <module name="config" />
         <module name="oss" />
         <module name="gateway" />
         <module name="order" />

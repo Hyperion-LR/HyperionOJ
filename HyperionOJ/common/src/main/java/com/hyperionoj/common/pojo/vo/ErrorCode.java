@@ -8,6 +8,7 @@ package com.hyperionoj.common.pojo.vo;
  */
 public enum ErrorCode {
     SYSTEM_ERROR(501, "系统错误"),
+    CODE_ERROR(501, "验证码错误"),
     PARAMS_ERROR(502, "参数有误"),
     TOKEN_ERROR(503, "token不合法"),
     ACCOUNT_EXIST(504, "账号已存在"),

@@ -19,4 +19,6 @@ public class RegisterParam {
 
     private String mail;
 
+    private String verCode;
+
 }
