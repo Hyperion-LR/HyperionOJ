@@ -9,6 +9,7 @@ import com.hyperionoj.oss.service.SysUserService;
 import com.hyperionoj.oss.vo.LoginParam;
 import com.hyperionoj.oss.vo.RegisterParam;
 import com.hyperionoj.oss.vo.SysUserVo;
+import com.hyperionoj.oss.vo.UpdatePasswordParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import static com.hyperionoj.common.constants.OSSConstants.SLAT;
+import static com.hyperionoj.common.constants.Constants.*;
 
 /**
  * @author Hyperion
@@ -46,14 +47,12 @@ public class OSSServiceImpl implements OSSService {
         if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
             return null;
         }
-        password = DigestUtils.md5Hex(password + SLAT);
         SysUser sysUser = sysUserService.findUser(account, password);
         if (sysUser == null) {
             return null;
         }
         String token = JWTUtils.createToken(sysUser.getId(), 24 * 60 * 60);
-        redisSever.setRedisKV("TOKEN_" + token, JSON.toJSONString(sysUser), 3600);
-        log.info(redisSever.getRedisKV("TOKEN_" + token));
+        redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(sysUser), 3600);
         return token;
     }
 
@@ -70,7 +69,9 @@ public class OSSServiceImpl implements OSSService {
         }
         SysUser newUser = copyRegisterParamToSysUser(registerParam);
         sysUserService.insert(newUser);
-        return JWTUtils.createToken(newUser.getId(), 24 * 60 * 60);
+        String token = JWTUtils.createToken(newUser.getId(), 24 * 60 * 60);
+        redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(newUser), 3600);
+        return token;
     }
 
     /**
@@ -85,17 +86,31 @@ public class OSSServiceImpl implements OSSService {
         sysUser.setAvatar(userVo.getAvatar());
         sysUser.setMail(userVo.getMail());
         sysUserService.update(sysUser);
-
     }
 
     /**
      * 更新用户账号密码
      *
-     * @param loginParam 登录信息
+     * @param updateParam 登录信息
      */
     @Override
-    public void updatePassword(LoginParam loginParam) {
-        sysUserService.updatePassword(loginParam.getAccount(), loginParam.getPassword());
+    public boolean updatePassword(UpdatePasswordParam updateParam) {
+        if (StringUtils.compare(updateParam.getCode(), redisSever.getRedisKV(VER_CODE + updateParam.getUserMail())) == 0) {
+            sysUserService.updatePassword(updateParam.getUserMail(), updateParam.getPassword());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 销毁账户
+     * 将账户状态修改为注销
+     *
+     * @param destroyParam 申请注销的参数
+     */
+    @Override
+    public void destroy(LoginParam destroyParam) {
+        sysUserService.destroy(destroyParam.getAccount(), destroyParam.getPassword());
     }
 
     private SysUser copyRegisterParamToSysUser(RegisterParam registerParam) {

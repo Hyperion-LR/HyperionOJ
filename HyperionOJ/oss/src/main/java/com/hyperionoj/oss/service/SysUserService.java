@@ -41,8 +41,16 @@ public interface SysUserService {
     /**
      * 更新用户账号密码
      *
-     * @param account  账号
+     * @param userMail 账号
      * @param password 新密码
      */
-    void updatePassword(String account, String password);
+    void updatePassword(String userMail, String password);
+
+    /**
+     * 注销账号(更新用户状态)
+     *
+     * @param account  账号id
+     * @param password 密码目前没用到
+     */
+    void destroy(String account, String password);
 }

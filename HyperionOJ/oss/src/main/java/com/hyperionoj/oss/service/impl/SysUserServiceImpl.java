@@ -1,15 +1,17 @@
 package com.hyperionoj.oss.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.oss.dao.mapper.sys.SysUserMapper;
 import com.hyperionoj.oss.dao.pojo.sys.SysUser;
 import com.hyperionoj.oss.service.SysUserService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import static com.hyperionoj.common.constants.OSSConstants.SLAT;
+import static com.hyperionoj.common.constants.Constants.*;
 
 /**
  * @author Hyperion
@@ -21,8 +23,11 @@ public class SysUserServiceImpl implements SysUserService {
     @Resource
     private SysUserMapper sysUserMapper;
 
+    @Resource
+    private RedisSever redisSever;
+
     /**
-     * 通过账号密码查找用户
+     * 通过账号密码查找用户(手机号或者邮箱)
      *
      * @param account  账号
      * @param password 密码
@@ -31,10 +36,27 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser findUser(String account, String password) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getId, account);
-        queryWrapper.eq(SysUser::getPassword, password);
+        if (StringUtils.isNumeric(account)) {
+            queryWrapper.eq(SysUser::getId, account);
+        } else if (StringUtils.indexOf(account, AT) != -1) {
+            queryWrapper.eq(SysUser::getMail, account);
+        } else {
+            return null;
+        }
         queryWrapper.last(" limit 1");
-        return sysUserMapper.selectOne(queryWrapper);
+        SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
+        if (password.length() > CODE_LENGTH) {
+            password = DigestUtils.md5Hex(password + SLAT);
+            if (StringUtils.compare(sysUser.getPassword(), password) == 0) {
+                return sysUser;
+            }
+        } else {
+            String redisCode = redisSever.getRedisKV(VER_CODE + sysUser.getMail());
+            if (StringUtils.compare(password, redisCode) == 0) {
+                return sysUser;
+            }
+        }
+        return null;
     }
 
     /**
@@ -71,13 +93,32 @@ public class SysUserServiceImpl implements SysUserService {
     /**
      * 更新用户账号密码
      *
-     * @param account  账号
+     * @param userMail 账号
      * @param password 新密码
      */
     @Override
-    public void updatePassword(String account, String password) {
-        SysUser sysUser = sysUserMapper.selectById(account);
+    public void updatePassword(String userMail, String password) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getMail, userMail);
+        queryWrapper.last(" limit 1");
+        SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
         sysUser.setPassword(DigestUtils.md5Hex(password + SLAT));
+        sysUserMapper.updateById(sysUser);
+    }
+
+    /**
+     * 注销账号(更新用户状态)
+     *
+     * @param account  账号id
+     * @param password 密码目前没用到
+     */
+    @Override
+    public void destroy(String account, String password) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getId, account);
+        queryWrapper.last(" limit 1");
+        SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
+        sysUser.setStatus(1);
         sysUserMapper.updateById(sysUser);
     }
 }

@@ -2,8 +2,7 @@ package com.hyperionoj.oss.controller;
 
 import com.hyperionoj.common.pojo.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
-import com.hyperionoj.oss.vo.SysUserVo;
-import com.hyperionoj.oss.vo.UpdatePasswordParam;
+import com.hyperionoj.oss.vo.LoginParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,24 +12,18 @@ import javax.annotation.Resource;
 
 /**
  * @author Hyperion
- * @date 2021/12/1
+ * @date 2021/12/2
  */
-@RequestMapping("/update")
+@RequestMapping("/destroy")
 @RestController
-public class UpdateController {
+public class DestroyController {
 
     @Resource
     private OSSService ossService;
 
-    @PostMapping("/user")
-    public Result byUser(@RequestBody SysUserVo userVo) {
-        ossService.updateUser(userVo);
-        return Result.success(null);
-    }
-
-    @PostMapping("/password")
-    public Result byUser(@RequestBody UpdatePasswordParam updateParam) {
-        ossService.updatePassword(updateParam);
+    @PostMapping
+    public Result destroy(@RequestBody LoginParam destroyParam) {
+        ossService.destroy(destroyParam);
         return Result.success(null);
     }
 
