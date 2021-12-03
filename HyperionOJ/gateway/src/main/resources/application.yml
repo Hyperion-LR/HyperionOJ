@@ -17,7 +17,7 @@ spring:
         - id: oss-service
           uri: lb://oss
           predicates:
-            - Path=/ping, /login/*, /register/*, /vercode/*
+            - Path=/ping, /login/*, /register/*, /vercode/*, /destroy, /update/*, /vercode
             #- After=
             #- Befor=
             #- Cookie=

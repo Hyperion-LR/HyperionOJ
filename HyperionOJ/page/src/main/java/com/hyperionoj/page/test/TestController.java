@@ -1,4 +1,4 @@
-package com.hyperionoj.test;
+package com.hyperionoj.page.test;
 
 import com.hyperionoj.common.pojo.bo.Mail;
 import com.hyperionoj.common.pojo.vo.ErrorCode;

@@ -4,12 +4,14 @@ import com.hyperionoj.common.pojo.bo.Mail;
 import com.hyperionoj.common.service.MailService;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.oss.service.VerCodeService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Random;
 
+import static com.hyperionoj.common.constants.Constants.SLAT;
 import static com.hyperionoj.common.constants.Constants.VER_CODE;
 
 /**
@@ -40,7 +42,7 @@ public class VerCodeServiceImpl implements VerCodeService {
         mailBean.setContent(subject + "的验证码为: " + code);
         mailBean.setRecipient(userMail);
         mailService.sendSimpleMail(mailBean);
-        redisSever.setRedisKV(VER_CODE + userMail, Integer.toString(code));
+        redisSever.setRedisKV(VER_CODE + userMail, DigestUtils.md5Hex(code + SLAT));
     }
 
     /**

@@ -46,7 +46,7 @@ public interface OSSService {
      * 销毁账户
      * 将账户状态修改为注销
      *
-     * @param destroyParam 申请注销的参数
+     * @param destroyParam 申请注销账号的参数
      */
     void destroy(LoginParam destroyParam);
 }

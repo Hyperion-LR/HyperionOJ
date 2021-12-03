@@ -2,6 +2,7 @@ package com.hyperionoj.oss.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.common.service.RedisSever;
+import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.oss.dao.mapper.sys.SysUserMapper;
 import com.hyperionoj.oss.dao.pojo.sys.SysUser;
 import com.hyperionoj.oss.service.SysUserService;
@@ -52,7 +53,7 @@ public class SysUserServiceImpl implements SysUserService {
             }
         } else {
             String redisCode = redisSever.getRedisKV(VER_CODE + sysUser.getMail());
-            if (StringUtils.compare(password, redisCode) == 0) {
+            if (StringUtils.compare(password, DigestUtils.md5Hex(redisCode + SLAT)) == 0) {
                 return sysUser;
             }
         }
@@ -98,12 +99,11 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public void updatePassword(String userMail, String password) {
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getMail, userMail);
-        queryWrapper.last(" limit 1");
-        SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
-        sysUser.setPassword(DigestUtils.md5Hex(password + SLAT));
-        sysUserMapper.updateById(sysUser);
+        SysUser sysUser = (SysUser) ThreadLocalUtils.get();
+        if (StringUtils.compare(userMail, sysUser.getMail()) == 0) {
+            sysUser.setPassword(DigestUtils.md5Hex(password + SLAT));
+            sysUserMapper.updateById(sysUser);
+        }
     }
 
     /**
@@ -114,11 +114,10 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public void destroy(String account, String password) {
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getId, account);
-        queryWrapper.last(" limit 1");
-        SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
-        sysUser.setStatus(1);
-        sysUserMapper.updateById(sysUser);
+        SysUser sysUser = (SysUser) ThreadLocalUtils.get();
+        if (StringUtils.compare(account, String.valueOf(sysUser.getId())) == 0) {
+            sysUser.setStatus(1);
+            sysUserMapper.updateById(sysUser);
+        }
     }
 }

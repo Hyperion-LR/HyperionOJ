@@ -1,4 +1,4 @@
-package com.hyperionoj;
+package com.hyperionoj.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Hyperion
  * @date 2021/11/26
  */
-@SpringBootApplication
-public class PageApplication {
+@SpringBootApplication(scanBasePackages = {"com.hyperionoj"})
+public class GatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(PageApplication.class, args);
+        SpringApplication.run(GatewayApplication.class, args);
     }
 }
