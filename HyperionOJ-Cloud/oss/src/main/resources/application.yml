@@ -1,0 +1,42 @@
+server:
+  port: 9020
+spring:
+  application:
+    name: oss
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      discovery:
+        cluster-name: HyperionOJ
+        ephemeral: true
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hyperionoj?serverTimezone=UTC
+    username: root
+    password: 123212321
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-request-size: 5GB
+      max-file-size: 1GB
+  mail:
+    host: smtp.qq.com
+    username: Hyperion_LR@foxmail.com
+    password: sggplcgucwxxdhfi
+    default-encoding: UTF-8
+mybatis-plus:
+  mapper-locations: classpath:com/hyperionoj/dao/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: oj_

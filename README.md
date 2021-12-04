@@ -12,32 +12,26 @@
 
 * oss采用七牛云
 
-  
-
 # 系统模块
 
 ~~~
 com.hyperion
-├── hyperion-ui              							// 前端框架 [80]
+├── hyperion-ui              							// 前端框架 [8080]
 |
-├── hyperion-gateway         							// 网关模块 [8080]
+├── hyperion-gateway         							// 网关模块 [9000]
 |
-├── hyperion-oss            							// 单点登录 [9999]
+├── hyperion-oss            							// 单点登录 [9020]
 |
 ├── hyperion-config         							// 配置模块
 |
-├── hyperion-service         							// 业务模块 [9010-9090]
-│       └── hyperion-service-judge						// 判题服务 [9010]
-│       └── hyperion-service-page 						// 题解博客 [9020]
-│       └── hyperion-service-xxx 						// 其他
 |
-├── hyperion-admin          							// 管理模块和监控中心 [9000]
+├── hyperion-admin          							// 管理模块和监控中心 [9999]
 |
-├── hyperion-order          							// 支付模块 
-│       └── hyperion-order-alipay                       // 阿里支付 [8888]
-│       └── hyperion-order-wxpay               		 	// 微信支付 [8889]
+├── hyperion-order          							// 支付模块 [8888]
+│       └── hyperion-order-alipay                       // 阿里支付 
+│       └── hyperion-order-wxpay               		 	// 微信支付 
 |
-├── hyperion-commom             						// 通用模块
+├── hyperion-commom             						// 通用模块 [10000]
 │       └── hyperion-commom-datasource               	// 数据来源
 │       └── hyperion-commom-redis               		// 缓存服务
 │       └── hyperion-commom-log               			// 日志服务
