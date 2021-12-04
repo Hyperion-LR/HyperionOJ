@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>oj-gateway</module>
-        <module>oj-oss</module>
-        <module>oj-admin</module>
-        <module>oj-common</module>
-        <module>oj-order</module>
-        <module>oj-judge</module>
-        <module>oj-page</module>
+        <module>gateway</module>
+        <module>oss</module>
+        <module>admin</module>
+        <module>common</module>
+        <module>order</module>
+        <module>judge</module>
+        <module>page</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

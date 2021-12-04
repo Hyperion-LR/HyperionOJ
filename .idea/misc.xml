@@ -4,6 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/HyperionOJ/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

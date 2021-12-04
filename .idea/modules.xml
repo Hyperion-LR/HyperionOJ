@@ -2,15 +2,22 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/HyperionOJ.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/HyperionOJ.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/HyperionOJ-Cloud.iml" filepath="$PROJECT_DIR$/HyperionOJ/HyperionOJ-Cloud.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/HyperionOJ-master.iml" filepath="$PROJECT_DIR$/.idea/HyperionOJ-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/admin/admin.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/admin/admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/common/common.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/gateway/gateway.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/gateway/gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/judge/judge.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/judge/judge.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/admin/oj-admin.iml" filepath="$PROJECT_DIR$/HyperionOJ/admin/oj-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/common/oj-common.iml" filepath="$PROJECT_DIR$/HyperionOJ/common/oj-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/gateway/oj-gateway.iml" filepath="$PROJECT_DIR$/HyperionOJ/gateway/oj-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/judge/oj-judge.iml" filepath="$PROJECT_DIR$/HyperionOJ/judge/oj-judge.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/order/oj-order.iml" filepath="$PROJECT_DIR$/HyperionOJ/order/oj-order.iml" />
-      <module fileurl="file://$PROJECT_DIR$/HyperionOJ/oss/oj-oss.iml" filepath="$PROJECT_DIR$/HyperionOJ/oss/oj-oss.iml" />
       <module fileurl="file://$PROJECT_DIR$/HyperionOJ/page/oj-page.iml" filepath="$PROJECT_DIR$/HyperionOJ/page/oj-page.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/order/order.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/order/order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/oss/oss.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/oss/oss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HyperionOJ-Cloud/page/page.iml" filepath="$PROJECT_DIR$/HyperionOJ-Cloud/page/page.iml" />
     </modules>
   </component>
 </project>
