@@ -1,5 +1,6 @@
 package com.hyperionoj.oss.controller;
 
+import com.hyperionoj.common.pojo.vo.Result;
 import com.hyperionoj.oss.service.VerCodeService;
 import com.hyperionoj.oss.vo.MailCodeParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,9 @@ public class VerCodeController {
     VerCodeService verCodeService;
 
     @PostMapping
-    public void getCode(@RequestBody MailCodeParam mailCodeParam) {
+    public Result getCode(@RequestBody MailCodeParam mailCodeParam) {
         verCodeService.getCode(mailCodeParam.getMail(), mailCodeParam.getSubject());
+        return Result.success(null);
     }
 
 }

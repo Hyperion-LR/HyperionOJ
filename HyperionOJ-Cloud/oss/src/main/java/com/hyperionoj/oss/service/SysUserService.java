@@ -52,5 +52,5 @@ public interface SysUserService {
      * @param account  账号id
      * @param password 密码目前没用到
      */
-    void destroy(String account, String password);
+    boolean destroy(String account, String password);
 }

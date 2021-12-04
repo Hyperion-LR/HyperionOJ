@@ -3,6 +3,7 @@ package com.hyperionoj.oss.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.JWTUtils;
+import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.oss.dao.pojo.admin.Admin;
 import com.hyperionoj.oss.dao.pojo.sys.SysUser;
 import com.hyperionoj.oss.service.AdminService;
@@ -108,7 +109,7 @@ public class OSSServiceImpl implements OSSService {
      */
     @Override
     public void updateUser(SysUserVo userVo) {
-        SysUser sysUser = sysUserService.findUserById(userVo.getId());
+        SysUser sysUser = (SysUser) ThreadLocalUtils.get();
         sysUser.setUsername(userVo.getUsername());
         sysUser.setAvatar(userVo.getAvatar());
         sysUser.setMail(userVo.getMail());
@@ -136,8 +137,8 @@ public class OSSServiceImpl implements OSSService {
      * @param destroyParam 申请注销的参数
      */
     @Override
-    public void destroy(LoginParam destroyParam) {
-        sysUserService.destroy(destroyParam.getAccount(), destroyParam.getPassword());
+    public boolean destroy(LoginParam destroyParam) {
+        return sysUserService.destroy(destroyParam.getAccount(), destroyParam.getPassword());
     }
 
     private SysUser copyRegisterParamToSysUser(RegisterParam registerParam) {

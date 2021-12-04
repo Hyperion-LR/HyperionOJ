@@ -1,8 +1,8 @@
 server:
-  port: 9999
+  port: 9010
 spring:
   application:
-    name: admin
+    name: page
   profiles:
     active: dev
   cloud:
@@ -24,6 +24,15 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  servlet:
+    multipart:
+      max-request-size: 5GB
+      max-file-size: 1GB
+  mail:
+    host: smtp.qq.com
+    username: Hyperion_LR@foxmail.com
+    password: sggplcgucwxxdhfi
+    default-encoding: UTF-8
 mybatis-plus:
   mapper-locations: classpath:com/hyperionoj/dao/mapper/*.xml
   configuration:

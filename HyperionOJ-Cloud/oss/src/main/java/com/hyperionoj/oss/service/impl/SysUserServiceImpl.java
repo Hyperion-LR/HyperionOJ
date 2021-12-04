@@ -113,11 +113,15 @@ public class SysUserServiceImpl implements SysUserService {
      * @param password 密码目前没用到
      */
     @Override
-    public void destroy(String account, String password) {
+    public boolean destroy(String account, String password) {
         SysUser sysUser = (SysUser) ThreadLocalUtils.get();
-        if (StringUtils.compare(account, String.valueOf(sysUser.getId())) == 0) {
-            sysUser.setStatus(1);
-            sysUserMapper.updateById(sysUser);
+        if (sysUser != null) {
+            if (StringUtils.compare(account, String.valueOf(sysUser.getId())) == 0) {
+                sysUser.setStatus(1);
+                sysUserMapper.updateById(sysUser);
+                return true;
+            }
         }
+        return false;
     }
 }

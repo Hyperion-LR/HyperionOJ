@@ -59,7 +59,7 @@ public class LoginInterceptor extends StatHandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception error) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception error) {
         ThreadLocalUtils.remove();
     }
 }

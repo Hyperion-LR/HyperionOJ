@@ -1,5 +1,6 @@
 package com.hyperionoj.oss.controller;
 
+import com.hyperionoj.common.pojo.vo.ErrorCode;
 import com.hyperionoj.common.pojo.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
 import com.hyperionoj.oss.vo.LoginParam;
@@ -23,8 +24,10 @@ public class DestroyController {
 
     @PostMapping
     public Result destroy(@RequestBody LoginParam destroyParam) {
-        ossService.destroy(destroyParam);
-        return Result.success(null);
+        if (ossService.destroy(destroyParam)) {
+            return Result.success(null);
+        }
+        return Result.fail(ErrorCode.PARAMS_ERROR);
     }
 
 }
