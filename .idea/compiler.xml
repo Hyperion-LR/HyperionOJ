@@ -3,62 +3,9 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="oj-page" />
-        <module name="oj-judge" />
-        <module name="admin" />
-        <module name="oj-order" />
-        <module name="oss" />
-        <module name="oj-gateway" />
-        <module name="common" />
-        <module name="oj-admin" />
-        <module name="page" />
-        <module name="judge" />
-        <module name="oj-common" />
-        <module name="gateway" />
-        <module name="order" />
-        <module name="HyperionOJ (1)" />
-      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="admin" target="1.8" />
-      <module name="common" target="1.8" />
-      <module name="config" target="1.8" />
-      <module name="gateway" target="1.8" />
       <module name="HyperionOJ" target="1.8" />
-      <module name="HyperionOJ (1)" target="1.8" />
-      <module name="HyperionOJ-Cloud" target="1.8" />
-      <module name="judge" target="1.8" />
-      <module name="oj-admin" target="1.8" />
-      <module name="oj-common" target="1.8" />
-      <module name="oj-gateway" target="1.8" />
-      <module name="oj-judge" target="1.8" />
-      <module name="oj-order" target="1.8" />
-      <module name="oj-page" target="1.8" />
-      <module name="order" target="1.8" />
-      <module name="oss" target="1.8" />
-      <module name="page" target="1.8" />
     </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="admin" options="-parameters" />
-      <module name="common" options="-parameters" />
-      <module name="config" options="-parameters" />
-      <module name="gateway" options="-parameters" />
-      <module name="judge" options="-parameters" />
-      <module name="oj-admin" options="-parameters" />
-      <module name="oj-common" options="-parameters" />
-      <module name="oj-gateway" options="-parameters" />
-      <module name="oj-judge" options="-parameters" />
-      <module name="oj-order" options="-parameters" />
-      <module name="oj-page" options="-parameters" />
-      <module name="order" options="-parameters" />
-      <module name="oss" options="-parameters" />
-      <module name="page" options="-parameters" />
-    </option>
   </component>
 </project>

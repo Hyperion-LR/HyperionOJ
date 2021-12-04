@@ -9,6 +9,13 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/admin/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/common/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/judge/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/order/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/oss/pom.xml" />
+        <option value="$PROJECT_DIR$/HyperionOJ-Cloud/page/pom.xml" />
         <option value="$PROJECT_DIR$/HyperionOJ/config/pom.xml" />
       </set>
     </option>
