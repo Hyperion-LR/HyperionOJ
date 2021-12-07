@@ -1,8 +1,8 @@
 package com.hyperionoj.judge.service.impl;
 
 import com.hyperionoj.common.utils.ThreadLocalUtils;
-import com.hyperionoj.judge.config.FilePath;
 import com.hyperionoj.judge.service.*;
+import com.hyperionoj.judge.vo.CMDResult;
 import com.hyperionoj.judge.vo.RunResult;
 import com.hyperionoj.judge.vo.SubmitVo;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,6 @@ import javax.annotation.Resource;
  */
 @Service
 public class SubmitServiceImpl implements SubmitService {
-
-    @Resource
-    private FilePath filePath;
 
     @Resource
     private FileService fileService;
@@ -40,11 +37,11 @@ public class SubmitServiceImpl implements SubmitService {
     @Override
     public RunResult submit(SubmitVo submit) {
         Object user = ThreadLocalUtils.get();
-        String codeFileName = filePath.getCodeFile() + submit.getProblemId() + "_" + submit.getCodeLang();
-        fileService.saveFile(codeFileName);
-        String compiledFileName = compileService.compile(submit.getCodeLang(), codeFileName);
-        String codeRes = runService.run(compiledFileName);
-        return comparerService.compare(codeRes, submit.getProblemId());
+        String codeFileName = submit.getProblemId() + "_" + submit.getCodeLang();
+        fileService.saveFile(codeFileName, submit.getCodeBody());
+        CMDResult compiledFile = compileService.compile(submit.getCodeLang(), codeFileName);
+        CMDResult codeRes = runService.run(submit.getCodeLang(), compiledFile.getMsg());
+        return comparerService.compare(codeRes.getMsg(), submit.getProblemId());
     }
 
 }

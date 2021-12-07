@@ -1,5 +1,7 @@
 package com.hyperionoj.judge.service;
 
+import com.hyperionoj.judge.vo.CMDResult;
+
 /**
  * 提供编译服务
  *
@@ -15,5 +17,5 @@ public interface CompileService {
      * @param codeFileName 本地目录
      * @return 代码编译后的保存目录
      */
-    String compile(String codeLang, String codeFileName);
+    CMDResult compile(String codeLang, String codeFileName);
 }
