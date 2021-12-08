@@ -13,7 +13,8 @@ public interface ComparerService {
      *
      * @param codeRes   代码运行的结果
      * @param problemId 题目id
+     * @param index     测试点
      * @return 代码运行是否正确
      */
-    Boolean compare(String codeRes, String problemId);
+    Boolean compare(String codeRes, String problemId, Integer index);
 }

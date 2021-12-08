@@ -65,8 +65,8 @@ public class RunServiceImpl implements RunService {
                 fileReader.close();
 
                 // 开始获取运行结果
+                StringBuilder res = new StringBuilder();
                 while ((tmp = bufferedReader.readLine()) != null) {
-
                     // 如果超时直接销毁子进程
                     if (System.currentTimeMillis() - start > 110000) {
                         process.destroy();
@@ -75,7 +75,7 @@ public class RunServiceImpl implements RunService {
                             bufferedReader.lines();
                         }
                     }
-                    result.setMsg(result.getMsg() + tmp + "\n");
+                    res.append(tmp).append('\n');
                 }
 
                 // 等待子进程结束
@@ -85,6 +85,7 @@ public class RunServiceImpl implements RunService {
                 long end = System.currentTimeMillis();
                 if (end - start < 1100) {
                     result.setStatus(true);
+                    result.setMsg(res.toString());
                 } else {
                     result.setStatus(false);
                     result.setMsg("超时");

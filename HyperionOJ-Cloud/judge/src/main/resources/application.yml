@@ -37,8 +37,6 @@ mybatis-plus:
       table-prefix: oj_
 judge:
   fileDir:
-    compiler: D:/WorkSpace/Java_Works/IDEA_Works/HyperionOJ/judge/compileFile/
     code: D:/WorkSpace/Java_Works/IDEA_Works/HyperionOJ/judge/codeFile/
     in: D:/WorkSpace/Java_Works/IDEA_Works/HyperionOJ/judge/inFile/
     out: D:/WorkSpace/Java_Works/IDEA_Works/HyperionOJ/judge/outFile/
-    res: D:/WorkSpace/Java_Works/IDEA_Works/HyperionOJ/judge/resFile/

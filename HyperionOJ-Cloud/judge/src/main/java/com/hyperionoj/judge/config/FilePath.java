@@ -30,10 +30,4 @@ public class FilePath {
     @Value("${judge.fileDir.out}")
     String outDir;
 
-    /**
-     * 结果目录
-     */
-    @Value("${judge.fileDir.res}")
-    String resDir;
-
 }
