@@ -17,5 +17,5 @@ public interface ComparerService {
      * @param problemId 题目id
      * @return 代码运行结果
      */
-    RunResult compare(String codeRes, Long problemId);
+    RunResult compare(String codeRes, String problemId);
 }

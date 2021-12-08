@@ -27,19 +27,19 @@ public class FilePath {
     /**
      * 输入数据目录
      */
-    @Value("${judge.fileDir.inDir}")
+    @Value("${judge.fileDir.in}")
     String inDir;
 
     /**
      * 输出数据目录
      */
-    @Value("${judge.fileDir.outDir}")
+    @Value("${judge.fileDir.out}")
     String outDir;
 
     /**
      * 结果目录
      */
-    @Value("${judge.fileDir.resDir}")
+    @Value("${judge.fileDir.res}")
     String resDir;
 
 }

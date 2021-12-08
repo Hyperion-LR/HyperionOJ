@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class SubmitVo {
 
-    private Long problemId;
+    private String problemId;
 
     private String codeLang;
 

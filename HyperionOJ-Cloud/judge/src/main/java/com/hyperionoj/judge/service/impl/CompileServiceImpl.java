@@ -2,14 +2,14 @@ package com.hyperionoj.judge.service.impl;
 
 import com.hyperionoj.judge.config.FilePath;
 import com.hyperionoj.judge.service.CompileService;
-import com.hyperionoj.judge.vo.Code;
 import com.hyperionoj.judge.vo.CMDResult;
+import com.hyperionoj.judge.vo.Code;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -32,8 +32,9 @@ public class CompileServiceImpl implements CompileService {
      */
     @Override
     public CMDResult compile(String codeLang, String codeFileName) {
+        String codeFile = filePath.getCodeFile() + codeFileName + File.separator + "Main.java";
         CMDResult result = new CMDResult();
-        ArrayList<String> args = getArgs(codeLang, codeFileName);
+        ArrayList<String> args = getArgs(codeLang, codeFile);
         if (args == null) {
             CMDResult errorResult = new CMDResult();
             errorResult.setStatus(false);
@@ -41,24 +42,20 @@ public class CompileServiceImpl implements CompileService {
             return errorResult;
         }
         ProcessBuilder processBuilder = new ProcessBuilder(args);
-        processBuilder.directory(new File(filePath.getCompileFile()));
         try {
             Process process = processBuilder.start();
-            InputStream inputStream = process.getInputStream();
-            int status = inputStream.read();
-            if (status == 1) {
-                result.setStatus(false);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "gbk"));
-                String tmp;
-                while ((tmp = bufferedReader.readLine()) != null) {
-                    result.setMsg(result.getMsg() + tmp);
-                }
-            } else {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "gbk"));
+            String tmp;
+            while ((tmp = bufferedReader.readLine()) != null) {
+                result.setMsg(result.getMsg() + tmp);
+            }
+            if (StringUtils.isBlank(result.getMsg())) {
                 result.setStatus(true);
                 result.setMsg(filePath.getCompileFile() + codeFileName);
+            } else {
+                result.setStatus(false);
             }
             process.waitFor();
-            inputStream.close();
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,22 +65,22 @@ public class CompileServiceImpl implements CompileService {
         return result;
     }
 
-    private ArrayList<String> getArgs(String codeLang, String codeFileName) {
+    private ArrayList<String> getArgs(String codeLang, String codeFile) {
         ArrayList<String> args = null;
         if ((Code.CPP_LANG).equals(codeLang)) {
             args = new ArrayList<>();
             args.add("g++");
-            args.add(codeFileName);
             args.add("-o");
-            args.add(codeFileName + "." + codeLang);
+            args.add("main");
+            args.add(codeFile);
         } else if ((Code.JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();
             args.add("javac");
-            args.add(codeFileName + "." + codeLang);
+            args.add(codeFile);
         } else if ((Code.PYTHON_LANG).equals(codeLang)) {
             args = new ArrayList<>();
             args.add("python3");
-            args.add(codeFileName + "." + codeLang);
+            args.add(codeFile);
         }
         return args;
     }

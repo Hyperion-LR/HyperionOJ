@@ -37,10 +37,10 @@ public class SubmitServiceImpl implements SubmitService {
     @Override
     public RunResult submit(SubmitVo submit) {
         Object user = ThreadLocalUtils.get();
-        String codeFileName = submit.getProblemId() + "_" + submit.getCodeLang();
+        String codeFileName = submit.getProblemId();
         fileService.saveFile(codeFileName, submit.getCodeBody());
         CMDResult compiledFile = compileService.compile(submit.getCodeLang(), codeFileName);
-        CMDResult codeRes = runService.run(submit.getCodeLang(), compiledFile.getMsg());
+        CMDResult codeRes = runService.run(submit.getCodeLang(), compiledFile.getMsg(), submit.getProblemId());
         return comparerService.compare(codeRes.getMsg(), submit.getProblemId());
     }
 

@@ -9,8 +9,9 @@ public interface FileService {
     /**
      * 将保存至指定目录
      *
-     * @param codeFileName 指定保存目录
+     * @param codeFileName 代码名称
      * @param codeBody     代码
+     * @return 指定保存目录
      */
-    void saveFile(String codeFileName, String codeBody);
+    String saveFile(String codeFileName, String codeBody);
 }
