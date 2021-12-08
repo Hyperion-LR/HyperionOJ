@@ -13,12 +13,6 @@ import org.springframework.stereotype.Component;
 public class FilePath {
 
     /**
-     * 代码编译文件存放地址
-     */
-    @Value("${judge.fileDir.compiler}")
-    String compileFile;
-
-    /**
      * 提交代码存放地址
      */
     @Value("${judge.fileDir.code}")

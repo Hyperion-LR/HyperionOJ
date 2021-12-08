@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -32,57 +30,65 @@ public class RunServiceImpl implements RunService {
      */
     @Override
     public CMDResult run(String codeLang, String compiledFile, String problemId) {
+        // 获取题目输入文件，并做好线程运行准备
         String inDir = filePath.getInDir() + File.separator + problemId + File.separator + "in1.txt";
-        String resDir = filePath.getResDir() + File.separator + problemId;
-        File resFile = new File(resDir);
-        if (!resFile.exists()) {
-            resFile.mkdir();
-        }
-        String resFilename = resFile.getPath() + File.separator + "res.txt";
-        Path resPath = Paths.get(resFilename);
         CMDResult result = new CMDResult();
-
-        ArrayList<String> args = getArgs(codeLang, compiledFile);
+        ArrayList<String> args = getArgs(codeLang);
         if (args == null) {
             CMDResult errorResult = new CMDResult();
             errorResult.setStatus(false);
             errorResult.setMsg("代码语言错误！");
             return errorResult;
         }
-
         ProcessBuilder processBuilder = new ProcessBuilder(args);
-        processBuilder.directory(resFile);
+        processBuilder.directory(new File(compiledFile));
+
         try {
+            // 正式开始启动程序
             Process process = processBuilder.start();
+
+            // 记录启动时间
             long start = System.currentTimeMillis();
-            if (inDir != null) {
-                try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(inDir)));
-                     PrintStream ps = new PrintStream(process.getOutputStream())) {
-                    String tmp;
-                    while ((tmp = fileReader.readLine()) != null) {
-                        ps.println(tmp);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+
+            // 向子进程输入数据和获取运行结果
+            try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(inDir)));
+                 PrintStream ps = new PrintStream(process.getOutputStream());
+                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String tmp;
+                while ((tmp = fileReader.readLine()) != null) {
+                    // 向子进程输入数据
+                    ps.println(tmp);
+                }
+
+                // 关闭IO流防止堵塞
+                ps.close();
+                fileReader.close();
+
+                // 开始获取运行结果
                 while ((tmp = bufferedReader.readLine()) != null) {
+
+                    // 如果超时直接销毁子进程
                     if (System.currentTimeMillis() - start > 110000) {
-                        result.setStatus(false);
-                        result.setMsg("程序已经超时！");
                         process.destroy();
+                        // 把流中的数据消耗掉
                         while (bufferedReader.readLine() != null) {
                             bufferedReader.lines();
                         }
-                        break;
                     }
-                    result.setMsg(result.getMsg() + tmp);
+                    result.setMsg(result.getMsg() + tmp + "\n");
                 }
-                long end = System.currentTimeMillis();
-                System.out.println("共用时:" + (end - start));
+
+                // 等待子进程结束
                 process.waitFor(1000, TimeUnit.NANOSECONDS);
+
+                // 判断是否超时
+                long end = System.currentTimeMillis();
+                if (end - start < 1100) {
+                    result.setStatus(true);
+                } else {
+                    result.setStatus(false);
+                    result.setMsg("超时");
+                }
                 return result;
             }
         } catch (Exception e) {
@@ -93,7 +99,7 @@ public class RunServiceImpl implements RunService {
         return result;
     }
 
-    private ArrayList<String> getArgs(String codeLang, String compiledFileName) {
+    private ArrayList<String> getArgs(String codeLang) {
         ArrayList<String> args = null;
         if ((Code.CPP_LANG).equals(codeLang)) {
             args = new ArrayList<>();

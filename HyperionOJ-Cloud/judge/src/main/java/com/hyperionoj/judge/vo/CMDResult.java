@@ -11,6 +11,6 @@ public class CMDResult {
 
     private boolean status;
 
-    private String msg;
+    private String msg = "";
 
 }

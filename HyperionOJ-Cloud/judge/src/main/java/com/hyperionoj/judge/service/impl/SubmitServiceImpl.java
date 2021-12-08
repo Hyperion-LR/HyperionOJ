@@ -41,7 +41,8 @@ public class SubmitServiceImpl implements SubmitService {
         fileService.saveFile(codeFileName, submit.getCodeBody());
         CMDResult compiledFile = compileService.compile(submit.getCodeLang(), codeFileName);
         CMDResult codeRes = runService.run(submit.getCodeLang(), compiledFile.getMsg(), submit.getProblemId());
-        return comparerService.compare(codeRes.getMsg(), submit.getProblemId());
+        comparerService.compare(codeRes.getMsg(), submit.getProblemId());
+        return new RunResult();
     }
 
 }

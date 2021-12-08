@@ -1,7 +1,5 @@
 package com.hyperionoj.judge.service;
 
-import com.hyperionoj.judge.vo.RunResult;
-
 /**
  * 比较代码运行结果
  *
@@ -15,7 +13,7 @@ public interface ComparerService {
      *
      * @param codeRes   代码运行的结果
      * @param problemId 题目id
-     * @return 代码运行结果
+     * @return 代码运行是否正确
      */
-    RunResult compare(String codeRes, String problemId);
+    Boolean compare(String codeRes, String problemId);
 }

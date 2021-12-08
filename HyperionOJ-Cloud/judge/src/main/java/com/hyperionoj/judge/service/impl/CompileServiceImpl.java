@@ -51,7 +51,7 @@ public class CompileServiceImpl implements CompileService {
             }
             if (StringUtils.isBlank(result.getMsg())) {
                 result.setStatus(true);
-                result.setMsg(filePath.getCompileFile() + codeFileName);
+                result.setMsg(filePath.getCodeFile() + codeFileName);
             } else {
                 result.setStatus(false);
             }
