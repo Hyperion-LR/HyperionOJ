@@ -2,14 +2,15 @@ package com.hyperionoj.judge.service.impl;
 
 import com.hyperionoj.judge.config.FilePath;
 import com.hyperionoj.judge.service.RunService;
-import com.hyperionoj.judge.vo.CMDResult;
-import com.hyperionoj.judge.vo.Code;
+import com.hyperionoj.judge.vo.RunResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import static com.hyperionoj.judge.constants.Constants.*;
 
 /**
  * @author Hyperion
@@ -29,20 +30,18 @@ public class RunServiceImpl implements RunService {
      * @return 代码运行结果
      */
     @Override
-    public CMDResult run(String codeLang, String compiledFile, String problemId) {
-        // 获取题目输入文件，并做好线程运行准备
-        String inDir = filePath.getInDir() + File.separator + problemId + File.separator + "in1.txt";
-        CMDResult result = new CMDResult();
+    public RunResult run(String codeLang, String compiledFile, String problemId) {
+        // 获取题目输入文件，并做好进程运行准备
+        String inData = filePath.getProblem() + File.separator + problemId + File.separator + "in" + File.separator + "in1.txt";
+        RunResult result = new RunResult();
         ArrayList<String> args = getArgs(codeLang);
         if (args == null) {
-            CMDResult errorResult = new CMDResult();
-            errorResult.setStatus(false);
-            errorResult.setMsg("代码语言错误！");
-            return errorResult;
+            result.setVerdict(CE);
+            result.setMsg("代码语言错误！");
+            return result;
         }
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         processBuilder.directory(new File(compiledFile));
-
         try {
             // 正式开始启动程序
             Process process = processBuilder.start();
@@ -51,7 +50,7 @@ public class RunServiceImpl implements RunService {
             long start = System.currentTimeMillis();
 
             // 向子进程输入数据和获取运行结果
-            try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(inDir)));
+            try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(inData)));
                  PrintStream ps = new PrintStream(process.getOutputStream());
                  BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String tmp;
@@ -84,10 +83,12 @@ public class RunServiceImpl implements RunService {
                 // 判断是否超时
                 long end = System.currentTimeMillis();
                 if (end - start < 1100) {
-                    result.setStatus(true);
+                    result.setVerdict(AC);
+                    result.setRunTime((int) (end - start));
+                    result.setRunMemory(0);
                     result.setMsg(res.toString());
                 } else {
-                    result.setStatus(false);
+                    result.setVerdict(TLE);
                     result.setMsg("超时");
                 }
                 return result;
@@ -95,24 +96,24 @@ public class RunServiceImpl implements RunService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        result.setStatus(false);
+        result.setVerdict(RE);
         result.setMsg("系统错误");
         return result;
     }
 
     private ArrayList<String> getArgs(String codeLang) {
         ArrayList<String> args = null;
-        if ((Code.CPP_LANG).equals(codeLang)) {
+        if ((CPP_LANG).equals(codeLang)) {
             args = new ArrayList<>();
-            args.add("Main.exe");
-        } else if ((Code.JAVA_LANG).equals(codeLang)) {
+            args.add(CPP_COMPILE);
+        } else if ((JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();
-            args.add("java");
-            args.add("Main");
-        } else if ((Code.PYTHON_LANG).equals(codeLang)) {
+            args.add(JAVA_RUN);
+            args.add(JAVA_COMPILE);
+        } else if ((PYTHON_LANG).equals(codeLang)) {
             args = new ArrayList<>();
-            args.add("python3");
-            args.add("Main.py");
+            args.add(PYTHON_RUN);
+            args.add(PYTHON_COMPILE);
         }
         return args;
     }

@@ -1,9 +1,8 @@
 package com.hyperionoj.judge.service.impl;
 
-import com.hyperionoj.judge.config.FilePath;
 import com.hyperionoj.judge.service.CompileService;
+import com.hyperionoj.judge.service.FileService;
 import com.hyperionoj.judge.vo.CMDResult;
-import com.hyperionoj.judge.vo.Code;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +12,8 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import static com.hyperionoj.judge.constants.Constants.*;
+
 /**
  * @author Hyperion
  * @date 2021/12/7
@@ -21,18 +22,18 @@ import java.util.ArrayList;
 public class CompileServiceImpl implements CompileService {
 
     @Resource
-    private FilePath filePath;
+    private FileService fileService;
 
     /**
      * 编译已经保存在本地的代码
      *
-     * @param codeLang     代码语言
-     * @param codeFileName 本地目录
+     * @param codeLang    代码语言
+     * @param codeFileDir 本地目录
      * @return 代码编译后的保存目录
      */
     @Override
-    public CMDResult compile(String codeLang, String codeFileName) {
-        String codeFile = filePath.getCodeFile() + codeFileName + File.separator + "Main.java";
+    public CMDResult compile(String codeLang, String codeFileDir) {
+        String codeFile = codeFileDir + File.separator + fileService.codeFileName(codeLang);
         CMDResult result = new CMDResult();
         ArrayList<String> args = getArgs(codeLang, codeFile);
         if (args == null) {
@@ -51,7 +52,7 @@ public class CompileServiceImpl implements CompileService {
             }
             if (StringUtils.isBlank(result.getMsg())) {
                 result.setStatus(true);
-                result.setMsg(filePath.getCodeFile() + codeFileName);
+                result.setMsg(codeFileDir + File.separator + getCompileFileName(codeLang));
             } else {
                 result.setStatus(false);
             }
@@ -65,22 +66,46 @@ public class CompileServiceImpl implements CompileService {
         return result;
     }
 
+    /**
+     * 获取各语言编译后的文件
+     *
+     * @param codeLang 代码语言
+     * @return 可执行文件名
+     */
+    private String getCompileFileName(String codeLang) {
+        String CompileFileName = "";
+        if ((CPP_LANG).equals(codeLang)) {
+            CompileFileName = CPP_COMPILE;
+        } else if ((JAVA_LANG).equals(codeLang)) {
+            CompileFileName = JAVA_COMPILE;
+        } else if ((PYTHON_LANG).equals(codeLang)) {
+            CompileFileName = PYTHON_COMPILE;
+        }
+        return CompileFileName;
+    }
+
+    /**
+     * 获取CMD参数
+     *
+     * @param codeLang 代码语言
+     * @param codeFile 代码文件
+     * @return CMD参数
+     */
     private ArrayList<String> getArgs(String codeLang, String codeFile) {
         ArrayList<String> args = null;
-        if ((Code.CPP_LANG).equals(codeLang)) {
+        if ((CPP_LANG).equals(codeLang)) {
             args = new ArrayList<>();
-            args.add("g++");
+            args.add(CPP_COMPILE_CMD);
             args.add("-o");
             args.add("main");
             args.add(codeFile);
-        } else if ((Code.JAVA_LANG).equals(codeLang)) {
+        } else if ((JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();
-            args.add("javac");
+            args.add(JAVA_COMPILE_CMD);
             args.add(codeFile);
-        } else if ((Code.PYTHON_LANG).equals(codeLang)) {
+        } else if ((PYTHON_LANG).equals(codeLang)) {
+            // 不为null
             args = new ArrayList<>();
-            args.add("python3");
-            args.add(codeFile);
         }
         return args;
     }

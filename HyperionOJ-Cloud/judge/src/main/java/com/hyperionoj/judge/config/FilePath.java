@@ -2,32 +2,26 @@ package com.hyperionoj.judge.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Hyperion
  * @date 2021/12/7
  */
 @Data
-@Component
+@Configuration
 public class FilePath {
 
     /**
-     * 提交代码存放地址
+     * 题目数据
      */
-    @Value("${judge.fileDir.code}")
-    String codeFile;
+    @Value("${judge.fileDir.problem}")
+    String problem;
 
     /**
-     * 输入数据目录
+     * 题目数据
      */
-    @Value("${judge.fileDir.in}")
-    String inDir;
-
-    /**
-     * 输出数据目录
-     */
-    @Value("${judge.fileDir.out}")
-    String outDir;
+    @Value("${judge.fileDir.submit}")
+    String submit;
 
 }

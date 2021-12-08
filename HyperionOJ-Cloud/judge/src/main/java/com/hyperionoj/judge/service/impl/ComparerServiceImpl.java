@@ -30,7 +30,7 @@ public class ComparerServiceImpl implements ComparerService {
      */
     @Override
     public Boolean compare(String codeRes, String problemId, Integer index) {
-        String outDir = filePath.getOutDir() + problemId + File.separator + "out" + index + ".txt";
+        String outDir = filePath.getProblem() + File.separator + problemId + File.separator + "out" + File.separator + "out" + index + ".txt";
         StringBuilder ans = new StringBuilder();
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(outDir)))) {
             String tmp;

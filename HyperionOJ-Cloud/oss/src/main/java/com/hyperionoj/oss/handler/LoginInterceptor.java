@@ -30,7 +30,7 @@ public class LoginInterceptor extends StatHandlerInterceptor {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
 
         log.info("=================request start===========================");
         String requestURI = request.getRequestURI();

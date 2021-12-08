@@ -1,6 +1,6 @@
 package com.hyperionoj.judge.service;
 
-import com.hyperionoj.judge.vo.CMDResult;
+import com.hyperionoj.judge.vo.RunResult;
 
 /**
  * 运行编译后的代码
@@ -18,5 +18,5 @@ public interface RunService {
      * @param problemId        问题编号
      * @return 代码运行结果
      */
-    CMDResult run(String codeLang, String compiledFileName, String problemId);
+    RunResult run(String codeLang, String compiledFileName, String problemId);
 }

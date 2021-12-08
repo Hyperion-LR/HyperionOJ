@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Hyperion
  * @date 2021/12/7
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.hyperionoj"})
 public class JudgeApplication {
     public static void main(String[] args) {
         SpringApplication.run(JudgeApplication.class, args);

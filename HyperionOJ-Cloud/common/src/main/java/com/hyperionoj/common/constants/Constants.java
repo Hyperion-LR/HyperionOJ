@@ -24,7 +24,7 @@ public interface Constants {
     /**
      * 下划线: '_'
      */
-    Character UNDERLINE = '_';
+    String UNDERLINE = "_";
 
     /**
      * redis分隔符英文冒号: ':'
