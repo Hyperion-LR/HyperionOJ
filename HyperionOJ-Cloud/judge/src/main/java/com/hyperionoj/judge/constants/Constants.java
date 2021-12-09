@@ -87,39 +87,18 @@ public interface Constants {
     String PYTHON_COMPILE = "Main.py";
 
     /**
-     * 提交运行结果: 通过
+     * 输入数据文件
      */
-    String AC = "Accept";
+    String IN = "in";
 
     /**
-     * 提交运行结果: 错误答案
+     * 答案数据文件
      */
-    String WA = "Wrong answer";
+    String OUT = "out";
 
     /**
-     * 提交运行结果: 运行超时
+     * 文本后缀
      */
-    String TLE = "Time limit exceeded";
-
-    /**
-     * 提交运行结果: 内存超限
-     */
-    String MLE = "Memory limit exceeded";
-
-    /**
-     * 提交运行结果: 编译失败
-     */
-    String CE = "Compilation error";
-
-    /**
-     * 提交运行结果: 运行时错误
-     */
-    String RE = "Runtime Error";
-
-    /**
-     * 提交运行结果: 格式错误
-     */
-    String PE = "Presentation Error";
-
+    String TXT = ".txt";
 
 }

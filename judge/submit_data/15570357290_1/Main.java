@@ -11,7 +11,7 @@ Scanner in = new Scanner(System.in);
 int t = 0, a = 0, b = 0;
 System.out.println(name);
 t = in.nextInt();
-while(t++ > 0){
+while(t-- > 0){
 a = in.nextInt();
 b = in.nextInt();
 System.out.println(a + b);

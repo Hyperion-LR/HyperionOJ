@@ -3,22 +3,24 @@ package com.hyperionoj.judge.vo;
 import lombok.Data;
 
 /**
+ * 暂时不用
+ *
  * @author Hyperion
- * @date 2021/12/7
+ * @date 2021/12/9
  */
 @Data
-public class SubmitVo {
-
-    private String problemId;
+public class RunVo {
 
     private String codeLang;
 
-    private String codeBody;
+    private String compiledFile;
+
+    private String problemId;
 
     private Integer runTime;
 
     private Integer runMemory;
 
-    private Integer caseNumber;
+    private Integer index;
 
 }

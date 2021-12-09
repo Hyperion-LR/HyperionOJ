@@ -3,6 +3,7 @@ package com.hyperionoj.judge.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.pojo.bo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.judge.constants.Verdict;
 import com.hyperionoj.judge.service.*;
 import com.hyperionoj.judge.vo.RunResult;
 import com.hyperionoj.judge.vo.ShellResult;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import static com.hyperionoj.judge.constants.Constants.*;
+import static com.hyperionoj.judge.constants.Constants.UNDERLINE;
 
 /**
  * @author Hyperion
@@ -57,25 +58,25 @@ public class SubmitServiceImpl implements SubmitService {
         // 编译本地代码
         ShellResult compiledFile = compileService.compile(submit.getCodeLang(), saveDir);
         if (compiledFile.isStatus()) {
+            int caseNumber = submit.getCaseNumber();
+            for (int i = 1; i <= caseNumber; ++i) {
+                // 运行本地代码
+                runResult = runService.run(submit.getCodeLang(), saveDir, submit.getProblemId(), submit.getRunTime(), submit.getRunMemory(), i);
 
-            // 运行本地代码
-            runResult = runService.run(submit.getCodeLang(), saveDir, submit.getProblemId());
-
-            // 测试点
-            int index = 1;
-
-            // 如果运行成功则进入比较(这里AC仅仅表示代码能运行完成生出结果)
-            if (StringUtils.compare(AC, runResult.getVerdict()) == 0) {
-                // 进入比较
-                if (comparerService.compare(runResult.getMsg(), submit.getProblemId(), index)) {
-                    runResult.setVerdict(AC);
-                } else {
-                    runResult.setVerdict(WA);
-                    runResult.setMsg(null);
+                // 如果运行成功则进入比较(这里AC仅仅表示代码能运行完成生出结果)
+                if (StringUtils.compare(Verdict.AC.getVerdict(), runResult.getVerdict()) == 0) {
+                    // 进入比较
+                    if (comparerService.compare(runResult.getMsg(), submit.getProblemId(), i)) {
+                        runResult.setVerdict(Verdict.AC.getVerdict());
+                    } else {
+                        runResult.setVerdict(Verdict.WA.getVerdict());
+                        runResult.setMsg(null);
+                        break;
+                    }
                 }
             }
         } else {
-            runResult.setVerdict(CE);
+            runResult.setVerdict(Verdict.CE.getVerdict());
             runResult.setMsg(compiledFile.getMsg());
         }
         runResult.setProblemId(Integer.valueOf(submit.getProblemId()));
