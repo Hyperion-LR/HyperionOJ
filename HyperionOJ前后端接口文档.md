@@ -159,3 +159,94 @@
 }
 ```
 
+
+
+## page
+
+### 获取题目归档
+
+接口url：localhost:9000/problem/list
+
+请求方式：get
+
+请求参数：
+
+```json
+{
+    "page": 1,
+    "pageSize": 10,
+    "level": null,
+    "categoryId": null
+}
+```
+
+返回参数
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1",
+            "title": "test",
+            "bodyId": "1",
+            "problemLevel": 1,
+            "categoryId": "1",
+            "acNumber": 0,
+            "submitNumber": 0,
+            "solutionNumber": 0,
+            "commentNumber": 0
+        },
+        {
+            "id": "2",
+            "title": "test2",
+            "bodyId": "2",
+            "problemLevel": 1,
+            "categoryId": "1",
+            "acNumber": 0,
+            "submitNumber": 0,
+            "solutionNumber": 0,
+            "commentNumber": 0
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+
+
+### 通过id查看题目
+
+接口url：localhost:9000/problem/{id}
+
+请求方式：get
+
+请求参数：
+
+```json
+{
+}
+```
+
+返回参数
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1",
+        "title": "test",
+        "bodyId": "1",
+        "problemLevel": 1,
+        "categoryId": "1",
+        "acNumber": 0,
+        "submitNumber": 0,
+        "solutionNumber": 0,
+        "commentNumber": 0
+    },
+    "msg": null
+}
+```
+

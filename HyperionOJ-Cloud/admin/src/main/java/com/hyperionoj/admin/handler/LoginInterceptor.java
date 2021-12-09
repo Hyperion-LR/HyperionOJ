@@ -2,10 +2,10 @@ package com.hyperionoj.admin.handler;
 
 import com.alibaba.druid.support.spring.mvc.StatHandlerInterceptor;
 import com.alibaba.fastjson.JSON;
-import com.hyperionoj.common.pojo.vo.ErrorCode;
-import com.hyperionoj.common.pojo.vo.Result;
 import com.hyperionoj.common.utils.JWTUtils;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.ErrorCode;
+import com.hyperionoj.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

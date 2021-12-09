@@ -1,6 +1,6 @@
 package com.hyperionoj.oss.controller;
 
-import com.hyperionoj.common.pojo.vo.Result;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.oss.service.VerCodeService;
 import com.hyperionoj.oss.vo.MailCodeParam;
 import org.springframework.web.bind.annotation.PostMapping;

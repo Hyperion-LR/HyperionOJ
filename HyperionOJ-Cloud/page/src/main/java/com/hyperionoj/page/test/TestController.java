@@ -1,11 +1,11 @@
 package com.hyperionoj.page.test;
 
-import com.hyperionoj.common.pojo.bo.Mail;
-import com.hyperionoj.common.pojo.vo.ErrorCode;
-import com.hyperionoj.common.pojo.vo.Result;
+import com.hyperionoj.common.pojo.Mail;
 import com.hyperionoj.common.service.MailService;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.QiniuUtils;
+import com.hyperionoj.common.vo.ErrorCode;
+import com.hyperionoj.common.vo.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

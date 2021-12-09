@@ -1,6 +1,6 @@
 package com.hyperionoj.judge.controller;
 
-import com.hyperionoj.common.pojo.vo.Result;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.judge.service.SubmitService;
 import com.hyperionoj.judge.vo.SubmitVo;
 import org.springframework.web.bind.annotation.PostMapping;

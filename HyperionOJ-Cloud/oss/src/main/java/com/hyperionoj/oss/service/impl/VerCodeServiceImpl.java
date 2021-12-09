@@ -1,6 +1,6 @@
 package com.hyperionoj.oss.service.impl;
 
-import com.hyperionoj.common.pojo.bo.Mail;
+import com.hyperionoj.common.pojo.Mail;
 import com.hyperionoj.common.service.MailService;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.oss.service.VerCodeService;

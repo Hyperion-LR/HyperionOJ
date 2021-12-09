@@ -1,6 +1,6 @@
 package com.hyperionoj.oss.controller;
 
-import com.hyperionoj.common.pojo.vo.Result;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
 import com.hyperionoj.oss.vo.SysUserVo;
 import com.hyperionoj.oss.vo.UpdatePasswordParam;

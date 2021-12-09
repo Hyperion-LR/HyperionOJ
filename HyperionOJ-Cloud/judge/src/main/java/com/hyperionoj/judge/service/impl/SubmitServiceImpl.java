@@ -1,7 +1,7 @@
 package com.hyperionoj.judge.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.common.pojo.bo.SysUser;
+import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.judge.constants.Verdict;
 import com.hyperionoj.judge.service.*;

@@ -1,7 +1,7 @@
 package com.hyperionoj.oss.controller;
 
-import com.hyperionoj.common.pojo.vo.ErrorCode;
-import com.hyperionoj.common.pojo.vo.Result;
+import com.hyperionoj.common.vo.ErrorCode;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
 import com.hyperionoj.oss.vo.LoginParam;
 import org.springframework.web.bind.annotation.PostMapping;

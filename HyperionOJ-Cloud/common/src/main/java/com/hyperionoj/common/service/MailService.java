@@ -1,6 +1,6 @@
 package com.hyperionoj.common.service;
 
-import com.hyperionoj.common.pojo.bo.Mail;
+import com.hyperionoj.common.pojo.Mail;
 
 /**
  * @author Hyperion

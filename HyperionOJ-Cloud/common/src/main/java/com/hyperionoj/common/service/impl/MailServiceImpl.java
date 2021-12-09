@@ -1,7 +1,7 @@
 package com.hyperionoj.common.service.impl;
 
 import com.hyperionoj.common.config.MailProperties;
-import com.hyperionoj.common.pojo.bo.Mail;
+import com.hyperionoj.common.pojo.Mail;
 import com.hyperionoj.common.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
