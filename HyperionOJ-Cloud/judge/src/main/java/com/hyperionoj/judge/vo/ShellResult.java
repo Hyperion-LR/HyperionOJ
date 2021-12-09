@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2021/12/7
  */
 @Data
-public class CMDResult {
+public class ShellResult {
 
     private boolean status;
 

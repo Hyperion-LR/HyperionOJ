@@ -5,6 +5,12 @@ package com.hyperionoj.judge.constants;
  * @date 2021/12/1
  */
 public interface Constants {
+
+    /**
+     * 字符编码: gbk
+     */
+    String ENCODING_GBK = "gbk";
+
     /**
      * 未知，开发时用于代表不确定
      */

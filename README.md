@@ -24,6 +24,7 @@ com.hyperion
 |
 ├── hyperion-config         							// 配置模块
 |
+├── hyperion-judge         							    // 判题模块 [9900] 
 |
 ├── hyperion-admin          							// 管理模块和监控中心 [9999]
 |

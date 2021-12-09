@@ -2,7 +2,7 @@ package com.hyperionoj.judge.service.impl;
 
 import com.hyperionoj.judge.service.CompileService;
 import com.hyperionoj.judge.service.FileService;
-import com.hyperionoj.judge.vo.CMDResult;
+import com.hyperionoj.judge.vo.ShellResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -32,20 +32,19 @@ public class CompileServiceImpl implements CompileService {
      * @return 代码编译后的保存目录
      */
     @Override
-    public CMDResult compile(String codeLang, String codeFileDir) {
+    public ShellResult compile(String codeLang, String codeFileDir) {
         String codeFile = codeFileDir + File.separator + fileService.codeFileName(codeLang);
-        CMDResult result = new CMDResult();
+        ShellResult result = new ShellResult();
         ArrayList<String> args = getArgs(codeLang, codeFile);
         if (args == null) {
-            CMDResult errorResult = new CMDResult();
-            errorResult.setStatus(false);
-            errorResult.setMsg("代码语言版本错误！");
-            return errorResult;
+            result.setStatus(false);
+            result.setMsg("代码语言版本错误！");
+            return result;
         }
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         try {
             Process process = processBuilder.start();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "gbk"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), ENCODING_GBK));
             String tmp;
             while ((tmp = bufferedReader.readLine()) != null) {
                 result.setMsg(result.getMsg() + tmp);
@@ -73,15 +72,15 @@ public class CompileServiceImpl implements CompileService {
      * @return 可执行文件名
      */
     private String getCompileFileName(String codeLang) {
-        String CompileFileName = "";
+        String compileFileName = "";
         if ((CPP_LANG).equals(codeLang)) {
-            CompileFileName = CPP_COMPILE;
+            compileFileName = CPP_COMPILE;
         } else if ((JAVA_LANG).equals(codeLang)) {
-            CompileFileName = JAVA_COMPILE;
+            compileFileName = JAVA_COMPILE;
         } else if ((PYTHON_LANG).equals(codeLang)) {
-            CompileFileName = PYTHON_COMPILE;
+            compileFileName = PYTHON_COMPILE;
         }
-        return CompileFileName;
+        return compileFileName;
     }
 
     /**

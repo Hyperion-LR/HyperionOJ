@@ -52,7 +52,8 @@ public class RunServiceImpl implements RunService {
             // 向子进程输入数据和获取运行结果
             try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(inData)));
                  PrintStream ps = new PrintStream(process.getOutputStream());
-                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                 BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
                 String tmp;
                 while ((tmp = fileReader.readLine()) != null) {
                     // 向子进程输入数据
@@ -77,19 +78,33 @@ public class RunServiceImpl implements RunService {
                     res.append(tmp).append('\n');
                 }
 
-                // 等待子进程结束
-                process.waitFor(1000, TimeUnit.NANOSECONDS);
-
-                // 判断是否超时
-                long end = System.currentTimeMillis();
-                if (end - start < 1100) {
-                    result.setVerdict(AC);
-                    result.setRunTime((int) (end - start));
-                    result.setRunMemory(0);
+                // 没有输出信息判断运行出错
+                if (res.length() == 0) {
+                    while ((tmp = errorReader.readLine()) != null) {
+                        res.append(tmp).append('\n');
+                    }
+                    errorReader.close();
+                    result.setVerdict(RE);
                     result.setMsg(res.toString());
                 } else {
-                    result.setVerdict(TLE);
-                    result.setMsg("超时");
+                    // 等待子进程结束
+                    process.waitFor(1000, TimeUnit.NANOSECONDS);
+
+                    // 判断是否超时
+                    long end = System.currentTimeMillis();
+                    if (end - start < 1100) {
+
+                        // 没超时设置相关信息，这里不考虑结果对错之后会有服务比较
+                        result.setVerdict(AC);
+                        result.setRunTime((int) (end - start));
+                        result.setRunMemory(0);
+                        result.setMsg(res.toString());
+                    } else {
+
+                        // 超时返回TLE
+                        result.setVerdict(TLE);
+                        result.setMsg("超时");
+                    }
                 }
                 return result;
             }
@@ -101,6 +116,12 @@ public class RunServiceImpl implements RunService {
         return result;
     }
 
+    /**
+     * 根据代码语言获取参数
+     *
+     * @param codeLang 代码语言
+     * @return shell运行参数
+     */
     private ArrayList<String> getArgs(String codeLang) {
         ArrayList<String> args = null;
         if ((CPP_LANG).equals(codeLang)) {
@@ -109,6 +130,7 @@ public class RunServiceImpl implements RunService {
         } else if ((JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();
             args.add(JAVA_RUN);
+            args.add("-Xmx256m");
             args.add(JAVA_COMPILE);
         } else if ((PYTHON_LANG).equals(codeLang)) {
             args = new ArrayList<>();
