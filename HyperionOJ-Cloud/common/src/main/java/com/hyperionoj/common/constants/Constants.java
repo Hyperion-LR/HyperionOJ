@@ -5,11 +5,15 @@ package com.hyperionoj.common.constants;
  * @date 2021/12/1
  */
 public interface Constants {
+    /**
+     * 状态码成功
+     */
+    int SUCCESS_CODE = 200;
 
     /**
      * 用户密码加密盐
      */
-    String SLAT = "HyperionOJ";
+    String SALT = "HyperionOJ";
 
     /**
      * 邮箱符号: '@'

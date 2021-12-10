@@ -30,4 +30,10 @@ public class DestroyController {
         return Result.fail(ErrorCode.PARAMS_ERROR);
     }
 
+    @PostMapping("/admin")
+    public Result deleteAdmin(@RequestBody String id) {
+        ossService.deleteAdmin(id);
+        return Result.success(null);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.hyperionoj.oss.dao.pojo.admin;
+package com.hyperionoj.admin.dao.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

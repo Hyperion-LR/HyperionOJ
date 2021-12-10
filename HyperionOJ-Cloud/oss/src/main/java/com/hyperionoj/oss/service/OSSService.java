@@ -1,9 +1,6 @@
 package com.hyperionoj.oss.service;
 
-import com.hyperionoj.oss.vo.LoginParam;
-import com.hyperionoj.oss.vo.RegisterParam;
-import com.hyperionoj.oss.vo.SysUserVo;
-import com.hyperionoj.oss.vo.UpdatePasswordParam;
+import com.hyperionoj.oss.vo.*;
 
 /**
  * @author Hyperion
@@ -28,12 +25,12 @@ public interface OSSService {
     String adminLogin(LoginParam loginParam);
 
     /**
-     * 注册功能
+     * 注册普通用户
      *
      * @param registerParam 注册参数
      * @return token
      */
-    String register(RegisterParam registerParam);
+    String registerUser(RegisterParam registerParam);
 
     /**
      * 更新用户不敏感信息
@@ -59,4 +56,31 @@ public interface OSSService {
      */
     boolean destroy(LoginParam destroyParam);
 
+    /**
+     * 注册管理员
+     *
+     * @param registerParam 注册参数
+     */
+    void addAdmin(RegisterAdminParam registerParam);
+
+    /**
+     * 更新管理员
+     *
+     * @param registerParam 注册参数
+     */
+    void updateAdmin(RegisterAdminParam registerParam);
+
+    /**
+     * 删除管理员
+     *
+     * @param id 管理员id
+     */
+    void deleteAdmin(String id);
+
+    /**
+     * 冻结普通用户
+     *
+     * @param id 要冻结的用户id
+     */
+    void freezeUser(String id);
 }

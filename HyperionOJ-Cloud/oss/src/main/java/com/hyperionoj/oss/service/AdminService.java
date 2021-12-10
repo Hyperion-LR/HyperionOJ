@@ -16,4 +16,25 @@ public interface AdminService {
      * @return token
      */
     Admin findAdmin(String account, String password);
+
+    /**
+     * 增加管理员
+     *
+     * @param admin 管理员
+     */
+    void addAdmin(Admin admin);
+
+    /**
+     * 更新管理员
+     *
+     * @param admin 管理员
+     */
+    void updateAdmin(Admin admin);
+
+    /**
+     * 删除管理员
+     *
+     * @param id 要删除的管理员id
+     */
+    void deleteAdmin(String id);
 }

@@ -7,6 +7,14 @@ import com.hyperionoj.oss.dao.pojo.sys.SysUser;
  * @date 2021/12/1
  */
 public interface SysUserService {
+
+    /**
+     * 冻结普通用户
+     *
+     * @param id 要冻结的用户id
+     */
+    void freezeUser(String id);
+
     /**
      * 通过账号密码查找用户
      *
@@ -51,6 +59,7 @@ public interface SysUserService {
      *
      * @param account  账号id
      * @param password 密码目前没用到
+     * @return 是否注销成功
      */
     boolean destroy(String account, String password);
 }

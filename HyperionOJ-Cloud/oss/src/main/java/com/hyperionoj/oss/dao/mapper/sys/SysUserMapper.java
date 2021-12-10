@@ -10,4 +10,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SysUserMapper extends BaseMapper<SysUser> {
+
+    /**
+     * 冻结普通用户
+     *
+     * @param id 要冻结的用户id
+     */
+    void freezeUser(String id);
 }

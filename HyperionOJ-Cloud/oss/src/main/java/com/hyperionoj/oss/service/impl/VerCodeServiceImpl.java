@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Random;
 
-import static com.hyperionoj.common.constants.Constants.SLAT;
-import static com.hyperionoj.common.constants.Constants.VER_CODE;
+import static com.hyperionoj.common.constants.Constants.*;
 
 /**
  * @author Hyperion
@@ -42,7 +41,7 @@ public class VerCodeServiceImpl implements VerCodeService {
         mailBean.setContent(subject + "的验证码为: " + code);
         mailBean.setRecipient(userMail);
         mailService.sendSimpleMail(mailBean);
-        redisSever.setRedisKV(VER_CODE + userMail, DigestUtils.md5Hex(code + SLAT));
+        redisSever.setRedisKV(VER_CODE + userMail, DigestUtils.md5Hex(code + SALT));
     }
 
     /**

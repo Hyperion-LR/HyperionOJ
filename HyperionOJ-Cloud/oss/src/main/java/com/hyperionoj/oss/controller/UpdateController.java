@@ -2,6 +2,7 @@ package com.hyperionoj.oss.controller;
 
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
+import com.hyperionoj.oss.vo.RegisterAdminParam;
 import com.hyperionoj.oss.vo.SysUserVo;
 import com.hyperionoj.oss.vo.UpdatePasswordParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,18 @@ public class UpdateController {
     public Result byUser(@RequestBody UpdatePasswordParam updateParam) {
         ossService.updatePassword(updateParam);
         return Result.success(null);
+    }
+
+    @PostMapping("/freeze")
+    public Result freezeUser(@RequestBody String id) {
+        ossService.freezeUser(id);
+        return Result.success(null);
+    }
+
+    @PostMapping("/admin")
+    public Result byAdmin(@RequestBody RegisterAdminParam registerParam) {
+        ossService.updateAdmin(registerParam);
+        return Result.success(registerParam);
     }
 
 }

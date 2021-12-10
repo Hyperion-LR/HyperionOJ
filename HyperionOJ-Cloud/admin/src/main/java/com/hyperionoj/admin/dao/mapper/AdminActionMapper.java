@@ -1,7 +1,7 @@
-package com.hyperionoj.oss.dao.mapper.admin;
+package com.hyperionoj.admin.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hyperionoj.oss.dao.pojo.admin.AdminAction;
+import com.hyperionoj.admin.dao.pojo.AdminAction;
 import org.springframework.stereotype.Repository;
 
 /**

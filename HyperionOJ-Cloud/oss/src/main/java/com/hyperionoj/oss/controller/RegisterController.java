@@ -4,6 +4,7 @@ import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
 import com.hyperionoj.oss.service.VerCodeService;
+import com.hyperionoj.oss.vo.RegisterAdminParam;
 import com.hyperionoj.oss.vo.RegisterParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,10 +32,16 @@ public class RegisterController {
         if (!verCodeService.checkCode(registerParam.getMail(), registerParam.getVerCode())) {
             return Result.fail(ErrorCode.CODE_ERROR);
         }
-        String token = ossService.register(registerParam);
+        String token = ossService.registerUser(registerParam);
         if (StringUtils.isBlank(token)) {
             return Result.fail(ErrorCode.PARAMS_ERROR);
         }
         return Result.success(token);
+    }
+
+    @PostMapping("/admin")
+    public Result addAdmin(@RequestBody RegisterAdminParam registerParam) {
+        ossService.addAdmin(registerParam);
+        return Result.success(registerParam);
     }
 }

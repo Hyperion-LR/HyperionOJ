@@ -7,6 +7,7 @@ import com.hyperionoj.oss.dao.mapper.sys.SysUserMapper;
 import com.hyperionoj.oss.dao.pojo.sys.SysUser;
 import com.hyperionoj.oss.service.SysUserService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,16 @@ public class SysUserServiceImpl implements SysUserService {
     private RedisSever redisSever;
 
     /**
+     * 冻结普通用户
+     *
+     * @param id 要冻结的用户id
+     */
+    @Override
+    public void freezeUser(String id) {
+        sysUserMapper.freezeUser(id);
+    }
+
+    /**
      * 通过账号密码查找用户(手机号或者邮箱)
      *
      * @param account  账号
@@ -46,15 +57,17 @@ public class SysUserServiceImpl implements SysUserService {
         }
         queryWrapper.last(" limit 1");
         SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
-        if (password.length() > CODE_LENGTH) {
-            password = DigestUtils.md5Hex(password + SLAT);
-            if (StringUtils.compare(sysUser.getPassword(), password) == 0) {
-                return sysUser;
-            }
-        } else {
-            String redisCode = redisSever.getRedisKV(VER_CODE + sysUser.getMail());
-            if (StringUtils.compare(password, DigestUtils.md5Hex(redisCode + SLAT)) == 0) {
-                return sysUser;
+        if(!ObjectUtils.isEmpty(sysUser)){
+            if (password.length() > CODE_LENGTH) {
+                password = DigestUtils.md5Hex(password + SALT);
+                if (StringUtils.compare(sysUser.getPassword(), password) == 0) {
+                    return sysUser;
+                }
+            } else {
+                String redisCode = redisSever.getRedisKV(VER_CODE + sysUser.getMail());
+                if (StringUtils.compare(password, DigestUtils.md5Hex(redisCode + SALT)) == 0) {
+                    return sysUser;
+                }
             }
         }
         return null;
@@ -101,7 +114,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void updatePassword(String userMail, String password) {
         SysUser sysUser = (SysUser) ThreadLocalUtils.get();
         if (StringUtils.compare(userMail, sysUser.getMail()) == 0) {
-            sysUser.setPassword(DigestUtils.md5Hex(password + SLAT));
+            sysUser.setPassword(DigestUtils.md5Hex(password + SALT));
             sysUserMapper.updateById(sysUser);
         }
     }

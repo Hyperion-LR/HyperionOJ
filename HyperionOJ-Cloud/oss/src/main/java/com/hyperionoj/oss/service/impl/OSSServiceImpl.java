@@ -1,6 +1,7 @@
 package com.hyperionoj.oss.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.hyperionoj.common.constants.Constants;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.JWTUtils;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
@@ -9,10 +10,7 @@ import com.hyperionoj.oss.dao.pojo.sys.SysUser;
 import com.hyperionoj.oss.service.AdminService;
 import com.hyperionoj.oss.service.OSSService;
 import com.hyperionoj.oss.service.SysUserService;
-import com.hyperionoj.oss.vo.LoginParam;
-import com.hyperionoj.oss.vo.RegisterParam;
-import com.hyperionoj.oss.vo.SysUserVo;
-import com.hyperionoj.oss.vo.UpdatePasswordParam;
+import com.hyperionoj.oss.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import static com.hyperionoj.common.constants.Constants.*;
+import static com.hyperionoj.common.constants.Constants.TOKEN;
+import static com.hyperionoj.common.constants.Constants.VER_CODE;
+import static com.sun.javafx.font.FontResource.SALT;
 
 /**
  * @author Hyperion
@@ -85,13 +85,13 @@ public class OSSServiceImpl implements OSSService {
     }
 
     /**
-     * 注册功能
+     * 注册普通用户
      *
      * @param registerParam 注册参数
      * @return token
      */
     @Override
-    public String register(RegisterParam registerParam) {
+    public String registerUser(RegisterParam registerParam) {
         if (sysUserService.findUserById(registerParam.getId()) != null) {
             return null;
         }
@@ -141,18 +141,68 @@ public class OSSServiceImpl implements OSSService {
         return sysUserService.destroy(destroyParam.getAccount(), destroyParam.getPassword());
     }
 
+    /**
+     * 注册管理员
+     *
+     * @param registerParam 注册参数
+     */
+    @Override
+    public void addAdmin(RegisterAdminParam registerParam) {
+        adminService.addAdmin(copyRegisterParamToAdmin(registerParam));
+    }
+
+    /**
+     * 更新管理员
+     *
+     * @param registerParam 注册参数
+     */
+    @Override
+    public void updateAdmin(RegisterAdminParam registerParam) {
+        adminService.updateAdmin(copyRegisterParamToAdmin(registerParam));
+    }
+
+    /**
+     * 删除管理员
+     *
+     * @param id 管理员id
+     */
+    @Override
+    public void deleteAdmin(String id) {
+        adminService.deleteAdmin(id);
+    }
+
+    /**
+     * 冻结普通用户
+     *
+     * @param id 要冻结的用户id
+     */
+    @Override
+    public void freezeUser(String id) {
+        sysUserService.freezeUser(id);
+    }
+
     private SysUser copyRegisterParamToSysUser(RegisterParam registerParam) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(registerParam, sysUser);
         sysUser.setId(Long.parseLong(registerParam.getId()));
-        sysUser.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + SLAT));
+        sysUser.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + SALT));
         sysUser.setLastLogin(System.currentTimeMillis());
         sysUser.setCreateTime(System.currentTimeMillis());
         sysUser.setProblemAcNumber(0);
         sysUser.setProblemSubmitAcNumber(0);
         sysUser.setProblemSubmitNumber(0);
-        sysUser.setSalt(SLAT);
+        sysUser.setSalt(Constants.SALT);
         sysUser.setStatus(0);
         return sysUser;
+    }
+
+    private Admin copyRegisterParamToAdmin(RegisterAdminParam registerParam) {
+        Admin admin = new Admin();
+        admin.setId(Long.parseLong(registerParam.getId()));
+        admin.setPassword(registerParam.getPassword());
+        admin.setName(registerParam.getName());
+        admin.setPermissionLevel(registerParam.getPermissionLevel());
+        admin.setSalt(Constants.SALT);
+        return admin;
     }
 }
