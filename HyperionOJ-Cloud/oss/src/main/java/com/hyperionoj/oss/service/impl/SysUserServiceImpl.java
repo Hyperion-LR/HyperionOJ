@@ -1,6 +1,8 @@
 package com.hyperionoj.oss.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.oss.dao.mapper.sys.SysUserMapper;
@@ -35,7 +37,9 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public void freezeUser(String id) {
-        sysUserMapper.freezeUser(id);
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, id).set(SysUser::getStatus, 1);
+        sysUserMapper.update(null, updateWrapper);
     }
 
     /**
@@ -57,7 +61,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         queryWrapper.last(" limit 1");
         SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
-        if(!ObjectUtils.isEmpty(sysUser)){
+        if (!ObjectUtils.isEmpty(sysUser)) {
             if (password.length() > CODE_LENGTH) {
                 password = DigestUtils.md5Hex(password + SALT);
                 if (StringUtils.compare(sysUser.getPassword(), password) == 0) {
@@ -112,7 +116,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public void updatePassword(String userMail, String password) {
-        SysUser sysUser = (SysUser) ThreadLocalUtils.get();
+        SysUser sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), SysUser.class);
         if (StringUtils.compare(userMail, sysUser.getMail()) == 0) {
             sysUser.setPassword(DigestUtils.md5Hex(password + SALT));
             sysUserMapper.updateById(sysUser);
@@ -127,7 +131,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public boolean destroy(String account, String password) {
-        SysUser sysUser = (SysUser) ThreadLocalUtils.get();
+        SysUser sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), SysUser.class);
         if (sysUser != null) {
             if (StringUtils.compare(account, String.valueOf(sysUser.getId())) == 0) {
                 sysUser.setStatus(1);

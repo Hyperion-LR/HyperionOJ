@@ -25,7 +25,7 @@
         <where>
             1 = 1
             <if test="level != null">
-                and "level" = #{level}
+                and problem_level = #{problemLevel}
             </if>
             <if test="categoryId != null">
                 and category_id = #{categoryId}

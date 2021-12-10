@@ -1,15 +1,15 @@
-package com.hyperionoj.page.vo;
+package com.hyperionoj.admin.vo;
 
 import lombok.Data;
 
 /**
- * 题目分页查询参数
+ * 管理员行为分页查询参数
  *
  * @author Hyperion
- * @date 2021/12/9
+ * @date 2021/12/10
  */
 @Data
-public class PageParams {
+public class ActionPageParams {
 
     /**
      * 页数
@@ -22,13 +22,13 @@ public class PageParams {
     private Integer pageSize = 10;
 
     /**
-     * 题目难度
+     * 管理员id
      */
-    private Integer level;
+    private Integer adminId;
 
     /**
-     * 分类id
+     * 管理员行为
      */
-    private Long categoryId;
+    private String action;
 
 }

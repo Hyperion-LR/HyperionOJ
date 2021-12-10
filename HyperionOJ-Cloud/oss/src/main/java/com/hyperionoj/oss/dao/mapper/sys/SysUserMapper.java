@@ -16,5 +16,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      *
      * @param id 要冻结的用户id
      */
-    void freezeUser(String id);
+    void freezeUser(Long id);
 }

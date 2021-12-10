@@ -1,5 +1,6 @@
 package com.hyperionoj.admin.aop;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.admin.dao.mapper.AdminActionMapper;
 import com.hyperionoj.admin.dao.pojo.AdminAction;
 import com.hyperionoj.admin.vo.AdminVo;
@@ -42,19 +43,20 @@ public class AdminActionAspect {
     }
 
     private AdminAction getAction(ProceedingJoinPoint joinPoint, long time, Object result) {
-        AdminVo admin = (AdminVo) ThreadLocalUtils.get();
+        AdminVo admin = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), AdminVo.class);
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         AdminActionAnnotation adminActionAnnotation = method.getAnnotation(AdminActionAnnotation.class);
         AdminAction adminAction = new AdminAction();
-        adminAction.setAction(adminActionAnnotation.url());
-        adminAction.setTime(time);
+        adminAction.setAdminAction(adminActionAnnotation.url());
+        adminAction.setActionTime(time);
         adminAction.setAdminId(admin.getId());
         if (((Result) result).getCode() == SUCCESS_CODE) {
-            adminAction.setStatus(0);
+            adminAction.setActionStatus(0);
         } else {
-            adminAction.setStatus(1);
+            adminAction.setActionStatus(1);
         }
+        log.info(adminAction.toString());
         return adminAction;
     }
 

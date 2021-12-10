@@ -1,7 +1,8 @@
-package com.hyperionoj.oss.handler;
+package com.hyperionoj.page.interceptor;
 
 import com.alibaba.druid.support.spring.mvc.StatHandlerInterceptor;
 import com.alibaba.fastjson.JSON;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.JWTUtils;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.ErrorCode;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.hyperionoj.common.constants.Constants.TOKEN;
 import static com.hyperionoj.common.constants.Constants.UNDEFINED;
 
 /**
@@ -25,13 +28,24 @@ import static com.hyperionoj.common.constants.Constants.UNDEFINED;
 @Slf4j
 public class LoginInterceptor extends StatHandlerInterceptor {
 
+    @Resource
+    private RedisSever redisSever;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        String token = request.getHeader("token");
 
+        String token = request.getHeader("Admin-Token");
+        Object adminId = JWTUtils.checkToken(token);
+        String admin = redisSever.getRedisKV(TOKEN + token);
+        if (adminId != null && admin != null) {
+            ThreadLocalUtils.set(admin);
+            return true;
+        }
+
+        token = request.getHeader("SysUser-Token");
         log.info("=================request start===========================");
         String requestURI = request.getRequestURI();
         log.info("request uri:{}", requestURI);
@@ -45,8 +59,9 @@ public class LoginInterceptor extends StatHandlerInterceptor {
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
-        Object sysUser = JWTUtils.checkToken(token);
-        if (sysUser == null) {
+        Object sysUserId = JWTUtils.checkToken(token);
+        String sysUser = redisSever.getRedisKV(TOKEN + token);
+        if (sysUser == null || sysUserId == null) {
             return false;
         }
         ThreadLocalUtils.set(sysUser);

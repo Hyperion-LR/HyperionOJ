@@ -36,8 +36,8 @@ public class UpdateController {
     }
 
     @PostMapping("/freeze")
-    public Result freezeUser(@RequestBody String id) {
-        ossService.freezeUser(id);
+    public Result freezeUser(@RequestBody SysUserVo userVo) {
+        ossService.freezeUser(userVo.getId());
         return Result.success(null);
     }
 

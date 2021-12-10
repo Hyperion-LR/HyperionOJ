@@ -1,7 +1,10 @@
 package com.hyperionoj.admin.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.admin.dao.pojo.AdminAction;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,4 +13,15 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AdminActionMapper extends BaseMapper<AdminAction> {
+    /**
+     * 返回管理员行为列表
+     *
+     * @param page    分页参数
+     * @param adminId 管理员id
+     * @param action  管理员行为
+     * @return 分页数据
+     */
+    IPage<AdminAction> listAction(Page<AdminAction> page,
+                                  @Param("adminId") Integer adminId,
+                                  @Param("action") String action);
 }

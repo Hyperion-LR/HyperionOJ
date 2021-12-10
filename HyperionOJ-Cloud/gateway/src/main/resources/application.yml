@@ -23,10 +23,6 @@ spring:
             #- Cookie=
             #filters:
             #- AddRequestHeader
-        - id: page-service
-          uri: lb://page
-          predicates:
-            - Path=/test/*
         - id: judge-service
           uri: lb://judge
           predicates:
@@ -35,6 +31,10 @@ spring:
           uri: lb://page
           predicates:
             - Path=/problem/*, /article/*, /contests/*
+        - id: admin-service
+          uri: lb://admin
+          predicates:
+            - Path=/admin/*
         - id: finduser-service
           uri: lb://consumer
           predicates:

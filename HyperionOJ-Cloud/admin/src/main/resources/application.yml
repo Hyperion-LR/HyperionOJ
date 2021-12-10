@@ -31,3 +31,10 @@ mybatis-plus:
   global-config:
     db-config:
       table-prefix: oj_
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+        requestInterceptors:
+          - com.hyperionoj.common.interceptor.DefaultFeignConfiguration

@@ -2,6 +2,7 @@ package com.hyperionoj.common.feign;
 
 import com.hyperionoj.common.vo.RegisterParam;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.SysUserVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,18 +35,18 @@ public interface AdminClients {
     /**
      * 删除管理员管理员
      *
-     * @param id 要删除的管理员id
+     * @param userVo 要删除的管理员id
      * @return 返回参数
      */
     @PostMapping("/destroy/admin")
-    Result deleteAdmin(String id);
+    Result deleteAdmin(SysUserVo userVo);
 
     /**
      * 冻结普通用户
      *
-     * @param id 要冻结的用户id
+     * @param userVo 要冻结的用户id
      * @return 返回参数
      */
     @PostMapping("/update/freeze")
-    Result freezeUser(String id);
+    Result freezeUser(SysUserVo userVo);
 }

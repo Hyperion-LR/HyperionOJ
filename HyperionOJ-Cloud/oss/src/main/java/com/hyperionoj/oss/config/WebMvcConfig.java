@@ -1,6 +1,6 @@
 package com.hyperionoj.oss.config;
 
-import com.hyperionoj.oss.handler.LoginInterceptor;
+import com.hyperionoj.oss.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

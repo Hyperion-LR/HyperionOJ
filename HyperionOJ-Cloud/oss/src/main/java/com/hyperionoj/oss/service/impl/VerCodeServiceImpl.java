@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Random;
 
-import static com.hyperionoj.common.constants.Constants.*;
+import static com.hyperionoj.common.constants.Constants.SALT;
+import static com.hyperionoj.common.constants.Constants.VER_CODE;
 
 /**
  * @author Hyperion

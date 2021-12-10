@@ -1,6 +1,7 @@
 package com.hyperionoj.oss.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.constants.Constants;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.JWTUtils;
@@ -109,7 +110,7 @@ public class OSSServiceImpl implements OSSService {
      */
     @Override
     public void updateUser(SysUserVo userVo) {
-        SysUser sysUser = (SysUser) ThreadLocalUtils.get();
+        SysUser sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), SysUser.class);
         sysUser.setUsername(userVo.getUsername());
         sysUser.setAvatar(userVo.getAvatar());
         sysUser.setMail(userVo.getMail());

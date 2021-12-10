@@ -1,8 +1,9 @@
-package com.hyperionoj.judge.handler;
+package com.hyperionoj.oss.interceptor;
 
 import com.alibaba.druid.support.spring.mvc.StatHandlerInterceptor;
 import com.alibaba.fastjson.JSON;
 import com.hyperionoj.common.service.RedisSever;
+import com.hyperionoj.common.utils.JWTUtils;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
@@ -35,8 +36,16 @@ public class LoginInterceptor extends StatHandlerInterceptor {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        String token = request.getHeader("token");
 
+        String token = request.getHeader("Admin-Token");
+        Object adminId = JWTUtils.checkToken(token);
+        String admin = redisSever.getRedisKV(TOKEN + token);
+        if (adminId != null && admin != null) {
+            ThreadLocalUtils.set(admin);
+            return true;
+        }
+
+        token = request.getHeader("SysUser-Token");
         log.info("=================request start===========================");
         String requestURI = request.getRequestURI();
         log.info("request uri:{}", requestURI);
@@ -50,8 +59,9 @@ public class LoginInterceptor extends StatHandlerInterceptor {
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
+        Object sysUserId = JWTUtils.checkToken(token);
         String sysUser = redisSever.getRedisKV(TOKEN + token);
-        if (sysUser == null) {
+        if (sysUser == null || sysUserId == null) {
             return false;
         }
         ThreadLocalUtils.set(sysUser);

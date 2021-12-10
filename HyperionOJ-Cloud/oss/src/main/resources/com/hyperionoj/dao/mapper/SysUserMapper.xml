@@ -4,15 +4,9 @@
 
 <mapper namespace="com.hyperionoj.oss.dao.mapper.sys.SysUserMapper">
 
-    <update id="freezeUser" parameterType="String">
-        UPDATE oj_sys_user
-        <set>
-            <if test="status != null">
-                status = 1
-            </if>
-        </set>
-        <where>
-            id = #{id}
-        </where>
+    <update id="freezeUser" parameterType="java.lang.Long">
+        update oj_sys_user
+        set status = 1
+        where id = #{id}
     </update>
 </mapper>

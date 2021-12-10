@@ -16,10 +16,10 @@ public class AdminAction {
 
     private Long adminId;
 
-    private String action;
+    private String adminAction;
 
-    private Long time;
+    private Long actionTime;
 
-    private Integer status;
+    private Integer actionStatus;
 
 }
