@@ -21,13 +21,15 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     /**
      * 用户提交了一次正确代码
+     *
      * @param authorId 用户id
      */
     void updateSubmitAc(@Param("authorId") Long authorId);
 
     /**
      * 用户提交了一次错误代码
+     *
      * @param authorId 用户id
      */
-    void updateSubmitNoAc(@Param("authorId")Long authorId);
+    void updateSubmitNoAc(@Param("authorId") Long authorId);
 }

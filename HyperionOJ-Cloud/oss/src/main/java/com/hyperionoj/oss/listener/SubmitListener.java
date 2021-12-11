@@ -8,10 +8,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-
 import java.util.Optional;
 
-import static com.hyperionoj.common.constants.Constants.*;
+import static com.hyperionoj.common.constants.Constants.AC;
+import static com.hyperionoj.common.constants.Constants.KAFKA_TOPIC_SUBMIT_PAGE;
 
 /**
  * @author Hyperion
@@ -30,9 +30,9 @@ public class SubmitListener {
             UpdateSubmitVo updateSubmitVo = JSONObject.parseObject((String) kafkaMessage.get(), UpdateSubmitVo.class);
             Long authorId = updateSubmitVo.getAuthorId();
             String status = updateSubmitVo.getStatus();
-            if(AC.equals(status)){
+            if (AC.equals(status)) {
                 sysUserMapper.updateSubmitAc(authorId);
-            }else{
+            } else {
                 sysUserMapper.updateSubmitNoAc(authorId);
             }
 

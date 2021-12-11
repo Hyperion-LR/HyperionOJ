@@ -23,7 +23,7 @@
         set problem_ac_number =
                 (select count(distinct problem_id, `status`)
                  from oj_problem_submit
-                 where id = #{authorId}
+                 where author_id = #{authorId}
                    and `status` = 'AC')
         where id = #{authorId};
     </update>
