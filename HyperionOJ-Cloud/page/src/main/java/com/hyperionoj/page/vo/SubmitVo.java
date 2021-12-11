@@ -1,4 +1,4 @@
-package com.hyperionoj.judge.vo;
+package com.hyperionoj.page.vo;
 
 import lombok.Data;
 

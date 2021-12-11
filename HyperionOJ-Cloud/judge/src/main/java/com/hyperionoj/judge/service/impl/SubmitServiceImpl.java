@@ -1,8 +1,5 @@
 package com.hyperionoj.judge.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.common.pojo.SysUser;
-import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.judge.constants.Verdict;
 import com.hyperionoj.judge.service.*;
 import com.hyperionoj.judge.vo.RunResult;
@@ -46,11 +43,8 @@ public class SubmitServiceImpl implements SubmitService {
         // 准备工作
         RunResult runResult = new RunResult();
 
-        // 获取提交作者
-        SysUser sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), SysUser.class);
-
         // 生成本地目录
-        String codeFileName = sysUser.getId() + UNDERLINE + submit.getProblemId();
+        String codeFileName = submit.getAuthorId() + UNDERLINE + submit.getProblemId();
 
         // 保存代码至本地
         String saveDir = fileService.saveFile(codeFileName, submit.getCodeBody(), submit.getCodeLang());
@@ -79,6 +73,7 @@ public class SubmitServiceImpl implements SubmitService {
             runResult.setVerdict(Verdict.CE.getVerdict());
             runResult.setMsg(compiledFile.getMsg());
         }
+        runResult.setAuthorId(submit.getAuthorId());
         runResult.setProblemId(Integer.valueOf(submit.getProblemId()));
         return runResult;
     }

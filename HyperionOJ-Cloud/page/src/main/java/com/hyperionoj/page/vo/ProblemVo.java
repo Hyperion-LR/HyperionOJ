@@ -27,4 +27,6 @@ public class ProblemVo {
 
     private Integer commentNumber;
 
+    private ProblemBodyVo problemBodyVo;
+
 }

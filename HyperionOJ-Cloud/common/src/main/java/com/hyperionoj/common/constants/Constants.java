@@ -65,4 +65,19 @@ public interface Constants {
      */
     String COMMA = ",";
 
+    /**
+     * 非法字符
+     */
+    String ILLEGAL_CHAR_SYSTEM = "system(";
+
+    /**
+     * 表示kafka消息主题
+     */
+    String KAFKA_TOPIC_SUBMIT = "SUBMIT";
+
+    /**
+     * 表示kafka消息主题
+     */
+    String KAFKA_TOPIC_SUBMIT_RESULT = "RESULT";
+
 }

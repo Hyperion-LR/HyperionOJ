@@ -5,6 +5,7 @@ import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.PageParams;
 import com.hyperionoj.page.vo.ProblemVo;
+import com.hyperionoj.page.vo.SubmitVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,10 +33,10 @@ public class ProblemController {
     }
 
     /**
-     * 查询 题目简要情况
+     * 查询 题目具体情况
      *
      * @param id 题目id
-     * @return 题目简要情况
+     * @return 题目具体情况
      */
     @GetMapping("/{id}")
     public Result getProblemById(@PathVariable Long id) {
@@ -45,4 +46,22 @@ public class ProblemController {
         }
         return Result.success(problem);
     }
+
+    /**
+     * 提交题目
+     *
+     * @param submitVo 用户提交数据
+     * @return 本次提交情况
+     */
+    @PostMapping("/submit")
+    public Result submit(@RequestBody SubmitVo submitVo) {
+        Object result = problemService.submit(submitVo);
+        if (result == null) {
+            return Result.fail(ErrorCode.SYSTEM_ERROR);
+        } else {
+            return Result.success(result);
+        }
+    }
+
+
 }

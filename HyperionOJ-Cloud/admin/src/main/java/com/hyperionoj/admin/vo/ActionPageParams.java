@@ -24,7 +24,7 @@ public class ActionPageParams {
     /**
      * 管理员id
      */
-    private Integer adminId;
+    private Long adminId;
 
     /**
      * 管理员行为

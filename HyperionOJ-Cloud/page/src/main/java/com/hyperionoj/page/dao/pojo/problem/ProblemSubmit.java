@@ -22,7 +22,7 @@ public class ProblemSubmit {
 
     private String codeBody;
 
-    private Integer status;
+    private String status;
 
     private Integer runTime;
 

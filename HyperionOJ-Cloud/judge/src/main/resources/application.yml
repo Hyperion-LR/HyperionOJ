@@ -28,6 +28,29 @@ spring:
     multipart:
       max-request-size: 5GB
       max-file-size: 1GB
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      # 发生错误后，消息重发的次数。
+      retries: 3
+      # 键的序列化方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 值的序列化方式
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: judgeTest
+      # 键的反序列化方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 值的反序列化方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.artisan.springkafka.domain
+    listener:
+      # 但消费者监听的topic不存在时，保证能够是项目启动
+      missing-topics-fatal: false
 mybatis-plus:
   mapper-locations: classpath:com/hyperionoj/dao/mapper/*.xml
   configuration:

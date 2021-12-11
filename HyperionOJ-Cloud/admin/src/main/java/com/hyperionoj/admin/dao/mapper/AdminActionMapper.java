@@ -22,6 +22,6 @@ public interface AdminActionMapper extends BaseMapper<AdminAction> {
      * @return 分页数据
      */
     IPage<AdminAction> listAction(Page<AdminAction> page,
-                                  @Param("adminId") Integer adminId,
+                                  @Param("adminId") Long adminId,
                                   @Param("action") String action);
 }

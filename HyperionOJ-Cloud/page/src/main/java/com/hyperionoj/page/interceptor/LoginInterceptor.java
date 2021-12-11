@@ -38,11 +38,13 @@ public class LoginInterceptor extends StatHandlerInterceptor {
         }
 
         String token = request.getHeader("Admin-Token");
-        Object adminId = JWTUtils.checkToken(token);
-        String admin = redisSever.getRedisKV(TOKEN + token);
-        if (adminId != null && admin != null) {
-            ThreadLocalUtils.set(admin);
-            return true;
+        if (!StringUtils.isBlank(token)) {
+            Object adminId = JWTUtils.checkToken(token);
+            String admin = redisSever.getRedisKV(TOKEN + token);
+            if (adminId != null && admin != null) {
+                ThreadLocalUtils.set(admin);
+                return true;
+            }
         }
 
         token = request.getHeader("SysUser-Token");

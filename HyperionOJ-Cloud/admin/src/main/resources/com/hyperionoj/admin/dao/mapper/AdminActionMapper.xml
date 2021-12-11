@@ -16,8 +16,8 @@
         select id, admin_id, admin_action, action_time, action_status from oj_admin_action
         <where>
             1 = 1
-            <if test="adminId != null">and admin_id = #{admin_id}</if>
-            <if test="action != null">and admin_action = #{adminAction}</if>
+            <if test="adminId != null">and admin_id = #{adminId}</if>
+            <if test="action != null">and admin_action = #{action}</if>
         </where>
         order by action_time desc
     </select>

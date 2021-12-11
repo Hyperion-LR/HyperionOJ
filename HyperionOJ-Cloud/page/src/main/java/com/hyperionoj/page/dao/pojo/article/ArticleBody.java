@@ -18,5 +18,4 @@ public class ArticleBody {
 
     private String contentHtml;
 
-    private Long articleId;
 }

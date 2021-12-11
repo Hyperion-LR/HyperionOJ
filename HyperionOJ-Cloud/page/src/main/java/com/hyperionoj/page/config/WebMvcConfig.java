@@ -22,6 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/update/*")
                 .addPathPatterns("/destroy")
+                .addPathPatterns("/problem/submit")
         ;
     }
 }

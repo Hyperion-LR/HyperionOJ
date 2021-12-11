@@ -17,5 +17,4 @@ public class ProblemBody {
 
     private String problemBodyHtml;
 
-    private Long problemId;
 }

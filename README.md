@@ -22,24 +22,22 @@ com.hyperion
 |
 ├── hyperion-oss            							// 单点登录 [9020]
 |
-├── hyperion-config         							// 配置模块
-|
 ├── hyperion-judge         							    // 判题模块 [9900] 
 |
 ├── hyperion-admin          							// 管理模块和监控中心 [9999]
 |
-├── hyperion-order          							// 支付模块 [8888]
+├── hyperion-order          							// 支付模块 [8888](暂无)
 │       └── hyperion-order-alipay                       // 阿里支付 
 │       └── hyperion-order-wxpay               		 	// 微信支付 
 |
 ├── hyperion-commom             						// 通用模块 [10000]
-│       └── hyperion-commom-datasource               	// 数据来源
-│       └── hyperion-commom-redis               		// 缓存服务
-│       └── hyperion-commom-log               			// 日志服务
-│       └── hyperion-commom-utils                       // 系统工具类
-│       └── hyperion-commom-feign                       // 调用接口
+│       └── hyperion-commom-config               		// 配置相关
 │       └── hyperion-commom-constant                    // 常量包
-│       └── hyperion-commom-mail                        // 邮箱接口
+│       └── hyperion-commom-feign               		// 声明式调用
+│       └── hyperion-commom-interceptor               	// 拦截器
+│       └── hyperion-commom-service               		// 公共服务
+│       └── hyperion-commom-utils                       // 系统工具类
+│       └── hyperion-commom-vo                       	// 前端交互对象
 |
 ├──pom.xml                								// 公共依赖
 ~~~

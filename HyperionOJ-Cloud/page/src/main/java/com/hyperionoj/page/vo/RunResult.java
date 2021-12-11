@@ -1,19 +1,15 @@
-package com.hyperionoj.judge.vo;
+package com.hyperionoj.page.vo;
 
 import lombok.Data;
 
-/**
- * @author Hyperion
- * @date 2021/12/7
- */
 @Data
 public class RunResult {
 
     private String authorId;
 
-    private Integer submitId;
+    private Long submitId;
 
-    private Integer problemId;
+    private Long problemId;
 
     private String verdict;
 
