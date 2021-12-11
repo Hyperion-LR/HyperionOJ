@@ -29,30 +29,31 @@ public class AdminController {
     @Resource
     private AdminService adminService;
 
-    @AdminActionAnnotation(url = "/add")
+    @AdminActionAnnotation(url = "/add", level = 1)
     @PostMapping("/add")
     public Result addAdmin(@RequestBody RegisterParam registerParam) {
         return adminClients.addAdmin(registerParam);
     }
 
-    @AdminActionAnnotation(url = "/update")
+    @AdminActionAnnotation(url = "/update", level = 1)
     @PostMapping("/update")
     public Result updateAdmin(@RequestBody RegisterParam registerParam) {
         return adminClients.updateAdmin(registerParam);
     }
 
-    @AdminActionAnnotation(url = "/delete")
+    @AdminActionAnnotation(url = "/delete", level = 1)
     @PostMapping("/delete")
     public Result deleteAdmin(@RequestBody AdminVo adminVo) {
         return adminClients.deleteAdmin(adminVo);
     }
 
-    @AdminActionAnnotation(url = "/freeze")
+    @AdminActionAnnotation(url = "/freeze", level = 1)
     @PostMapping("/freeze")
     public Result freezeUser(@RequestBody SysUserVo sysUserVo) {
         return adminClients.freezeUser(sysUserVo);
     }
 
+    @AdminActionAnnotation(url = "/query/action", level = 3)
     @PostMapping("/query/action")
     public Result queryAdminActionList(@RequestBody ActionPageParams pageParams) {
         return Result.success(adminService.queryActionList(pageParams));

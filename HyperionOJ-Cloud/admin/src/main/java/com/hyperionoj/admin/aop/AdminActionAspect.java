@@ -5,6 +5,7 @@ import com.hyperionoj.admin.dao.mapper.AdminActionMapper;
 import com.hyperionoj.admin.dao.pojo.AdminAction;
 import com.hyperionoj.admin.vo.AdminVo;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -36,20 +37,30 @@ public class AdminActionAspect {
     }
 
     @Around("pt()")
-    public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object result = joinPoint.proceed();
-        adminActionMapper.insert(getAction(joinPoint, System.currentTimeMillis(), result));
-        return result;
-    }
-
-    private AdminAction getAction(ProceedingJoinPoint joinPoint, long time, Object result) {
+    public Object action(ProceedingJoinPoint joinPoint) throws Throwable {
         AdminVo admin = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), AdminVo.class);
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         AdminActionAnnotation adminActionAnnotation = method.getAnnotation(AdminActionAnnotation.class);
+        boolean isLevel = checkLevel(adminActionAnnotation, admin);
+        Object result;
+        if (isLevel) {
+            result = joinPoint.proceed();
+        } else {
+            result = Result.fail(ErrorCode.NO_PERMISSION);
+        }
+        adminActionMapper.insert(getAction(admin, adminActionAnnotation, result));
+        return result;
+    }
+
+    private boolean checkLevel(AdminActionAnnotation adminActionAnnotation, AdminVo admin) {
+        return admin.getPermissionLevel() <= adminActionAnnotation.level();
+    }
+
+    private AdminAction getAction(AdminVo admin, AdminActionAnnotation adminActionAnnotation, Object result) {
         AdminAction adminAction = new AdminAction();
         adminAction.setAdminAction(adminActionAnnotation.url());
-        adminAction.setActionTime(time);
+        adminAction.setActionTime(System.currentTimeMillis());
         adminAction.setAdminId(admin.getId());
         if (((Result) result).getCode() == SUCCESS_CODE) {
             adminAction.setActionStatus(0);
@@ -59,6 +70,5 @@ public class AdminActionAspect {
         log.info(adminAction.toString());
         return adminAction;
     }
-
 
 }
