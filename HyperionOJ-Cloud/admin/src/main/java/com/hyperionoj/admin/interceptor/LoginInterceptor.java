@@ -54,6 +54,9 @@ public class LoginInterceptor extends StatHandlerInterceptor {
         Object adminId = JWTUtils.checkToken(token);
         String admin = redisSever.getRedisKV(TOKEN + token);
         if (admin == null || adminId == null) {
+            Result result = Result.fail(ErrorCode.NO_LOGIN);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
         ThreadLocalUtils.set(admin);

@@ -61,5 +61,5 @@ public interface SysUserService {
      * @param password 密码目前没用到
      * @return 是否注销成功
      */
-    boolean destroy(String account, String password);
+    boolean destroy(Long account, String password);
 }

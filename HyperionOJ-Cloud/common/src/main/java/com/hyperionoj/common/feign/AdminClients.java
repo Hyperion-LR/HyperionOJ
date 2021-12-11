@@ -1,5 +1,6 @@
 package com.hyperionoj.common.feign;
 
+import com.hyperionoj.common.vo.AdminVo;
 import com.hyperionoj.common.vo.RegisterParam;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.SysUserVo;
@@ -35,11 +36,11 @@ public interface AdminClients {
     /**
      * 删除管理员管理员
      *
-     * @param userVo 要删除的管理员id
+     * @param adminVo 要删除的管理员id
      * @return 返回参数
      */
     @PostMapping("/destroy/admin")
-    Result deleteAdmin(SysUserVo userVo);
+    Result deleteAdmin(AdminVo adminVo);
 
     /**
      * 冻结普通用户

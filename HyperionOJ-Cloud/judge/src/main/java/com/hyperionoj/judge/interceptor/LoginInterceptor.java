@@ -54,6 +54,9 @@ public class LoginInterceptor extends StatHandlerInterceptor {
         Object sysUserId = JWTUtils.checkToken(token);
         String sysUser = redisSever.getRedisKV(TOKEN + token);
         if (sysUser == null || sysUserId == null) {
+            Result result = Result.fail(ErrorCode.NO_LOGIN);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
         ThreadLocalUtils.set(sysUser);

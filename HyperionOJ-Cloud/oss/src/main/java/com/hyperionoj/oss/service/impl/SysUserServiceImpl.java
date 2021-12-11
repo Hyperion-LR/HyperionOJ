@@ -130,10 +130,10 @@ public class SysUserServiceImpl implements SysUserService {
      * @param password 密码目前没用到
      */
     @Override
-    public boolean destroy(String account, String password) {
+    public boolean destroy(Long account, String password) {
         SysUser sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), SysUser.class);
         if (sysUser != null) {
-            if (StringUtils.compare(account, String.valueOf(sysUser.getId())) == 0) {
+            if (sysUser.getId().equals(account)) {
                 sysUser.setStatus(1);
                 sysUserMapper.updateById(sysUser);
                 return true;

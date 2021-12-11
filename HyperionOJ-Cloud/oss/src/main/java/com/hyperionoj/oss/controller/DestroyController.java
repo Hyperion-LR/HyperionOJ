@@ -1,5 +1,6 @@
 package com.hyperionoj.oss.controller;
 
+import com.hyperionoj.common.vo.AdminVo;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.oss.service.OSSService;
@@ -31,8 +32,10 @@ public class DestroyController {
     }
 
     @PostMapping("/admin")
-    public Result deleteAdmin(@RequestBody String id) {
-        ossService.deleteAdmin(id);
+    public Result deleteAdmin(@RequestBody AdminVo adminVo) {
+        if (!ossService.deleteAdmin(Long.parseLong(adminVo.getId()))) {
+            return Result.fail(ErrorCode.PARAMS_ERROR);
+        }
         return Result.success(null);
     }
 

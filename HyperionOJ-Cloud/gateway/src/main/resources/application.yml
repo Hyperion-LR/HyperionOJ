@@ -34,7 +34,7 @@ spring:
         - id: admin-service
           uri: lb://admin
           predicates:
-            - Path=/admin/*
+            - Path=/admin/*, /admin/*/*
         - id: finduser-service
           uri: lb://consumer
           predicates:

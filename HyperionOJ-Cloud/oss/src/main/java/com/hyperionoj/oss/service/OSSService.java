@@ -1,5 +1,6 @@
 package com.hyperionoj.oss.service;
 
+import com.hyperionoj.oss.dao.pojo.admin.Admin;
 import com.hyperionoj.oss.vo.*;
 
 /**
@@ -60,22 +61,24 @@ public interface OSSService {
      * 注册管理员
      *
      * @param registerParam 注册参数
+     * @return 返回管理员信息
      */
-    void addAdmin(RegisterAdminParam registerParam);
+    Admin addAdmin(RegisterAdminParam registerParam);
 
     /**
      * 更新管理员
      *
      * @param registerParam 注册参数
      */
-    void updateAdmin(RegisterAdminParam registerParam);
+    Admin updateAdmin(RegisterAdminParam registerParam);
 
     /**
      * 删除管理员
      *
      * @param id 管理员id
+     * @return 是否成功删除
      */
-    void deleteAdmin(String id);
+    boolean deleteAdmin(Long id);
 
     /**
      * 冻结普通用户

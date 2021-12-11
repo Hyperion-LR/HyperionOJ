@@ -2,6 +2,7 @@ package com.hyperionoj.oss.controller;
 
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.oss.dao.pojo.admin.Admin;
 import com.hyperionoj.oss.service.OSSService;
 import com.hyperionoj.oss.service.VerCodeService;
 import com.hyperionoj.oss.vo.RegisterAdminParam;
@@ -41,7 +42,10 @@ public class RegisterController {
 
     @PostMapping("/admin")
     public Result addAdmin(@RequestBody RegisterAdminParam registerParam) {
-        ossService.addAdmin(registerParam);
-        return Result.success(registerParam);
+        Admin admin = ossService.addAdmin(registerParam);
+        if (admin == null) {
+            return Result.fail(ErrorCode.ACCOUNT_EXIST);
+        }
+        return Result.success(admin);
     }
 }

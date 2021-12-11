@@ -4,6 +4,7 @@ import com.hyperionoj.admin.aop.AdminActionAnnotation;
 import com.hyperionoj.admin.service.AdminService;
 import com.hyperionoj.admin.vo.ActionPageParams;
 import com.hyperionoj.common.feign.AdminClients;
+import com.hyperionoj.common.vo.AdminVo;
 import com.hyperionoj.common.vo.RegisterParam;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.SysUserVo;
@@ -42,8 +43,8 @@ public class AdminController {
 
     @AdminActionAnnotation(url = "/delete")
     @PostMapping("/delete")
-    public Result deleteAdmin(@RequestBody SysUserVo sysUserVo) {
-        return adminClients.deleteAdmin(sysUserVo);
+    public Result deleteAdmin(@RequestBody AdminVo adminVo) {
+        return adminClients.deleteAdmin(adminVo);
     }
 
     @AdminActionAnnotation(url = "/freeze")
@@ -53,7 +54,7 @@ public class AdminController {
     }
 
     @PostMapping("/query/action")
-    public Result QueryAdminActionList(@RequestBody ActionPageParams pageParams) {
+    public Result queryAdminActionList(@RequestBody ActionPageParams pageParams) {
         return Result.success(adminService.queryActionList(pageParams));
     }
 

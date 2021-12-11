@@ -71,18 +71,19 @@ public class OSSServiceImpl implements OSSService {
      */
     @Override
     public String adminLogin(LoginParam loginParam) {
-        String account = loginParam.getAccount();
+        long account = Long.parseLong(loginParam.getAccount());
         String password = loginParam.getPassword();
-        if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
+        if (account == 0 || StringUtils.isBlank(password)) {
             return null;
         }
-        Admin admin = adminService.findAdmin(account, password);
-        if (admin == null) {
-            return null;
+        Admin admin = adminService.findAdmin(account);
+        password = DigestUtils.md5Hex(password + Constants.SALT);
+        if (admin != null && StringUtils.compare(admin.getPassword(), password) == 0) {
+            String token = JWTUtils.createToken(admin.getId(), 24 * 60 * 60);
+            redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(admin), 3600);
+            return token;
         }
-        String token = JWTUtils.createToken(admin.getId(), 24 * 60 * 60);
-        redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(admin), 3600);
-        return token;
+        return null;
     }
 
     /**
@@ -139,7 +140,7 @@ public class OSSServiceImpl implements OSSService {
      */
     @Override
     public boolean destroy(LoginParam destroyParam) {
-        return sysUserService.destroy(destroyParam.getAccount(), destroyParam.getPassword());
+        return sysUserService.destroy(Long.parseLong(destroyParam.getAccount()), destroyParam.getPassword());
     }
 
     /**
@@ -148,18 +149,32 @@ public class OSSServiceImpl implements OSSService {
      * @param registerParam 注册参数
      */
     @Override
-    public void addAdmin(RegisterAdminParam registerParam) {
-        adminService.addAdmin(copyRegisterParamToAdmin(registerParam));
+    public Admin addAdmin(RegisterAdminParam registerParam) {
+        if (adminService.findAdmin(Long.parseLong(registerParam.getId())) != null) {
+            return null;
+        }
+        Admin admin = copyRegisterParamToAdmin(registerParam);
+        adminService.addAdmin(admin);
+        return admin;
     }
 
     /**
      * 更新管理员
      *
      * @param registerParam 注册参数
+     * @return 管理员消息更改结果
      */
     @Override
-    public void updateAdmin(RegisterAdminParam registerParam) {
-        adminService.updateAdmin(copyRegisterParamToAdmin(registerParam));
+    public Admin updateAdmin(RegisterAdminParam registerParam) {
+        Admin admin = adminService.findAdmin(Long.parseLong(registerParam.getId()));
+        if (admin == null) {
+            return null;
+        }
+        admin.setName(registerParam.getName());
+        admin.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + Constants.SALT));
+        admin.setPermissionLevel(registerParam.getPermissionLevel());
+        adminService.updateAdmin(admin);
+        return admin;
     }
 
     /**
@@ -168,8 +183,12 @@ public class OSSServiceImpl implements OSSService {
      * @param id 管理员id
      */
     @Override
-    public void deleteAdmin(String id) {
+    public boolean deleteAdmin(Long id) {
+        if (adminService.findAdmin(id) == null) {
+            return false;
+        }
         adminService.deleteAdmin(id);
+        return true;
     }
 
     /**
@@ -200,7 +219,7 @@ public class OSSServiceImpl implements OSSService {
     private Admin copyRegisterParamToAdmin(RegisterAdminParam registerParam) {
         Admin admin = new Admin();
         admin.setId(Long.parseLong(registerParam.getId()));
-        admin.setPassword(registerParam.getPassword());
+        admin.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + Constants.SALT));
         admin.setName(registerParam.getName());
         admin.setPermissionLevel(registerParam.getPermissionLevel());
         admin.setSalt(Constants.SALT);
