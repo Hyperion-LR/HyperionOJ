@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.dao.mapper.problem.*;
 import com.hyperionoj.page.dao.pojo.problem.Problem;
 import com.hyperionoj.page.dao.pojo.problem.ProblemBody;
@@ -97,7 +98,7 @@ public class ProblemServiceImpl implements ProblemService {
             RunResult runResult = new RunResult();
             runResult.setAuthorId(submitVo.getAuthorId());
             runResult.setProblemId(Long.parseLong(submitVo.getProblemId()));
-            runResult.setMsg("请不要使用系统命令或者非法私服");
+            runResult.setMsg("请不要使用系统命令或者非法字符");
             return runResult;
         }
         RunResult result = null;
@@ -113,7 +114,6 @@ public class ProblemServiceImpl implements ProblemService {
         } catch (Exception e) {
             log.warn(e.toString());
         }
-
         if (result != null) {
             ProblemSubmit problemSubmit = new ProblemSubmit();
             problemSubmit.setProblemId(result.getProblemId());
@@ -124,6 +124,11 @@ public class ProblemServiceImpl implements ProblemService {
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
             problemSubmitMapper.insert(problemSubmit);
+            UpdateSubmitVo updateSubmitVo = new UpdateSubmitVo();
+            updateSubmitVo.setProblemId(problemSubmit.getProblemId());
+            updateSubmitVo.setAuthorId(problemSubmit.getAuthorId());
+            updateSubmitVo.setStatus(problemSubmit.getStatus());
+            kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_PAGE, JSONObject.toJSONString(updateSubmitVo));
         }
         return result;
     }

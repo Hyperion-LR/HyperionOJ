@@ -71,13 +71,23 @@ public interface Constants {
     String ILLEGAL_CHAR_SYSTEM = "system(";
 
     /**
-     * 表示kafka消息主题
+     * 表示kafka请求judge服务运行代码主题
      */
     String KAFKA_TOPIC_SUBMIT = "SUBMIT";
 
     /**
-     * 表示kafka消息主题
+     * 表示kafka从judge服务返回page服务运行结果消息主题
      */
     String KAFKA_TOPIC_SUBMIT_RESULT = "RESULT";
+
+    /**
+     * 表示kafka更新用户提交数量主题
+     */
+    String KAFKA_TOPIC_SUBMIT_PAGE = "SUBMIT_PAGE";
+
+    /**
+     * 表示提交状态
+     */
+    String AC = "AC";
 
 }

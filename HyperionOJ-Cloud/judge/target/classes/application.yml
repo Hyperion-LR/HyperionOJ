@@ -1,8 +1,8 @@
 server:
-  port: 9020
+  port: 9900
 spring:
   application:
-    name: oss
+    name: judge
   profiles:
     active: dev
   cloud:
@@ -28,11 +28,6 @@ spring:
     multipart:
       max-request-size: 5GB
       max-file-size: 1GB
-  mail:
-    host: smtp.qq.com
-    username: Hyperion_LR@foxmail.com
-    password: sggplcgucwxxdhfi
-    default-encoding: UTF-8
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -43,7 +38,7 @@ spring:
       # 值的序列化方式
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: pageTest
+      group-id: judgeTest
       # 键的反序列化方式
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       # 值的反序列化方式
@@ -63,3 +58,7 @@ mybatis-plus:
   global-config:
     db-config:
       table-prefix: oj_
+judge:
+  fileDir:
+    problem: D:\WorkSpace\Java_Works\IDEA_Works\HyperionOJ\judge\problem_data
+    submit: D:\WorkSpace\Java_Works\IDEA_Works\HyperionOJ\judge\submit_data

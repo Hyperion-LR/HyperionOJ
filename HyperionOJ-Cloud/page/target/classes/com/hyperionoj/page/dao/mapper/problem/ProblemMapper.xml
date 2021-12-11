@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyperionoj.page.dao.mapper.problem.ProblemMapper">
+
+    <resultMap id="problemMap" type="com.hyperionoj.page.dao.pojo.problem.Problem">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="body_id" property="bodyId"/>
+        <result column="problem_level" property="problemLevel"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="ac_number" property="acNumber"/>
+        <result column="submit_number" property="submitNumber"/>
+        <result column="solution_number" property="solutionNumber"/>
+        <result column="comment_number" property="commentNumber"/>
+        <result column="run_time" property="runTime"/>
+        <result column="run_memory" property="runMemory"/>
+    </resultMap>
+
+    <select id="listArticle" resultType="com.hyperionoj.page.dao.pojo.problem.Problem">
+        select id, title, body_id, problem_level, category_id, ac_number, submit_number, solution_number,
+        comment_number,
+        run_time, run_memory from oj_problem
+        <where>
+            1 = 1
+            <if test="level != null">
+                and problem_level = #{problemLevel}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+</mapper>

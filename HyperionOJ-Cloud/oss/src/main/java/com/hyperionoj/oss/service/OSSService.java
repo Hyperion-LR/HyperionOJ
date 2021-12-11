@@ -2,6 +2,7 @@ package com.hyperionoj.oss.service;
 
 import com.hyperionoj.oss.dao.pojo.admin.Admin;
 import com.hyperionoj.oss.vo.*;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author Hyperion
@@ -38,7 +39,7 @@ public interface OSSService {
      *
      * @param userVo 用户信息
      */
-    void updateUser(SysUserVo userVo);
+    void updateUser(@Param("userVo") SysUserVo userVo);
 
     /**
      * 更新用户账号密码
