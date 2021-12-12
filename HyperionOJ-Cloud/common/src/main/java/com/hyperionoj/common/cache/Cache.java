@@ -1,0 +1,24 @@
+package com.hyperionoj.common.cache;
+
+import java.lang.annotation.*;
+
+/**
+ * @author Hyperion
+ * @date 2021/12/12
+ */
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Cache {
+
+    /**
+     * 缓存时间
+     */
+    long time() default 2 * 60 * 1000;
+
+    /**
+     * 缓存名称
+     */
+    String name() default "";
+
+}
