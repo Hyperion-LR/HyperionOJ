@@ -39,7 +39,7 @@ public class ProblemController {
      * @return 题目所有类别
      */
     @GetMapping("/category")
-    public Result getCategory(){
+    public Result getCategory() {
         return Result.success(problemService.getCategory());
     }
 
@@ -76,6 +76,28 @@ public class ProblemController {
     }
 
     /**
+     * 获取提交列表
+     *
+     * @param pageParams 分页查询参数
+     * @return 根据分页参数返回简要提交信息
+     */
+    @GetMapping("/submits")
+    public Result getSubmitList(@RequestBody PageParams pageParams) {
+        return Result.success(problemService.getSubmitList(pageParams));
+    }
+
+    /**
+     * 获取提交详情
+     *
+     * @param id 提交id
+     * @return 提交结果
+     */
+    @GetMapping("/submit/{id}")
+    public Result getSubmit(@PathVariable("id") Long id) {
+        return Result.success(problemService.getSubmitById(id));
+    }
+
+    /**
      * 对题目进行评论
      *
      * @param commentVo 用户提交评论
@@ -84,7 +106,7 @@ public class ProblemController {
     @PostMapping("/comment")
     public Result comment(@RequestBody CommentVo commentVo) {
         boolean isComment = problemService.comment(commentVo);
-        if (isComment) {
+        if (!isComment) {
             return Result.fail(ErrorCode.PARAMS_ERROR);
         } else {
             return Result.success(null);
@@ -93,11 +115,12 @@ public class ProblemController {
 
     /**
      * 获取评论列表
+     *
      * @param pageParams 分页参数
      * @return 评论列表
      */
     @GetMapping("/comments")
-    public Result getComments(@RequestBody PageParams pageParams){
+    public Result getComments(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getCommentList(pageParams));
     }
 

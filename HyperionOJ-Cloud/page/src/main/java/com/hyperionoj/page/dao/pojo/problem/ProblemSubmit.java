@@ -14,6 +14,8 @@ public class ProblemSubmit {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
+    private String username;
+
     private Long problemId;
 
     private Long authorId;
@@ -27,4 +29,6 @@ public class ProblemSubmit {
     private Integer runTime;
 
     private Integer runMemory;
+
+    private Long createTime;
 }

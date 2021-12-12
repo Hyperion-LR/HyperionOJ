@@ -51,6 +51,7 @@ public interface ProblemService {
 
     /**
      * 获取评论列表
+     *
      * @param pageParams 分页参数
      * @return 评论列表
      */
@@ -59,9 +60,25 @@ public interface ProblemService {
     /**
      * 修改问题的评论数
      * 此方法用于redis定时回写数据库
-     * @param problemId 题目id
+     *
+     * @param problemId     题目id
      * @param commentNumber 评论数量
      */
     void updateProblemCommentNumber(Long problemId, Integer commentNumber);
 
+    /**
+     * 获取提交列表
+     *
+     * @param pageParams 分页查询参数
+     * @return 根据分页参数返回简要提交信息
+     */
+    List<SubmitVo> getSubmitList(PageParams pageParams);
+
+    /**
+     * 获取提交详情
+     *
+     * @param id 提交id
+     * @return 提交结果
+     */
+    SubmitVo getSubmitById(Long id);
 }

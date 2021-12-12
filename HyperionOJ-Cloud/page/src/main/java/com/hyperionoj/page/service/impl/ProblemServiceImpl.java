@@ -68,7 +68,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<ProblemVo> getProblemList(PageParams pageParams) {
         Page<Problem> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        IPage<Problem> problemPage = problemMapper.listArticle(page, pageParams.getLevel(), Long.parseLong(pageParams.getCategoryId()));
+        IPage<Problem> problemPage = problemMapper.problemList(page, pageParams.getLevel(), Long.getLong(pageParams.getCategoryId()));
         return copyProblemList(problemPage.getRecords(), false);
     }
 
@@ -94,9 +94,10 @@ public class ProblemServiceImpl implements ProblemService {
      */
     @Override
     public Object submit(SubmitVo submitVo) {
+        SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
         if (!check(submitVo)) {
             RunResult runResult = new RunResult();
-            runResult.setAuthorId(submitVo.getAuthorId());
+            runResult.setAuthorId(sysUser.getId().toString());
             runResult.setProblemId(Long.parseLong(submitVo.getProblemId()));
             runResult.setMsg("请不要使用系统命令或者非法字符");
             return runResult;
@@ -117,12 +118,14 @@ public class ProblemServiceImpl implements ProblemService {
         if (result != null) {
             ProblemSubmit problemSubmit = new ProblemSubmit();
             problemSubmit.setProblemId(result.getProblemId());
-            problemSubmit.setAuthorId(Long.parseLong(submitVo.getAuthorId()));
+            problemSubmit.setAuthorId(sysUser.getId());
+            problemSubmit.setUsername(sysUser.getUsername());
             problemSubmit.setCodeBody(submitVo.getCodeBody());
             problemSubmit.setRunMemory(result.getRunMemory());
             problemSubmit.setCodeLang(submitVo.getCodeLang());
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
+            problemSubmit.setCreateTime(System.currentTimeMillis());
             problemSubmitMapper.insert(problemSubmit);
             UpdateSubmitVo updateSubmitVo = new UpdateSubmitVo();
             updateSubmitVo.setProblemId(problemSubmit.getProblemId());
@@ -166,8 +169,8 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<CommentVo> getCommentList(PageParams pageParams) {
         Page<ProblemComment> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        IPage<ProblemComment> problemPage = problemMapper.getCommentList(page, pageParams.getProblemId());
-        return copyProblemCommitList(problemPage.getRecords());
+        IPage<ProblemComment> commentPage = problemCommentMapper.getCommentList(page, pageParams.getProblemId());
+        return copyProblemCommitList(commentPage.getRecords());
     }
 
     /**
@@ -183,6 +186,60 @@ public class ProblemServiceImpl implements ProblemService {
         updateWrapper.eq(Problem::getId, problemId);
         updateWrapper.set(Problem::getCommentNumber, commentNumber);
         problemMapper.update(null, updateWrapper);
+    }
+
+    /**
+     * 获取提交列表
+     *
+     * @param pageParams 分页查询参数
+     * @return 根据分页参数返回简要提交信息
+     */
+    @Override
+    public List<SubmitVo> getSubmitList(PageParams pageParams) {
+        Page<ProblemSubmit> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
+        IPage<ProblemSubmit> submitList = problemSubmitMapper.getSubmitList(page,
+                pageParams.getProblemId(),
+                pageParams.getCodeLang(),
+                pageParams.getUsername(),
+                pageParams.getVerdict());
+        return copySubmitVoList(submitList.getRecords());
+    }
+
+    /**
+     * 获取提交详情
+     *
+     * @param id 提交id
+     * @return 提交结果
+     */
+    @Override
+    public SubmitVo getSubmitById(Long id) {
+        LambdaQueryWrapper<ProblemSubmit> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProblemSubmit::getId, id);
+        return copySubmitVo(problemSubmitMapper.selectOne(queryWrapper), true);
+    }
+
+    private List<SubmitVo> copySubmitVoList(List<ProblemSubmit> submits) {
+        ArrayList<SubmitVo> submitVos = new ArrayList<>();
+        for (ProblemSubmit submit : submits) {
+            submitVos.add(copySubmitVo(submit, false));
+        }
+        return submitVos;
+    }
+
+    private SubmitVo copySubmitVo(ProblemSubmit submit, boolean isBody) {
+        SubmitVo submitVo = new SubmitVo();
+        submitVo.setId(submit.getId().toString());
+        submitVo.setProblemId(submit.getProblemId().toString());
+        submitVo.setAuthorId(submit.getAuthorId().toString());
+        submitVo.setCodeLang(submit.getCodeLang());
+        submitVo.setCreateTime(submit.getCreateTime().toString());
+        submitVo.setRunTime(submit.getRunTime());
+        submitVo.setRunMemory(submit.getRunMemory());
+        submitVo.setVerdict(submit.getStatus());
+        if (isBody) {
+            submitVo.setCodeBody(submit.getCodeBody());
+        }
+        return submitVo;
     }
 
     private List<CommentVo> copyProblemCommitList(List<ProblemComment> comments) {
@@ -210,11 +267,20 @@ public class ProblemServiceImpl implements ProblemService {
         problemComment.setProblemId(Long.parseLong(commentVo.getProblemId()));
         problemComment.setContent(commentVo.getContent());
         problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorId()));
-        problemComment.setDelete(0);
+        problemComment.setIsDelete(0);
         problemComment.setCreateTime(System.currentTimeMillis());
         problemComment.setLevel(commentVo.getLevel());
-        problemComment.setParentId(Long.parseLong(commentVo.getParentId()));
-        problemComment.setToUid(Long.parseLong(commentVo.getToUid()));
+        problemComment.setParentId(Long.getLong(commentVo.getParentId()));
+        problemComment.setToUid(Long.getLong(commentVo.getToUid()));
+        if (problemComment.getLevel() == null) {
+            problemComment.setLevel(0);
+        }
+        if (problemComment.getParentId() == null) {
+            problemComment.setParentId(0L);
+        }
+        if (problemComment.getToUid() == null) {
+            problemComment.setToUid(0L);
+        }
         return problemComment;
     }
 
@@ -313,7 +379,6 @@ public class ProblemServiceImpl implements ProblemService {
         if (kafkaMessage.isPresent()) {
             RunResult message = JSONObject.parseObject((String) kafkaMessage.get(), RunResult.class);
             SUBMIT_RESULT.put(message.getAuthorId() + UNDERLINE + message.getProblemId(), message);
-            System.out.println("is ok");
         }
     }
 

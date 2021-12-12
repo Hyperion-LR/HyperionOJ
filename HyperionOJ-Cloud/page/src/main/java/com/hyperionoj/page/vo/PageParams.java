@@ -36,4 +36,19 @@ public class PageParams {
      */
     private String problemId;
 
+    /**
+     * 用户名称
+     */
+    private String username;
+
+    /**
+     * 提交结果
+     */
+    private String verdict;
+
+    /**
+     * 代码语言
+     */
+    private String codeLang;
+
 }

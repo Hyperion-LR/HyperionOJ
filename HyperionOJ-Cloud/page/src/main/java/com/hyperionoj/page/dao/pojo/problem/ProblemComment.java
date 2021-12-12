@@ -27,6 +27,6 @@ public class ProblemComment {
 
     private Integer level;
 
-    private Integer delete;
+    private Integer isDelete;
 
 }

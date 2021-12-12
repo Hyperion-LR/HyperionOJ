@@ -42,6 +42,8 @@ public class SubmitServiceImpl implements SubmitService {
 
         // 准备工作
         RunResult runResult = new RunResult();
+        runResult.setRunMemory(0);
+        runResult.setRunTime(0);
 
         // 生成本地目录
         String codeFileName = submit.getAuthorId() + UNDERLINE + submit.getProblemId();

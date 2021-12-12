@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class SubmitVo {
 
+    private String id;
+
     private String authorId;
 
     private String problemId;
@@ -22,5 +24,9 @@ public class SubmitVo {
     private Integer runMemory;
 
     private Integer caseNumber;
+
+    private String verdict;
+
+    private String createTime;
 
 }

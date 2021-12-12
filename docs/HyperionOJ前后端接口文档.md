@@ -229,7 +229,7 @@
 
 
 
-### 获取题目列表
+### 获取题目列表（分页查询）
 
 接口url：localhost:9000/problem/list
 
@@ -357,6 +357,227 @@
 ```
 
 
+
+### 获取所有题目分类
+
+接口url：localhost:9000/problem/category
+
+请求方式：get
+
+请求参数
+
+```json
+
+```
+
+返回参数
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1",
+            "categoryName": "test",
+            "description": "测试分类"
+        },
+        {
+            "id": "2",
+            "categoryName": "test2",
+            "description": "测试分类2"
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取提交列表（分页查询）
+
+接口url：localhost:9000/problem/submits
+
+请求方式：get
+
+请求参数：
+
+```
+{
+    "page": 1,
+    "pageSize": 3,
+    "problemId": null,
+    "username": null,
+    "verdict": null,
+    "codeLang": null
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1469934295938920449",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 151,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "1639294620868"
+        },
+        {
+            "id": "1469934165613506561",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 0,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "CE",
+            "createTime": "1639294589797"
+        },
+        {
+            "id": "1469934088903880705",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 0,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "CE",
+            "createTime": "1639294571520"
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取单次提交
+
+接口url：localhost:9000/problem/submit/{id}
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1469933996805353473",
+        "authorId": "15570357290",
+        "problemId": "1",
+        "codeLang": "java",
+        "codeBody": "import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name)\n}\n}",
+        "runTime": 126,
+        "runMemory": 0,
+        "caseNumber": null,
+        "verdict": "AC",
+        "createTime": "1639294545628"
+    },
+    "msg": null
+}
+```
+
+
+
+### 题目评论
+
+接口url：localhost:9000/problem/comment
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "content": "评论测试",
+    "problemId": "1",
+    "authorId": "15570357290",
+    "parentId": null,
+    "toUid": null,
+    "level": null
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+### 获取评论列表(分页查询)
+
+接口urllocalhost:9000/problem/comments
+
+请求方式： get
+
+请求参数：
+
+```json
+{
+    "page": 1,
+    "pageSize": 3,
+    "problemId": "1"
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1469944256601407490",
+            "content": "评论测试",
+            "problemId": "1",
+            "authorId": "15570357290",
+            "parentId": "0",
+            "toUid": "0",
+            "level": 0
+        },
+        {
+            "id": "1469944007879221250",
+            "content": "评论测试",
+            "problemId": "1",
+            "authorId": "15570357290",
+            "parentId": "0",
+            "toUid": "0",
+            "level": 0
+        },
+        {
+            "id": "1469943945635749889",
+            "content": "评论测试",
+            "problemId": "1",
+            "authorId": "15570357290",
+            "parentId": "0",
+            "toUid": "0",
+            "level": 0
+        }
+    ],
+    "msg": null
+}
+```
 
 
 

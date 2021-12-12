@@ -1,7 +1,10 @@
 package com.hyperionoj.page.dao.mapper.problem;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.page.dao.pojo.problem.ProblemComment;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,4 +13,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProblemCommentMapper extends BaseMapper<ProblemComment> {
+    /**
+     * 获取评论列表
+     *
+     * @param page      分页参数
+     * @param problemId 题目id
+     * @return 评论列表
+     */
+    IPage<ProblemComment> getCommentList(Page<ProblemComment> page, @Param("problemId") String problemId);
 }

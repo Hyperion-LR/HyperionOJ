@@ -18,7 +18,7 @@
         <result column="run_memory" property="runMemory"/>
     </resultMap>
 
-    <select id="listArticle" resultType="com.hyperionoj.page.dao.pojo.problem.Problem">
+    <select id="problemList" resultType="com.hyperionoj.page.dao.pojo.problem.Problem">
         select id, title, body_id, problem_level, category_id, ac_number, submit_number, solution_number,
         comment_number,
         run_time, run_memory from oj_problem
@@ -31,15 +31,5 @@
                 and category_id = #{categoryId}
             </if>
         </where>
-    </select>
-    <select id="getCommentList" resultType="com.hyperionoj.page.dao.pojo.problem.ProblemComment">
-        select id, content, create_time, author_id, parent_id, to_uid, level from oj_problem_comment
-        <where>
-            `delete` = 0
-            <if test="problemId != null">
-                and problem_id = #{problemId}
-            </if>
-        </where>
-        order by create_time desc
     </select>
 </mapper>
