@@ -3,6 +3,7 @@ package com.hyperionoj.page.controller;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.service.ProblemService;
+import com.hyperionoj.page.vo.CommentVo;
 import com.hyperionoj.page.vo.PageParams;
 import com.hyperionoj.page.vo.ProblemVo;
 import com.hyperionoj.page.vo.SubmitVo;
@@ -31,6 +32,17 @@ public class ProblemController {
     public Result getProblemList(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getProblemList(pageParams));
     }
+
+    /**
+     * 获取题目分类列表
+     *
+     * @return 题目所有类别
+     */
+    @GetMapping("/category")
+    public Result getCategory(){
+        return Result.success(problemService.getCategory());
+    }
+
 
     /**
      * 查询 题目具体情况
@@ -63,5 +75,30 @@ public class ProblemController {
         }
     }
 
+    /**
+     * 对题目进行评论
+     *
+     * @param commentVo 用户提交评论
+     * @return 本次提交情况
+     */
+    @PostMapping("/comment")
+    public Result comment(@RequestBody CommentVo commentVo) {
+        boolean isComment = problemService.comment(commentVo);
+        if (isComment) {
+            return Result.fail(ErrorCode.PARAMS_ERROR);
+        } else {
+            return Result.success(null);
+        }
+    }
+
+    /**
+     * 获取评论列表
+     * @param pageParams 分页参数
+     * @return 评论列表
+     */
+    @GetMapping("/comments")
+    public Result getComments(@RequestBody PageParams pageParams){
+        return Result.success(problemService.getCommentList(pageParams));
+    }
 
 }

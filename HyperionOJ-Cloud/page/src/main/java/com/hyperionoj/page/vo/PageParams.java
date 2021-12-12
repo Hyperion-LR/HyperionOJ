@@ -29,6 +29,11 @@ public class PageParams {
     /**
      * 分类id
      */
-    private Long categoryId;
+    private String categoryId;
+
+    /**
+     * 题目id
+     */
+    private String problemId;
 
 }

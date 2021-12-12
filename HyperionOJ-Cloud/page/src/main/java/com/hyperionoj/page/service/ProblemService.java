@@ -1,8 +1,6 @@
 package com.hyperionoj.page.service;
 
-import com.hyperionoj.page.vo.PageParams;
-import com.hyperionoj.page.vo.ProblemVo;
-import com.hyperionoj.page.vo.SubmitVo;
+import com.hyperionoj.page.vo.*;
 
 import java.util.List;
 
@@ -35,4 +33,35 @@ public interface ProblemService {
      * @return 本次提交情况
      */
     Object submit(SubmitVo submitVo);
+
+    /**
+     * 获取题目分类列表
+     *
+     * @return 题目所有类别1
+     */
+    List<ProblemCategoryVo> getCategory();
+
+    /**
+     * 对题目进行评论
+     *
+     * @param commentVo 用户提交评论
+     * @return 本次提交情况
+     */
+    boolean comment(CommentVo commentVo);
+
+    /**
+     * 获取评论列表
+     * @param pageParams 分页参数
+     * @return 评论列表
+     */
+    List<CommentVo> getCommentList(PageParams pageParams);
+
+    /**
+     * 修改问题的评论数
+     * 此方法用于redis定时回写数据库
+     * @param problemId 题目id
+     * @param commentNumber 评论数量
+     */
+    void updateProblemCommentNumber(Long problemId, Integer commentNumber);
+
 }

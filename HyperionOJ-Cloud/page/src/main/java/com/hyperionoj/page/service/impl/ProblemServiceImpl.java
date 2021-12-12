@@ -1,15 +1,15 @@
 package com.hyperionoj.page.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.dao.mapper.problem.*;
-import com.hyperionoj.page.dao.pojo.problem.Problem;
-import com.hyperionoj.page.dao.pojo.problem.ProblemBody;
-import com.hyperionoj.page.dao.pojo.problem.ProblemSubmit;
+import com.hyperionoj.page.dao.pojo.problem.*;
 import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<ProblemVo> getProblemList(PageParams pageParams) {
         Page<Problem> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        IPage<Problem> problemPage = problemMapper.listArticle(page, pageParams.getLevel(), pageParams.getCategoryId());
+        IPage<Problem> problemPage = problemMapper.listArticle(page, pageParams.getLevel(), Long.parseLong(pageParams.getCategoryId()));
         return copyProblemList(problemPage.getRecords(), false);
     }
 
@@ -131,6 +131,107 @@ public class ProblemServiceImpl implements ProblemService {
             kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_PAGE, JSONObject.toJSONString(updateSubmitVo));
         }
         return result;
+    }
+
+    /**
+     * 获取题目分类列表
+     *
+     * @return 题目所有类别
+     */
+    @Override
+    public List<ProblemCategoryVo> getCategory() {
+        LambdaQueryWrapper<ProblemCategory> queryWrapper = new LambdaQueryWrapper<>();
+        List<ProblemCategory> problemCategories = problemCategoryMapper.selectList(queryWrapper);
+        return copyProblemCategoryVoList(problemCategories);
+    }
+
+    /**
+     * 对题目进行评论
+     *
+     * @param commentVo 用户提交评论
+     * @return 本次提交情况
+     */
+    @Override
+    public boolean comment(CommentVo commentVo) {
+        problemCommentMapper.insert(copyComment(commentVo));
+        return true;
+    }
+
+    /**
+     * 获取评论列表
+     *
+     * @param pageParams 分页参数
+     * @return 评论列表
+     */
+    @Override
+    public List<CommentVo> getCommentList(PageParams pageParams) {
+        Page<ProblemComment> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
+        IPage<ProblemComment> problemPage = problemMapper.getCommentList(page, pageParams.getProblemId());
+        return copyProblemCommitList(problemPage.getRecords());
+    }
+
+    /**
+     * 修改问题的评论数
+     * 此方法用于redis定时回写数据库
+     *
+     * @param problemId     题目id
+     * @param commentNumber 评论数量
+     */
+    @Override
+    public void updateProblemCommentNumber(Long problemId, Integer commentNumber) {
+        LambdaUpdateWrapper<Problem> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Problem::getId, problemId);
+        updateWrapper.set(Problem::getCommentNumber, commentNumber);
+        problemMapper.update(null, updateWrapper);
+    }
+
+    private List<CommentVo> copyProblemCommitList(List<ProblemComment> comments) {
+        ArrayList<CommentVo> commentVos = new ArrayList<>();
+        for (ProblemComment comment : comments) {
+            commentVos.add(copyCommentVo(comment));
+        }
+        return commentVos;
+    }
+
+    private CommentVo copyCommentVo(ProblemComment comment) {
+        CommentVo commentVo = new CommentVo();
+        commentVo.setProblemId(comment.getProblemId().toString());
+        commentVo.setAuthorId(comment.getAuthorId().toString());
+        commentVo.setContent(comment.getContent());
+        commentVo.setLevel(comment.getLevel());
+        commentVo.setId(comment.getId().toString());
+        commentVo.setParentId(comment.getParentId().toString());
+        commentVo.setToUid(comment.getToUid().toString());
+        return commentVo;
+    }
+
+    private ProblemComment copyComment(CommentVo commentVo) {
+        ProblemComment problemComment = new ProblemComment();
+        problemComment.setProblemId(Long.parseLong(commentVo.getProblemId()));
+        problemComment.setContent(commentVo.getContent());
+        problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorId()));
+        problemComment.setDelete(0);
+        problemComment.setCreateTime(System.currentTimeMillis());
+        problemComment.setLevel(commentVo.getLevel());
+        problemComment.setParentId(Long.parseLong(commentVo.getParentId()));
+        problemComment.setToUid(Long.parseLong(commentVo.getToUid()));
+        return problemComment;
+    }
+
+    private List<ProblemCategoryVo> copyProblemCategoryVoList(List<ProblemCategory> problemCategories) {
+        ArrayList<ProblemCategoryVo> problemCategoryVos = new ArrayList<>();
+        for (ProblemCategory category : problemCategories) {
+            problemCategoryVos.add(copyProblemCategoryVo(category));
+        }
+        return problemCategoryVos;
+    }
+
+    private ProblemCategoryVo copyProblemCategoryVo(ProblemCategory category) {
+        ProblemCategoryVo problemCategoryVo = new ProblemCategoryVo();
+        problemCategoryVo.setId(category.getId().toString());
+        problemCategoryVo.setCategoryName(category.getCategoryName());
+        problemCategoryVo.setDescription(category.getDescription());
+        return problemCategoryVo;
     }
 
     /**

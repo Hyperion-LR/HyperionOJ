@@ -47,7 +47,7 @@ public class AdminController {
         return adminClients.deleteAdmin(adminVo);
     }
 
-    @AdminActionAnnotation(url = "/freeze", level = 1)
+    @AdminActionAnnotation(url = "/freeze", level = 2)
     @PostMapping("/freeze")
     public Result freezeUser(@RequestBody SysUserVo sysUserVo) {
         return adminClients.freezeUser(sysUserVo);
