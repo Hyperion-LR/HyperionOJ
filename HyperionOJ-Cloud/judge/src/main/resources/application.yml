@@ -11,23 +11,7 @@ spring:
       discovery:
         cluster-name: HyperionOJ
         ephemeral: true
-        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
-  redis:
-    host: 127.0.0.1
-    port: 6379
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hyperionoj?serverTimezone=UTC&allowMultiQueries=true
-    username: root
-    password: 123212321
-    type: com.alibaba.druid.pool.DruidDataSource
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-  servlet:
-    multipart:
-      max-request-size: 5GB
-      max-file-size: 1GB
+        namespace: 0e00e406-05ce-4cc8-a5d0-e5038753b730
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -51,13 +35,6 @@ spring:
     listener:
       # 但消费者监听的topic不存在时，保证能够是项目启动
       missing-topics-fatal: false
-mybatis-plus:
-  mapper-locations: classpath:com/hyperionoj/dao/mapper/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  global-config:
-    db-config:
-      table-prefix: oj_
 judge:
   fileDir:
     problem: D:\WorkSpace\Java_Works\IDEA_Works\HyperionOJ\judge\problem_data
