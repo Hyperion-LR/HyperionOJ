@@ -6,9 +6,9 @@ import com.hyperionoj.admin.vo.ActionPageParams;
 import com.hyperionoj.common.feign.AdminClients;
 import com.hyperionoj.common.feign.AdminPageClients;
 import com.hyperionoj.common.vo.*;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -38,7 +38,7 @@ public class AdminController {
      * @return 注册成功管理员参数
      */
     @PermissionAnnotation(level = 1)
-    @PostMapping("/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Result addAdmin(@RequestBody RegisterParam registerParam) {
         return adminClients.addAdmin(registerParam);
     }
@@ -51,7 +51,7 @@ public class AdminController {
      * @return 新管理员参数
      */
     @PermissionAnnotation(level = 1)
-    @PostMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateAdmin(@RequestBody RegisterParam registerParam) {
         return adminClients.updateAdmin(registerParam);
     }
@@ -64,7 +64,7 @@ public class AdminController {
      * @return 删除信息
      */
     @PermissionAnnotation(level = 1)
-    @PostMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public Result deleteAdmin(@RequestBody AdminVo adminVo) {
         return adminClients.deleteAdmin(adminVo);
     }
@@ -77,7 +77,7 @@ public class AdminController {
      * @return 冻结信息
      */
     @PermissionAnnotation(level = 2)
-    @PostMapping("/freeze")
+    @RequestMapping(value = "/freeze", method = RequestMethod.POST)
     public Result freezeUser(@RequestBody SysUserVo sysUserVo) {
         return adminClients.freezeUser(sysUserVo);
     }
@@ -90,7 +90,7 @@ public class AdminController {
      * @return 管理员行为列表
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/query/action")
+    @RequestMapping(value = "/query/action", method = RequestMethod.GET)
     public Result queryAdminActionList(@RequestBody ActionPageParams pageParams) {
         return Result.success(adminService.queryActionList(pageParams));
     }
@@ -102,7 +102,7 @@ public class AdminController {
      * @return 分类情况
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/add/problem/category")
+    @RequestMapping(value = "/add/problem/category", method = RequestMethod.POST)
     public Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
         return adminPageClients.addProblemCategory(problemCategoryVo);
     }
@@ -113,9 +113,9 @@ public class AdminController {
      * @param problemCategoryVo 分类参数
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/delete/problem/category")
+    @RequestMapping(value = "/delete/problem/category", method = RequestMethod.DELETE)
     public Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
-        return adminPageClients.addProblemCategory(problemCategoryVo);
+        return adminPageClients.deleteProblemCategory(problemCategoryVo);
     }
 
     /**
@@ -125,7 +125,7 @@ public class AdminController {
      * @return 新加的题目
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/add/problem")
+    @RequestMapping(value = "/add/problem", method = RequestMethod.POST)
     public Result addProblem(@RequestBody ProblemVo problemVo) {
         return adminPageClients.addProblem(problemVo);
     }
@@ -136,7 +136,7 @@ public class AdminController {
      * @param problemVo 题目信息
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/update/problem")
+    @RequestMapping(value = "/update/problem", method = RequestMethod.POST)
     public Result updateProblem(@RequestBody ProblemVo problemVo) {
         return adminPageClients.updateProblem(problemVo);
     }
@@ -147,7 +147,7 @@ public class AdminController {
      * @param problemVo 题目信息
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/delete/problem")
+    @RequestMapping(value = "/delete/problem", method = RequestMethod.DELETE)
     public Result deleteProblem(@RequestBody ProblemVo problemVo) {
         return adminPageClients.deleteProblem(problemVo);
     }
@@ -158,7 +158,7 @@ public class AdminController {
      * @param commentVo 评论参数
      */
     @PermissionAnnotation(level = 2)
-    @PostMapping("/delete/comment")
+    @RequestMapping(value = "/delete/comment", method = RequestMethod.DELETE)
     public Result deleteComment(@RequestBody CommentVo commentVo) {
         return adminPageClients.deleteComment(commentVo);
     }

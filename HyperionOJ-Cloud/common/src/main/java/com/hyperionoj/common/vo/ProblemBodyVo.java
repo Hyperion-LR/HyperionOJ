@@ -1,4 +1,4 @@
-package com.hyperionoj.page.vo;
+package com.hyperionoj.common.vo;
 
 import lombok.Data;
 
@@ -8,8 +8,6 @@ import lombok.Data;
  */
 @Data
 public class ProblemBodyVo {
-
-    private String id;
 
     private String problemBody;
 

@@ -6,6 +6,8 @@
 
 ## oss单点登录
 
+**（部分请求请携带请求头"SysUser-Token"）**
+
 ### 普通用户登录
 
 接口url：localhost:9000/login/user
@@ -583,6 +585,8 @@
 
 ## 管理员
 
+**（该模块所有请求的请求头请携带"Admin-Token",同时权限等级不够会被拦截）**
+
 ### 管理员登录
 
 接口url：localhost:9000/login/admin
@@ -782,4 +786,392 @@
 }
 ```
 
-###    
+
+
+### 增加题库分类
+
+接口url：localhost:9000/admin/add/problem/category
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "categoryName": "testCateGory",
+    "description": "这个是测试分类1"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1470387437352689666",
+        "categoryName": "testCateGory",
+        "description": "这个是测试分类1"
+    },
+    "msg": null
+}
+```
+
+
+
+### 删除题库分类
+
+接口url：localhost:9000/admin/delete/problem/category
+
+请求方式： delete
+
+请求参数：
+
+```json
+{
+    "id": "1470387894615711745"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 向题库添加题目（暂时，以后会更改）
+
+接口url：localhost:9000/admin/add/problem
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "title": "test",
+    "problemLevel": 1,
+    "categoryId": "1",
+    "caseNumber": 1,
+    "runMemory": 256,
+    "runTime": 1000,
+    "problemBodyVo": {
+        "problemBody": "这是测试",
+        "problemBodyHtml": "<p>这是测试</p>"
+    }
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1470389250931982337",
+        "title": "test",
+        "bodyId": "1470389250806153218",
+        "problemLevel": 1,
+        "categoryId": "1",
+        "acNumber": 0,
+        "submitNumber": 0,
+        "solutionNumber": 0,
+        "commentNumber": 0,
+        "caseNumber": 1,
+        "runMemory": 256,
+        "runTime": 1000,
+        "problemBodyVo": {
+            "id": null,
+            "problemBody": "这是测试",
+            "problemBodyHtml": "<p>这是测试</p>"
+        }
+    },
+    "msg": null
+}
+```
+
+
+
+
+
+### 更新题目
+
+接口url：localhost:9000/admin/update/problem
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "id":"1470389250931982337",
+    "title": "test",
+    "bodyId": "1470389250806153218",
+    "problemLevel": 1,
+    "categoryId": "1",
+    "caseNumber": 1,
+    "runMemory": 256,
+    "runTime": 2000,
+    "problemBodyVo": {
+        "problemBody": "这是update测试",
+        "problemBodyHtml": "<p>这是update测试</p>"
+    }
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+

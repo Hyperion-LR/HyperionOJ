@@ -30,11 +30,11 @@ spring:
         - id: page-service
           uri: lb://page
           predicates:
-            - Path=/problem/*, /article/*, /contests/*,/problem/*/*,
+            - Path=/problem/*,/problem/*/*,/problem/*/*/*,/problem/*/*/*/*, /article/*, /contests/*,
         - id: admin-service
           uri: lb://admin
           predicates:
-            - Path=/admin/*, /admin/*/*
+            - Path=/admin/**
         - id: finduser-service
           uri: lb://consumer
           predicates:

@@ -1,6 +1,7 @@
 package com.hyperionoj.admin;
 
 import com.hyperionoj.common.feign.AdminClients;
+import com.hyperionoj.common.feign.AdminPageClients;
 import com.hyperionoj.common.interceptor.DefaultFeignConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author Hyperion
  * @date 2021/12/4
  */
-@EnableFeignClients(defaultConfiguration = DefaultFeignConfiguration.class, clients = {AdminClients.class})
+@EnableFeignClients(defaultConfiguration = DefaultFeignConfiguration.class, clients = {AdminClients.class, AdminPageClients.class})
 @EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = {"com.hyperionoj"})
 @MapperScan("com.hyperionoj.admin.dao.mapper")

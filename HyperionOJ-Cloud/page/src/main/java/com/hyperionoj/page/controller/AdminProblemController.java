@@ -5,9 +5,9 @@ import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.CommentVo;
 import com.hyperionoj.page.vo.ProblemCategoryVo;
 import com.hyperionoj.page.vo.ProblemVo;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -29,7 +29,7 @@ public class AdminProblemController {
      * @param problemCategoryVo 分类信息
      * @return 分类情况
      */
-    @PostMapping("/add/problem/category")
+    @RequestMapping(value = "/add/problem/category", method = RequestMethod.POST)
     public Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
         return Result.success(problemService.addCategory(problemCategoryVo));
     }
@@ -39,7 +39,7 @@ public class AdminProblemController {
      *
      * @param problemCategoryVo 分类参数
      */
-    @PostMapping("/delete/problem/category")
+    @RequestMapping(value = "/delete/problem/category", method = RequestMethod.DELETE)
     public Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
         problemService.deleteCategory(problemCategoryVo);
         return Result.success(null);
@@ -51,7 +51,7 @@ public class AdminProblemController {
      * @param problemVo 题目对象
      * @return 新加的题目
      */
-    @PostMapping("/add/problem")
+    @RequestMapping(value = "/add/problem", method = RequestMethod.POST)
     public Result addProblem(@RequestBody ProblemVo problemVo) {
         return Result.success(problemService.addProblem(problemVo));
     }
@@ -61,7 +61,7 @@ public class AdminProblemController {
      *
      * @param problemVo 题目信息
      */
-    @PostMapping("/update/problem")
+    @RequestMapping(value = "/update/problem", method = RequestMethod.POST)
     public Result updateProblem(@RequestBody ProblemVo problemVo) {
         problemService.updateProblem(problemVo);
         return Result.success(null);
@@ -72,7 +72,7 @@ public class AdminProblemController {
      *
      * @param problemVo 题目信息
      */
-    @PostMapping("/delete/problem")
+    @RequestMapping(value = "/delete/problem", method = RequestMethod.DELETE)
     public Result deleteProblem(@RequestBody ProblemVo problemVo) {
         problemService.deleteProblem(problemVo);
         return Result.success(null);
@@ -83,7 +83,7 @@ public class AdminProblemController {
      *
      * @param commentVo 评论参数
      */
-    @PostMapping("/delete/comment")
+    @RequestMapping(value = "/delete/comment", method = RequestMethod.POST)
     public Result deleteComment(@RequestBody CommentVo commentVo) {
         problemService.deleteComment(commentVo);
         return Result.success(null);

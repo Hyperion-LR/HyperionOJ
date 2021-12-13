@@ -5,14 +5,15 @@ import com.hyperionoj.common.vo.ProblemCategoryVo;
 import com.hyperionoj.common.vo.ProblemVo;
 import com.hyperionoj.common.vo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author Hyperion
  * @date 2021/12/13
  */
-@FeignClient("oss")
+@FeignClient("page")
 public interface AdminPageClients {
 
     /**
@@ -21,7 +22,7 @@ public interface AdminPageClients {
      * @param problemCategoryVo 分类信息
      * @return 分类情况
      */
-    @PostMapping("/problem/admin/add/problem/category")
+    @RequestMapping(value = "/problem/admin/add/problem/category", method = RequestMethod.POST)
     Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo);
 
     /**
@@ -30,7 +31,7 @@ public interface AdminPageClients {
      * @param problemCategoryVo 分类参数
      * @return null
      */
-    @PostMapping("/problem/admin/delete/problem/category")
+    @RequestMapping(value = "/problem/admin/delete/problem/category", method = RequestMethod.DELETE)
     Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo);
 
     /**
@@ -39,7 +40,7 @@ public interface AdminPageClients {
      * @param problemVo 题目对象
      * @return 新加的题目
      */
-    @PostMapping("/problem/admin/add/problem")
+    @RequestMapping(value = "/problem/admin/add/problem", method = RequestMethod.POST)
     Result addProblem(@RequestBody ProblemVo problemVo);
 
     /**
@@ -48,7 +49,7 @@ public interface AdminPageClients {
      * @param problemVo 题目信息
      * @return result
      */
-    @PostMapping("/problem/admin/update/problem")
+    @RequestMapping(value = "/problem/admin/update/problem", method = RequestMethod.POST)
     Result updateProblem(@RequestBody ProblemVo problemVo);
 
     /**
@@ -57,7 +58,7 @@ public interface AdminPageClients {
      * @param problemVo 题目信息
      * @return result
      */
-    @PostMapping("/problem/admin/delete/problem")
+    @RequestMapping(value = "/problem/admin/delete/problem", method = RequestMethod.DELETE)
     Result deleteProblem(@RequestBody ProblemVo problemVo);
 
     /**
@@ -66,7 +67,7 @@ public interface AdminPageClients {
      * @param commentVo 评论参数
      * @return result
      */
-    @PostMapping("/problem/admin/delete/comment")
+    @RequestMapping(value = "/problem/admin/delete/comment", method = RequestMethod.POST)
     Result deleteComment(@RequestBody CommentVo commentVo);
 
 }

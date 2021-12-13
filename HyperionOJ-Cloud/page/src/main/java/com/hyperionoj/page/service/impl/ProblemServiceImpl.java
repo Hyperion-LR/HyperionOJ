@@ -168,8 +168,35 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public void updateProblem(ProblemVo problemVo) {
         ProblemBodyVo problemBodyVo = problemVo.getProblemBodyVo();
+        problemBodyVo.setId(problemVo.getBodyId());
         problemBodyMapper.updateById(voToProblemBody(problemBodyVo));
         problemMapper.updateById(voToProblem(problemVo));
+    }
+
+
+    private ProblemBody voToProblemBody(ProblemBodyVo problemBodyVo) {
+        ProblemBody problemBody = new ProblemBody();
+        if (null != problemBodyVo.getId()) {
+            problemBody.setId(Long.valueOf(problemBodyVo.getId()));
+        }
+        problemBody.setProblemBody(problemBodyVo.getProblemBody());
+        problemBody.setProblemBodyHtml(problemBodyVo.getProblemBodyHtml());
+        return problemBody;
+    }
+
+    private Problem voToProblem(ProblemVo problemVo) {
+        Problem problem = new Problem();
+        if (null != problemVo.getId()) {
+            problem.setId(Long.valueOf(problemVo.getId()));
+        }
+        problem.setTitle(problemVo.getTitle());
+        problem.setBodyId(Long.valueOf(problemVo.getBodyId()));
+        problem.setCategoryId(Long.valueOf(problemVo.getCategoryId()));
+        problem.setProblemLevel(problemVo.getProblemLevel());
+        problem.setRunMemory(problemVo.getRunMemory());
+        problem.setRunTime(problemVo.getRunTime());
+        problem.setCaseNumber(problemVo.getCaseNumber());
+        return problem;
     }
 
     /**
@@ -384,25 +411,6 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public void deleteCategory(ProblemCategoryVo problemCategoryVo) {
         problemCategoryMapper.deleteById(problemCategoryVo.getId());
-    }
-
-    private ProblemBody voToProblemBody(ProblemBodyVo problemBodyVo) {
-        ProblemBody problemBody = new ProblemBody();
-        problemBody.setProblemBody(problemBodyVo.getProblemBody());
-        problemBody.setProblemBodyHtml(problemBodyVo.getProblemBodyHtml());
-        return problemBody;
-    }
-
-    private Problem voToProblem(ProblemVo problemVo) {
-        Problem problem = new Problem();
-        problem.setTitle(problemVo.getTitle());
-        problem.setBodyId(Long.valueOf(problemVo.getBodyId()));
-        problem.setCategoryId(Long.valueOf(problemVo.getCategoryId()));
-        problem.setProblemLevel(problemVo.getProblemLevel());
-        problem.setRunMemory(problemVo.getRunMemory());
-        problem.setRunTime(problemVo.getRunTime());
-        problem.setCaseNumber(problemVo.getCaseNumber());
-        return problem;
     }
 
     /**
