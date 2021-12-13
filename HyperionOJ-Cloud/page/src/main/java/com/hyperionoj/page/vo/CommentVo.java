@@ -21,6 +21,8 @@ public class CommentVo {
 
     private String toUid;
 
+    private Integer supportNumber;
+
     private Integer level;
 
 }

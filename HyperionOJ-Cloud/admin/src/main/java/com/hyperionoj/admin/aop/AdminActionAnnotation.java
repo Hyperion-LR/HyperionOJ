@@ -13,6 +13,6 @@ public @interface AdminActionAnnotation {
 
     String url() default "";
 
-    int level() default 1;
+    int level() default 0;
 
 }

@@ -1,5 +1,6 @@
 package com.hyperionoj.page.controller;
 
+import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.service.ProblemService;
@@ -28,6 +29,7 @@ public class ProblemController {
      * @param pageParams 分页参数
      * @return 返回查询分页
      */
+    @Cache(name = "problemList", time = 60 * 60 * 1000)
     @GetMapping("/list")
     public Result getProblemList(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getProblemList(pageParams));
@@ -38,6 +40,7 @@ public class ProblemController {
      *
      * @return 题目所有类别
      */
+    @Cache(name = "problemList")
     @GetMapping("/category")
     public Result getCategory() {
         return Result.success(problemService.getCategory());
@@ -50,6 +53,7 @@ public class ProblemController {
      * @param id 题目id
      * @return 题目具体情况
      */
+    @Cache(name = "problemList", time = 60 * 60 * 1000)
     @GetMapping("/{id}")
     public Result getProblemById(@PathVariable Long id) {
         ProblemVo problem = problemService.getProblemById(id);
@@ -92,6 +96,7 @@ public class ProblemController {
      * @param id 提交id
      * @return 提交结果
      */
+    @Cache(name = "problemList", time = 60 * 60 * 1000)
     @GetMapping("/submit/{id}")
     public Result getSubmit(@PathVariable("id") Long id) {
         return Result.success(problemService.getSubmitById(id));
@@ -119,6 +124,7 @@ public class ProblemController {
      * @param pageParams 分页参数
      * @return 评论列表
      */
+    @Cache(name = "problemList", time = 60 * 60 * 1000)
     @GetMapping("/comments")
     public Result getComments(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getCommentList(pageParams));

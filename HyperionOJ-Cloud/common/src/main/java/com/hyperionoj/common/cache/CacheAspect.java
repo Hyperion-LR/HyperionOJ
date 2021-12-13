@@ -1,6 +1,7 @@
 package com.hyperionoj.common.cache;
 
 import com.alibaba.fastjson.JSON;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +12,11 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
-import java.time.Duration;
+import java.util.Random;
 
 
 /**
@@ -30,7 +30,12 @@ import java.time.Duration;
 public class CacheAspect {
 
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisSever redisSever;
+
+    /**
+     * 缓存过期时间加上随机数防止缓存击穿
+     */
+    private static final Random RANDOM = new Random();
 
     @Pointcut("@annotation(com.hyperionoj.common.cache.Cache)")
     public void pt() {
@@ -66,30 +71,34 @@ public class CacheAspect {
             //获取Cache注解
             Cache annotation = method.getAnnotation(Cache.class);
             //缓存过期时间
-            long expire = annotation.time();
+            long time = annotation.time();
             //缓存名称
             String name = annotation.name();
             //先从redis获取
             String redisKey = name + ":" + className + ":" + methodName + ":" + toRedisParams;
-            String redisValue = redisTemplate.opsForValue().get(redisKey);
+            String redisValue = redisSever.getRedisKV(redisKey);
             if (StringUtils.isNotEmpty(redisValue)) {
                 log.info("读取缓存: {},{}", className, methodName);
                 // 判断当前请求是否会改变其他变量如浏览量之类的数据
-                return checkMethodName(className, methodName, redisKey, redisValue, expire);
+                return checkMethodName(className, methodName, redisKey, redisValue, time);
             }
             Object proceed = pjp.proceed();
-            redisTemplate.opsForValue().set(redisKey, JSON.toJSONString(proceed), Duration.ofMillis(expire));
+            if (time > 0) {
+                redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed), time + RANDOM.nextInt(60 * 1000));
+            } else {
+                redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed));
+            }
             log.info("更新缓存: {},{}", className, methodName);
             return proceed;
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            log.warn(throwable.getMessage());
         }
         return Result.fail(ErrorCode.SYSTEM_ERROR);
     }
 
     private Object checkMethodName(String className, String methodName, String redisKey, String redisValue, long expire) {
 
-        Object result = JSON.parseObject(redisValue, Object.class);
+        Object result = JSON.parseObject(redisValue, Result.class);
 
         // 如果访问某篇文章则浏览量+1
 

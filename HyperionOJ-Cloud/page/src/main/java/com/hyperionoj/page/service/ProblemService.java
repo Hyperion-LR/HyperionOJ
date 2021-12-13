@@ -81,4 +81,11 @@ public interface ProblemService {
      * @return 提交结果
      */
     SubmitVo getSubmitById(Long id);
+
+    /**
+     * 添加题目分类
+     * @param problemCategoryVo 分类信息
+     * @return 分类情况
+     */
+    Object addCategory(ProblemCategoryVo problemCategoryVo);
 }

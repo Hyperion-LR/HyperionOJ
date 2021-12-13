@@ -14,7 +14,7 @@ public @interface Cache {
     /**
      * 缓存时间
      */
-    long time() default 2 * 60 * 1000;
+    long time() default 0;
 
     /**
      * 缓存名称

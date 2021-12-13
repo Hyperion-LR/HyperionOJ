@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -216,6 +217,21 @@ public class ProblemServiceImpl implements ProblemService {
         LambdaQueryWrapper<ProblemSubmit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProblemSubmit::getId, id);
         return copySubmitVo(problemSubmitMapper.selectOne(queryWrapper), true);
+    }
+
+    /**
+     * 添加题目分类
+     *
+     * @param problemCategoryVo 分类信息
+     * @return 分类情况
+     */
+    @Override
+    public ProblemCategoryVo addCategory(ProblemCategoryVo problemCategoryVo) {
+        ProblemCategory category = new ProblemCategory();
+        BeanUtils.copyProperties(problemCategoryVo, category);
+        problemCategoryMapper.insert(category);
+        problemCategoryVo.setId(category.getId().toString());
+        return problemCategoryVo;
     }
 
     private List<SubmitVo> copySubmitVoList(List<ProblemSubmit> submits) {
