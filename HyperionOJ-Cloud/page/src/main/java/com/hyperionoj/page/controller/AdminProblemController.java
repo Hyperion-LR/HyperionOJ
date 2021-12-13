@@ -2,6 +2,7 @@ package com.hyperionoj.page.controller;
 
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.service.ProblemService;
+import com.hyperionoj.page.vo.CommentVo;
 import com.hyperionoj.page.vo.ProblemCategoryVo;
 import com.hyperionoj.page.vo.ProblemVo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,12 @@ public class AdminProblemController {
     @PostMapping("/delete/problem")
     public Result deleteProblem(@RequestBody ProblemVo problemVo){
         problemService.deleteProblem(problemVo);
+        return Result.success(null);
+    }
+
+    @PostMapping("/delete/comment")
+    public Result deleteComment(@RequestBody CommentVo commentVo){
+        problemService.deleteComment(commentVo);
         return Result.success(null);
     }
 

@@ -224,6 +224,19 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     /**
+     * 删除评论
+     *
+     * @param commentVo 评论参数
+     */
+    @Override
+    public void deleteComment(CommentVo commentVo) {
+        LambdaUpdateWrapper<ProblemComment> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(ProblemComment::getId, commentVo.getId());
+        updateWrapper.set(ProblemComment::getIsDelete, 1);
+        problemCommentMapper.update(null, updateWrapper);
+    }
+
+    /**
      * 获取评论列表
      *
      * @param pageParams 分页参数

@@ -119,6 +119,16 @@ public class ProblemController {
     }
 
     /**
+     * 删除评论
+     * @param commentVo 评论参数
+     */
+    @PostMapping("/delete/comment")
+    public Result deleteComment(@RequestBody CommentVo commentVo){
+        problemService.deleteComment(commentVo);
+        return Result.success(null);
+    }
+
+    /**
      * 获取评论列表
      *
      * @param pageParams 分页参数

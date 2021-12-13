@@ -6,6 +6,7 @@ import com.hyperionoj.common.constants.Constants;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.JWTUtils;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.oss.dao.pojo.admin.Admin;
 import com.hyperionoj.oss.dao.pojo.sys.SysUser;
 import com.hyperionoj.oss.service.AdminService;
@@ -58,8 +59,11 @@ public class OSSServiceImpl implements OSSService {
         if (sysUser == null) {
             return null;
         }
-        String token = JWTUtils.createToken(sysUser.getId(), 24 * 60 * 60);
-        redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(sysUser), 3600);
+        String token = ErrorCode.USER_FREEZE.getMsg();
+        if(sysUser.getStatus() == 0){
+            token = JWTUtils.createToken(sysUser.getId(), 24 * 60 * 60);
+            redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(sysUser), 3600);
+        }
         return token;
     }
 

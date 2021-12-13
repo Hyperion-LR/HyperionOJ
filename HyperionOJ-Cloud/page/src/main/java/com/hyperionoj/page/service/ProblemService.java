@@ -83,6 +83,12 @@ public interface ProblemService {
     boolean comment(CommentVo commentVo);
 
     /**
+     * 删除评论
+     * @param commentVo 评论参数
+     */
+    void deleteComment(CommentVo commentVo);
+
+    /**
      * 获取评论列表
      *
      * @param pageParams 分页参数
