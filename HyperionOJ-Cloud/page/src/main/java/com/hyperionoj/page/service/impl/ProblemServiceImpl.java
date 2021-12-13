@@ -141,6 +141,48 @@ public class ProblemServiceImpl implements ProblemService {
         return result;
     }
 
+
+    /**
+     * 添加题目
+     *
+     * @param problemVo 题目对象
+     * @return 新加的题目
+     */
+    @Override
+    public ProblemVo addProblem(ProblemVo problemVo) {
+        ProblemBodyVo problemBodyVo = problemVo.getProblemBodyVo();
+        ProblemBody problemBody = voToProblemBody(problemBodyVo);
+        problemBodyMapper.insert(problemBody);
+        problemVo.setBodyId(problemBody.getId().toString());
+        Problem problem = voToProblem(problemVo);
+        problemMapper.insert(problem);
+        problemVo.setId(problem.getId().toString());
+        return problemVo;
+    }
+
+    /**
+     * 修改题目
+     *
+     * @param problemVo 题目信息
+     */
+    @Override
+    public void updateProblem(ProblemVo problemVo) {
+        ProblemBodyVo problemBodyVo = problemVo.getProblemBodyVo();
+        problemBodyMapper.updateById(voToProblemBody(problemBodyVo));
+        problemMapper.updateById(voToProblem(problemVo));
+    }
+
+    /**
+     * 删除题目
+     *
+     * @param problemVo 题目信息
+     */
+    @Override
+    public void deleteProblem(ProblemVo problemVo) {
+        problemBodyMapper.deleteById(problemVo.getBodyId());
+        problemMapper.deleteById(problemVo.getId());
+    }
+
     /**
      * 获取题目分类列表
      *
@@ -150,18 +192,18 @@ public class ProblemServiceImpl implements ProblemService {
     public List<ProblemCategoryVo> getCategory() {
         LambdaQueryWrapper<ProblemCategory> queryWrapper = new LambdaQueryWrapper<>();
         List<ProblemCategory> problemCategories = problemCategoryMapper.selectList(queryWrapper);
-        return ProblemCategoryToVoList(problemCategories);
+        return problemCategoryToVoList(problemCategories);
     }
 
-    private List<ProblemCategoryVo> ProblemCategoryToVoList(List<ProblemCategory> problemCategories) {
+    private List<ProblemCategoryVo> problemCategoryToVoList(List<ProblemCategory> problemCategories) {
         ArrayList<ProblemCategoryVo> problemCategoryVos = new ArrayList<>();
         for (ProblemCategory category : problemCategories) {
-            problemCategoryVos.add(ProblemCategoryToVo(category));
+            problemCategoryVos.add(problemCategoryToVo(category));
         }
         return problemCategoryVos;
     }
 
-    private ProblemCategoryVo ProblemCategoryToVo(ProblemCategory category) {
+    private ProblemCategoryVo problemCategoryToVo(ProblemCategory category) {
         ProblemCategoryVo problemCategoryVo = new ProblemCategoryVo();
         problemCategoryVo.setId(category.getId().toString());
         problemCategoryVo.setCategoryName(category.getCategoryName());
@@ -191,11 +233,11 @@ public class ProblemServiceImpl implements ProblemService {
     public List<CommentVo> getCommentList(PageParams pageParams) {
         Page<ProblemComment> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<ProblemComment> commentPage = problemCommentMapper.getCommentList(page, pageParams.getProblemId());
-        return ProblemCommitToVoList(commentPage.getRecords());
+        return problemCommitToVoList(commentPage.getRecords());
     }
 
 
-    private List<CommentVo> ProblemCommitToVoList(List<ProblemComment> comments) {
+    private List<CommentVo> problemCommitToVoList(List<ProblemComment> comments) {
         ArrayList<CommentVo> commentVos = new ArrayList<>();
         for (ProblemComment comment : comments) {
             commentVos.add(commentToVo(comment));
@@ -266,7 +308,7 @@ public class ProblemServiceImpl implements ProblemService {
                 pageParams.getCodeLang(),
                 pageParams.getUsername(),
                 pageParams.getVerdict());
-        return SubmitToVoList(submitList.getRecords());
+        return submitToVoList(submitList.getRecords());
     }
 
     /**
@@ -279,18 +321,18 @@ public class ProblemServiceImpl implements ProblemService {
     public SubmitVo getSubmitById(Long id) {
         LambdaQueryWrapper<ProblemSubmit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProblemSubmit::getId, id);
-        return SubmitToVo(problemSubmitMapper.selectOne(queryWrapper), true);
+        return submitToVo(problemSubmitMapper.selectOne(queryWrapper), true);
     }
 
-    private List<SubmitVo> SubmitToVoList(List<ProblemSubmit> submits) {
+    private List<SubmitVo> submitToVoList(List<ProblemSubmit> submits) {
         ArrayList<SubmitVo> submitVos = new ArrayList<>();
         for (ProblemSubmit submit : submits) {
-            submitVos.add(SubmitToVo(submit, false));
+            submitVos.add(submitToVo(submit, false));
         }
         return submitVos;
     }
 
-    private SubmitVo SubmitToVo(ProblemSubmit submit, boolean isBody) {
+    private SubmitVo submitToVo(ProblemSubmit submit, boolean isBody) {
         SubmitVo submitVo = new SubmitVo();
         submitVo.setId(submit.getId().toString());
         submitVo.setProblemId(submit.getProblemId().toString());
@@ -322,21 +364,13 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     /**
-     * 添加题目
+     * 删除题目分类
      *
-     * @param problemVo 题目对象
-     * @return 新加的题目
+     * @param problemCategoryVo 分类参数
      */
     @Override
-    public ProblemVo addProblem(ProblemVo problemVo) {
-        ProblemBodyVo problemBodyVo = problemVo.getProblemBodyVo();
-        ProblemBody problemBody = voToProblemBody(problemBodyVo);
-        problemBodyMapper.insert(problemBody);
-        problemVo.setBodyId(problemBody.getId().toString());
-        Problem problem = voToProblem(problemVo);
-        problemMapper.insert(problem);
-        problemVo.setId(problem.getId().toString());
-        return problemVo;
+    public void deleteCategory(ProblemCategoryVo problemCategoryVo) {
+        problemCategoryMapper.deleteById(problemCategoryVo.getId());
     }
 
     private ProblemBody voToProblemBody(ProblemBodyVo problemBodyVo) {

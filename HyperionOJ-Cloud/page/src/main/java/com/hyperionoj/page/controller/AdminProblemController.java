@@ -27,9 +27,27 @@ public class AdminProblemController {
         return Result.success(problemService.addCategory(problemCategoryVo));
     }
 
+    @PostMapping("/delete/problem/category")
+    public Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo){
+        problemService.deleteCategory(problemCategoryVo);
+        return Result.success(null);
+    }
+
     @PostMapping("/add/problem")
     public Result addProblem(@RequestBody ProblemVo problemVo){
         return Result.success(problemService.addProblem(problemVo));
+    }
+
+    @PostMapping("/update/problem")
+    public Result updateProblem(@RequestBody ProblemVo problemVo){
+        problemService.updateProblem(problemVo);
+        return Result.success(null);
+    }
+
+    @PostMapping("/delete/problem")
+    public Result deleteProblem(@RequestBody ProblemVo problemVo){
+        problemService.deleteProblem(problemVo);
+        return Result.success(null);
     }
 
 }

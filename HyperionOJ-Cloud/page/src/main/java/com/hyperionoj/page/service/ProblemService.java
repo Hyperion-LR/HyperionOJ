@@ -35,11 +35,44 @@ public interface ProblemService {
     Object submit(SubmitVo submitVo);
 
     /**
+     * 添加题目
+     * @param problemVo 题目对象
+     *
+     * @return 新加的题目
+     */
+    ProblemVo addProblem(ProblemVo problemVo);
+
+    /**
+     * 修改题目
+     * @param problemVo 题目信息
+     */
+    void updateProblem(ProblemVo problemVo);
+
+    /**
+     * 删除题目
+     * @param problemVo 题目信息
+     */
+    void deleteProblem(ProblemVo problemVo);
+
+    /**
      * 获取题目分类列表
      *
      * @return 题目所有类别1
      */
     List<ProblemCategoryVo> getCategory();
+
+    /**
+     * 添加题目分类
+     * @param problemCategoryVo 分类信息
+     * @return 分类情况
+     */
+    ProblemCategoryVo addCategory(ProblemCategoryVo problemCategoryVo);
+
+    /**
+     * 删除题目分类
+     * @param problemCategoryVo 分类参数
+     */
+    void deleteCategory(ProblemCategoryVo problemCategoryVo);
 
     /**
      * 对题目进行评论
@@ -82,18 +115,4 @@ public interface ProblemService {
      */
     SubmitVo getSubmitById(Long id);
 
-    /**
-     * 添加题目分类
-     * @param problemCategoryVo 分类信息
-     * @return 分类情况
-     */
-    ProblemCategoryVo addCategory(ProblemCategoryVo problemCategoryVo);
-
-    /**
-     * 添加题目
-     * @param problemVo 题目对象
-     *
-     * @return 新加的题目
-     */
-    ProblemVo addProblem(ProblemVo problemVo);
 }
