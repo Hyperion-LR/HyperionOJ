@@ -87,5 +87,13 @@ public interface ProblemService {
      * @param problemCategoryVo 分类信息
      * @return 分类情况
      */
-    Object addCategory(ProblemCategoryVo problemCategoryVo);
+    ProblemCategoryVo addCategory(ProblemCategoryVo problemCategoryVo);
+
+    /**
+     * 添加题目
+     * @param problemVo 题目对象
+     *
+     * @return 新加的题目
+     */
+    ProblemVo addProblem(ProblemVo problemVo);
 }

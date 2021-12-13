@@ -19,13 +19,19 @@ public class ProblemVo {
 
     private String categoryId;
 
-    private Integer acNumber;
+    private Integer acNumber = 0;
 
-    private Integer submitNumber;
+    private Integer submitNumber = 0;
 
-    private Integer solutionNumber;
+    private Integer solutionNumber = 0;
 
-    private Integer commentNumber;
+    private Integer commentNumber = 0;
+
+    private Integer caseNumber;
+
+    private Integer runMemory;
+
+    private Integer runTime;
 
     private ProblemBodyVo problemBodyVo;
 

@@ -1,9 +1,9 @@
 package com.hyperionoj.page.controller;
 
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.page.dao.mapper.problem.ProblemCategoryMapper;
 import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.ProblemCategoryVo;
+import com.hyperionoj.page.vo.ProblemVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +25,11 @@ public class AdminProblemController {
     @PostMapping("/add/problem/category")
     public Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo){
         return Result.success(problemService.addCategory(problemCategoryVo));
+    }
+
+    @PostMapping("/add/problem")
+    public Result addProblem(@RequestBody ProblemVo problemVo){
+        return Result.success(problemService.addProblem(problemVo));
     }
 
 }

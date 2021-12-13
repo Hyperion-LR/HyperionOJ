@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class ProblemBodyVo {
 
-    private String content;
+    private String problemBody;
+
+    private String problemBodyHtml;
 
 }

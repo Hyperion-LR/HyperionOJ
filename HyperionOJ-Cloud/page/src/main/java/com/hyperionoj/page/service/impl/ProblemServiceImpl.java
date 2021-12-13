@@ -146,7 +146,23 @@ public class ProblemServiceImpl implements ProblemService {
     public List<ProblemCategoryVo> getCategory() {
         LambdaQueryWrapper<ProblemCategory> queryWrapper = new LambdaQueryWrapper<>();
         List<ProblemCategory> problemCategories = problemCategoryMapper.selectList(queryWrapper);
-        return copyProblemCategoryVoList(problemCategories);
+        return ProblemCategoryToVoList(problemCategories);
+    }
+
+    private List<ProblemCategoryVo> ProblemCategoryToVoList(List<ProblemCategory> problemCategories) {
+        ArrayList<ProblemCategoryVo> problemCategoryVos = new ArrayList<>();
+        for (ProblemCategory category : problemCategories) {
+            problemCategoryVos.add(ProblemCategoryToVo(category));
+        }
+        return problemCategoryVos;
+    }
+
+    private ProblemCategoryVo ProblemCategoryToVo(ProblemCategory category) {
+        ProblemCategoryVo problemCategoryVo = new ProblemCategoryVo();
+        problemCategoryVo.setId(category.getId().toString());
+        problemCategoryVo.setCategoryName(category.getCategoryName());
+        problemCategoryVo.setDescription(category.getDescription());
+        return problemCategoryVo;
     }
 
     /**
@@ -157,7 +173,7 @@ public class ProblemServiceImpl implements ProblemService {
      */
     @Override
     public boolean comment(CommentVo commentVo) {
-        problemCommentMapper.insert(copyComment(commentVo));
+        problemCommentMapper.insert(voToComment(commentVo));
         return true;
     }
 
@@ -171,7 +187,50 @@ public class ProblemServiceImpl implements ProblemService {
     public List<CommentVo> getCommentList(PageParams pageParams) {
         Page<ProblemComment> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<ProblemComment> commentPage = problemCommentMapper.getCommentList(page, pageParams.getProblemId());
-        return copyProblemCommitList(commentPage.getRecords());
+        return ProblemCommitToVoList(commentPage.getRecords());
+    }
+
+
+    private List<CommentVo> ProblemCommitToVoList(List<ProblemComment> comments) {
+        ArrayList<CommentVo> commentVos = new ArrayList<>();
+        for (ProblemComment comment : comments) {
+            commentVos.add(commentToVo(comment));
+        }
+        return commentVos;
+    }
+
+    private CommentVo commentToVo(ProblemComment comment) {
+        CommentVo commentVo = new CommentVo();
+        commentVo.setProblemId(comment.getProblemId().toString());
+        commentVo.setAuthorId(comment.getAuthorId().toString());
+        commentVo.setContent(comment.getContent());
+        commentVo.setLevel(comment.getLevel());
+        commentVo.setId(comment.getId().toString());
+        commentVo.setParentId(comment.getParentId().toString());
+        commentVo.setToUid(comment.getToUid().toString());
+        return commentVo;
+    }
+
+    private ProblemComment voToComment(CommentVo commentVo) {
+        ProblemComment problemComment = new ProblemComment();
+        problemComment.setProblemId(Long.parseLong(commentVo.getProblemId()));
+        problemComment.setContent(commentVo.getContent());
+        problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorId()));
+        problemComment.setIsDelete(0);
+        problemComment.setCreateTime(System.currentTimeMillis());
+        problemComment.setLevel(commentVo.getLevel());
+        problemComment.setParentId(Long.getLong(commentVo.getParentId()));
+        problemComment.setToUid(Long.getLong(commentVo.getToUid()));
+        if (problemComment.getLevel() == null) {
+            problemComment.setLevel(0);
+        }
+        if (problemComment.getParentId() == null) {
+            problemComment.setParentId(0L);
+        }
+        if (problemComment.getToUid() == null) {
+            problemComment.setToUid(0L);
+        }
+        return problemComment;
     }
 
     /**
@@ -203,7 +262,7 @@ public class ProblemServiceImpl implements ProblemService {
                 pageParams.getCodeLang(),
                 pageParams.getUsername(),
                 pageParams.getVerdict());
-        return copySubmitVoList(submitList.getRecords());
+        return SubmitToVoList(submitList.getRecords());
     }
 
     /**
@@ -216,7 +275,31 @@ public class ProblemServiceImpl implements ProblemService {
     public SubmitVo getSubmitById(Long id) {
         LambdaQueryWrapper<ProblemSubmit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProblemSubmit::getId, id);
-        return copySubmitVo(problemSubmitMapper.selectOne(queryWrapper), true);
+        return SubmitToVo(problemSubmitMapper.selectOne(queryWrapper), true);
+    }
+
+    private List<SubmitVo> SubmitToVoList(List<ProblemSubmit> submits) {
+        ArrayList<SubmitVo> submitVos = new ArrayList<>();
+        for (ProblemSubmit submit : submits) {
+            submitVos.add(SubmitToVo(submit, false));
+        }
+        return submitVos;
+    }
+
+    private SubmitVo SubmitToVo(ProblemSubmit submit, boolean isBody) {
+        SubmitVo submitVo = new SubmitVo();
+        submitVo.setId(submit.getId().toString());
+        submitVo.setProblemId(submit.getProblemId().toString());
+        submitVo.setAuthorId(submit.getAuthorId().toString());
+        submitVo.setCodeLang(submit.getCodeLang());
+        submitVo.setCreateTime(submit.getCreateTime().toString());
+        submitVo.setRunTime(submit.getRunTime());
+        submitVo.setRunMemory(submit.getRunMemory());
+        submitVo.setVerdict(submit.getStatus());
+        if (isBody) {
+            submitVo.setCodeBody(submit.getCodeBody());
+        }
+        return submitVo;
     }
 
     /**
@@ -234,86 +317,41 @@ public class ProblemServiceImpl implements ProblemService {
         return problemCategoryVo;
     }
 
-    private List<SubmitVo> copySubmitVoList(List<ProblemSubmit> submits) {
-        ArrayList<SubmitVo> submitVos = new ArrayList<>();
-        for (ProblemSubmit submit : submits) {
-            submitVos.add(copySubmitVo(submit, false));
-        }
-        return submitVos;
+    /**
+     * 添加题目
+     *
+     * @param problemVo 题目对象
+     * @return 新加的题目
+     */
+    @Override
+    public ProblemVo addProblem(ProblemVo problemVo) {
+        ProblemBodyVo problemBodyVo = problemVo.getProblemBodyVo();
+        ProblemBody problemBody = voToProblemBody(problemBodyVo);
+        problemBodyMapper.insert(problemBody);
+        problemVo.setBodyId(problemBody.getId().toString());
+        Problem problem = voToProblem(problemVo);
+        problemMapper.insert(problem);
+        problemVo.setId(problem.getId().toString());
+        return problemVo;
     }
 
-    private SubmitVo copySubmitVo(ProblemSubmit submit, boolean isBody) {
-        SubmitVo submitVo = new SubmitVo();
-        submitVo.setId(submit.getId().toString());
-        submitVo.setProblemId(submit.getProblemId().toString());
-        submitVo.setAuthorId(submit.getAuthorId().toString());
-        submitVo.setCodeLang(submit.getCodeLang());
-        submitVo.setCreateTime(submit.getCreateTime().toString());
-        submitVo.setRunTime(submit.getRunTime());
-        submitVo.setRunMemory(submit.getRunMemory());
-        submitVo.setVerdict(submit.getStatus());
-        if (isBody) {
-            submitVo.setCodeBody(submit.getCodeBody());
-        }
-        return submitVo;
+    private ProblemBody voToProblemBody(ProblemBodyVo problemBodyVo) {
+        ProblemBody problemBody = new ProblemBody();
+        problemBody.setProblemBody(problemBodyVo.getProblemBody());
+        problemBody.setProblemBodyHtml(problemBodyVo.getProblemBodyHtml());
+        return problemBody;
     }
 
-    private List<CommentVo> copyProblemCommitList(List<ProblemComment> comments) {
-        ArrayList<CommentVo> commentVos = new ArrayList<>();
-        for (ProblemComment comment : comments) {
-            commentVos.add(copyCommentVo(comment));
-        }
-        return commentVos;
-    }
-
-    private CommentVo copyCommentVo(ProblemComment comment) {
-        CommentVo commentVo = new CommentVo();
-        commentVo.setProblemId(comment.getProblemId().toString());
-        commentVo.setAuthorId(comment.getAuthorId().toString());
-        commentVo.setContent(comment.getContent());
-        commentVo.setLevel(comment.getLevel());
-        commentVo.setId(comment.getId().toString());
-        commentVo.setParentId(comment.getParentId().toString());
-        commentVo.setToUid(comment.getToUid().toString());
-        return commentVo;
-    }
-
-    private ProblemComment copyComment(CommentVo commentVo) {
-        ProblemComment problemComment = new ProblemComment();
-        problemComment.setProblemId(Long.parseLong(commentVo.getProblemId()));
-        problemComment.setContent(commentVo.getContent());
-        problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorId()));
-        problemComment.setIsDelete(0);
-        problemComment.setCreateTime(System.currentTimeMillis());
-        problemComment.setLevel(commentVo.getLevel());
-        problemComment.setParentId(Long.getLong(commentVo.getParentId()));
-        problemComment.setToUid(Long.getLong(commentVo.getToUid()));
-        if (problemComment.getLevel() == null) {
-            problemComment.setLevel(0);
-        }
-        if (problemComment.getParentId() == null) {
-            problemComment.setParentId(0L);
-        }
-        if (problemComment.getToUid() == null) {
-            problemComment.setToUid(0L);
-        }
-        return problemComment;
-    }
-
-    private List<ProblemCategoryVo> copyProblemCategoryVoList(List<ProblemCategory> problemCategories) {
-        ArrayList<ProblemCategoryVo> problemCategoryVos = new ArrayList<>();
-        for (ProblemCategory category : problemCategories) {
-            problemCategoryVos.add(copyProblemCategoryVo(category));
-        }
-        return problemCategoryVos;
-    }
-
-    private ProblemCategoryVo copyProblemCategoryVo(ProblemCategory category) {
-        ProblemCategoryVo problemCategoryVo = new ProblemCategoryVo();
-        problemCategoryVo.setId(category.getId().toString());
-        problemCategoryVo.setCategoryName(category.getCategoryName());
-        problemCategoryVo.setDescription(category.getDescription());
-        return problemCategoryVo;
+    private Problem voToProblem(ProblemVo problemVo) {
+        Problem problem = new Problem();
+        problem.setTitle(problemVo.getTitle());
+        problem.setBodyId(Long.valueOf(problemVo.getBodyId()));
+        problem.setCategoryId(Long.valueOf(problemVo.getCategoryId()));
+        problem.setProblemLevel(problemVo.getProblemLevel());
+        problem.setRunMemory(problemVo.getRunMemory());
+        problem.setRunTime(problemVo.getRunTime());
+        problem.setCaseNumber(problemVo.getCaseNumber());
+        return problem;
     }
 
     /**
@@ -380,7 +418,7 @@ public class ProblemServiceImpl implements ProblemService {
             return null;
         }
         ProblemBodyVo problemBodyVo = new ProblemBodyVo();
-        problemBodyVo.setContent(problemBody.getProblemBodyHtml());
+        problemBodyVo.setProblemBodyHtml(problemBody.getProblemBodyHtml());
         return problemBodyVo;
     }
 
