@@ -96,6 +96,10 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Object submit(SubmitVo submitVo) {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
+        Problem problem = problemMapper.selectById(submitVo.getProblemId());
+        submitVo.setCaseNumber(problem.getCaseNumber());
+        submitVo.setRunTime(problem.getRunTime());
+        submitVo.setRunMemory(problem.getRunMemory());
         if (!check(submitVo)) {
             RunResult runResult = new RunResult();
             runResult.setAuthorId(sysUser.getId().toString());
