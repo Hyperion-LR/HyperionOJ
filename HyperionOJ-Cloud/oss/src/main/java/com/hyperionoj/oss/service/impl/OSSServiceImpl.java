@@ -60,7 +60,7 @@ public class OSSServiceImpl implements OSSService {
             return null;
         }
         String token = ErrorCode.USER_FREEZE.getMsg();
-        if(sysUser.getStatus() == 0){
+        if (sysUser.getStatus() == 0) {
             token = JWTUtils.createToken(sysUser.getId(), 24 * 60 * 60);
             redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(sysUser), 3600);
         }

@@ -5,7 +5,8 @@
 <mapper namespace="com.hyperionoj.page.dao.mapper.problem.ProblemCommentMapper">
 
     <select id="getCommentList" resultType="com.hyperionoj.page.dao.pojo.problem.ProblemComment">
-        select id, content, problem_id, create_time, author_id, parent_id, to_uid, support_number, level from oj_problem_comment
+        select id, content, problem_id, create_time, author_id, parent_id, to_uid, support_number, level from
+        oj_problem_comment
         <where>
             `is_delete` = 0
             <if test="problemId != null">

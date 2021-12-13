@@ -36,20 +36,22 @@ public interface ProblemService {
 
     /**
      * 添加题目
-     * @param problemVo 题目对象
      *
+     * @param problemVo 题目对象
      * @return 新加的题目
      */
     ProblemVo addProblem(ProblemVo problemVo);
 
     /**
      * 修改题目
+     *
      * @param problemVo 题目信息
      */
     void updateProblem(ProblemVo problemVo);
 
     /**
      * 删除题目
+     *
      * @param problemVo 题目信息
      */
     void deleteProblem(ProblemVo problemVo);
@@ -63,6 +65,7 @@ public interface ProblemService {
 
     /**
      * 添加题目分类
+     *
      * @param problemCategoryVo 分类信息
      * @return 分类情况
      */
@@ -70,6 +73,7 @@ public interface ProblemService {
 
     /**
      * 删除题目分类
+     *
      * @param problemCategoryVo 分类参数
      */
     void deleteCategory(ProblemCategoryVo problemCategoryVo);
@@ -84,6 +88,7 @@ public interface ProblemService {
 
     /**
      * 删除评论
+     *
      * @param commentVo 评论参数
      */
     void deleteComment(CommentVo commentVo);

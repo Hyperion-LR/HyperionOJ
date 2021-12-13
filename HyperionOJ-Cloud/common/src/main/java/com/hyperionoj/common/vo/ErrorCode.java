@@ -8,7 +8,7 @@ package com.hyperionoj.common.vo;
  */
 public enum ErrorCode {
     /**
-     * 系统错误
+     * 用来返回系统内部状态码
      */
     SYSTEM_ERROR(501, "系统错误"),
     CODE_ERROR(501, "验证码错误"),
@@ -18,8 +18,7 @@ public enum ErrorCode {
     NO_PERMISSION(505, "无访问权限"),
     SESSION_TIME_OUT(506, "会话超时"),
     NO_LOGIN(507, "未登录"),
-    USER_FREEZE(508, "账号已经冻结")
-    ;
+    USER_FREEZE(508, "账号已经冻结");
 
     private Integer code;
     private String msg;

@@ -26,6 +26,11 @@ com.hyperion
 |
 ├── hyperion-admin          							// 管理模块和监控中心 [9999]
 |
+├── hyperion-page          								// 基本页面 [9010]
+│       └── hyperion-page-article                       // 文章服务 
+│       └── hyperion-page-problem               		// 题库服务
+│       └── hyperion-page-contest               		// 比赛服务
+|
 ├── hyperion-order          							// 支付模块 [8888](暂无)
 │       └── hyperion-order-alipay                       // 阿里支付 
 │       └── hyperion-order-wxpay               		 	// 微信支付 

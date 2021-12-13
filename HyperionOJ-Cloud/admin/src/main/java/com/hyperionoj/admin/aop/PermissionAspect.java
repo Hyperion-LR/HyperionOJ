@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -27,12 +28,12 @@ import static com.hyperionoj.common.constants.Constants.SUCCESS_CODE;
 @Component
 @Aspect
 @Slf4j
-public class AdminActionAspect {
+public class PermissionAspect {
 
     @Resource
     private AdminActionMapper adminActionMapper;
 
-    @Pointcut("@annotation(com.hyperionoj.admin.aop.AdminActionAnnotation)")
+    @Pointcut("@annotation(com.hyperionoj.admin.aop.PermissionAnnotation)")
     public void pt() {
     }
 
@@ -41,25 +42,30 @@ public class AdminActionAspect {
         AdminVo admin = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), AdminVo.class);
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        AdminActionAnnotation adminActionAnnotation = method.getAnnotation(AdminActionAnnotation.class);
-        boolean isLevel = checkLevel(adminActionAnnotation, admin);
+        PermissionAnnotation permissionAnnotation = method.getAnnotation(PermissionAnnotation.class);
+        boolean isLevel = checkLevel(permissionAnnotation, admin);
         Object result;
         if (isLevel) {
             result = joinPoint.proceed();
         } else {
             result = Result.fail(ErrorCode.NO_PERMISSION);
         }
-        adminActionMapper.insert(getAction(admin, adminActionAnnotation, result));
+        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+        StringBuilder url = new StringBuilder();
+        for (String path : requestMapping.value()) {
+            url.append(path);
+        }
+        adminActionMapper.insert(getAction(admin, url.toString(), result));
         return result;
     }
 
-    private boolean checkLevel(AdminActionAnnotation adminActionAnnotation, AdminVo admin) {
-        return admin.getPermissionLevel() <= adminActionAnnotation.level();
+    private boolean checkLevel(PermissionAnnotation permissionAnnotation, AdminVo admin) {
+        return admin.getPermissionLevel() <= permissionAnnotation.level();
     }
 
-    private AdminAction getAction(AdminVo admin, AdminActionAnnotation adminActionAnnotation, Object result) {
+    private AdminAction getAction(AdminVo admin, String url, Object result) {
         AdminAction adminAction = new AdminAction();
-        adminAction.setAdminAction(adminActionAnnotation.url());
+        adminAction.setAdminAction(url);
         adminAction.setActionTime(System.currentTimeMillis());
         adminAction.setAdminId(admin.getId());
         if (((Result) result).getCode() == SUCCESS_CODE) {

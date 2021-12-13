@@ -29,13 +29,12 @@ import java.util.Random;
 @Slf4j
 public class CacheAspect {
 
-    @Resource
-    private RedisSever redisSever;
-
     /**
      * 缓存过期时间加上随机数防止缓存击穿
      */
     private static final Random RANDOM = new Random();
+    @Resource
+    private RedisSever redisSever;
 
     @Pointcut("@annotation(com.hyperionoj.common.cache.Cache)")
     public void pt() {

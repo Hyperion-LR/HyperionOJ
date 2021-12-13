@@ -29,7 +29,7 @@ public class LoginController {
         if (StringUtils.isBlank(token)) {
             return Result.fail(ErrorCode.PARAMS_ERROR);
         }
-        if(StringUtils.compare(token, ErrorCode.USER_FREEZE.getMsg()) == 0){
+        if (StringUtils.compare(token, ErrorCode.USER_FREEZE.getMsg()) == 0) {
             return Result.fail(ErrorCode.USER_FREEZE);
         }
         return Result.success(token);

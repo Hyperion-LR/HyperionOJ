@@ -9,10 +9,9 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AdminActionAnnotation {
-
-    String url() default "";
-
+public @interface PermissionAnnotation {
+    /**
+     * 执行方法需要的权限等级
+     */
     int level() default 0;
-
 }

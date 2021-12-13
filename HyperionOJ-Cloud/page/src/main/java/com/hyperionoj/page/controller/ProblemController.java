@@ -120,10 +120,11 @@ public class ProblemController {
 
     /**
      * 删除评论
+     *
      * @param commentVo 评论参数
      */
     @PostMapping("/delete/comment")
-    public Result deleteComment(@RequestBody CommentVo commentVo){
+    public Result deleteComment(@RequestBody CommentVo commentVo) {
         problemService.deleteComment(commentVo);
         return Result.success(null);
     }

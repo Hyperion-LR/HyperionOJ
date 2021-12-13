@@ -27,7 +27,7 @@ public class ScheduledTask {
      * 定时将评论中`is_delete`字段为1的删除
      */
     @Scheduled(fixedDelay = 48 * 60 * 60 * 1000)
-    public void deleteComment(){
+    public void deleteComment() {
         LambdaQueryWrapper<ProblemComment> problemCommentQueryWrapper = new LambdaQueryWrapper<>();
         problemCommentQueryWrapper.eq(ProblemComment::getIsDelete, 1);
         problemCommentMapper.delete(problemCommentQueryWrapper);
