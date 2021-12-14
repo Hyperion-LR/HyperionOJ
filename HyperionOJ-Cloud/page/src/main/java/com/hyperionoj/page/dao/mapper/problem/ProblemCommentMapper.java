@@ -24,6 +24,7 @@ public interface ProblemCommentMapper extends BaseMapper<ProblemComment> {
 
     /**
      * 题目下该评论的点赞数
+     *
      * @param commentId 评论id
      * @return 目前得赞数
      */

@@ -90,4 +90,39 @@ public interface Constants {
      */
     String AC = "AC";
 
+    /**
+     * 题目评论类名
+     */
+    String REDIS_KAY_PROBLEM_CONTROLLER = "ProblemController";
+
+    /**
+     * 题目评论方法名
+     */
+    String REDIS_KEY_METHOD_SUPPORT_COMMENT = "supportComment";
+
+    /**
+     * 获取评论列表
+     */
+    String REDIS_KEY_METHOD_GET_COMMENTS = "getComments";
+
+    /**
+     * 评论缓存名
+     */
+    String REDIS_KEY_CACHE_NAME = "ProblemCommentNumber";
+
+    /**
+     * 方法名
+     */
+    String REDIS_KEY_METHOD_PROBLEM_LIST = "getProblemList";
+
+    /**
+     * 问题缓存名
+     */
+    String REDIS_KEY_CACHE_NAME_PROBLEM = "problemList";
+
+    /**
+     * 获取题目方法名
+     */
+    String REDIS_KRY_METHOD_PROBLEM = "getProblemById";
+
 }

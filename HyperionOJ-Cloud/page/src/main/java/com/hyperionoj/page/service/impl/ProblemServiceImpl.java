@@ -196,6 +196,18 @@ public class ProblemServiceImpl implements ProblemService {
         problem.setRunMemory(problemVo.getRunMemory());
         problem.setRunTime(problemVo.getRunTime());
         problem.setCaseNumber(problemVo.getCaseNumber());
+        if (problemVo.getAcNumber() == null) {
+            problem.setAcNumber(0);
+        }
+        if (problemVo.getSubmitNumber() == null) {
+            problem.setSubmitNumber(0);
+        }
+        if (problemVo.getSolutionNumber() == null) {
+            problem.setSolutionNumber(0);
+        }
+        if (problemVo.getCommentNumber() == null) {
+            problem.setCommentNumber(0);
+        }
         return problem;
     }
 
@@ -370,6 +382,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     /**
      * 题目下该评论的点赞数
+     *
      * @param commentVo 评论参数
      * @return 目前得赞数
      */

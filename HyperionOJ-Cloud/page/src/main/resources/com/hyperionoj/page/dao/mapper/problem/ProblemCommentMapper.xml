@@ -16,7 +16,9 @@
         order by create_time desc, support_number desc
     </select>
     <select id="support" resultType="java.lang.Integer">
-        select support_number + 1 from oj_problem_comment where (id = #{commentId} and is_delete = 0)
+        select support_number + 1
+        from oj_problem_comment
+        where (id = #{commentId} and is_delete = 0)
     </select>
 
 </mapper>

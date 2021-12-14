@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.ErrorCode;
+import com.hyperionoj.common.vo.ProblemVo;
 import com.hyperionoj.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -22,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static com.hyperionoj.common.constants.Constants.*;
 
 
 /**
@@ -101,17 +104,25 @@ public class CacheAspect {
         Result result = JSON.parseObject(redisValue, Result.class);
 
         // 对评论点赞
-        if (StringUtils.compare(className, "ProblemController") == 0 && StringUtils.compare(methodName, "supportComment") == 0) {
+        if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
+                StringUtils.compare(methodName, REDIS_KEY_METHOD_SUPPORT_COMMENT) == 0) {
+
             result.setData((Integer) result.getData() + 1);
             redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
         }
+
         // 查看评论列表(有些评论的点赞数已经修改了)
-        if (StringUtils.compare(className, "ProblemController") == 0 && StringUtils.compare(methodName, "getComments") == 0) {
+        if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
+                StringUtils.compare(methodName, REDIS_KEY_METHOD_GET_COMMENTS) == 0) {
+
             List<CommentVo> newCommentVo = new ArrayList<>();
             CommentVo commentVoTemp = new CommentVo();
             for (CommentVo commentVo : JSONArray.parseArray(JSONObject.toJSONString(result.getData()), CommentVo.class)) {
                 commentVoTemp.setId(commentVo.getId());
-                String commentVoRedisKey = "ProblemCommentNumber:ProblemController:supportComment:" + DigestUtils.md5Hex(JSONObject.toJSONString(commentVoTemp));
+                String commentVoRedisKey = REDIS_KEY_CACHE_NAME + ":" +
+                        REDIS_KAY_PROBLEM_CONTROLLER + ":" +
+                        REDIS_KEY_METHOD_SUPPORT_COMMENT + ":" +
+                        DigestUtils.md5Hex(JSONObject.toJSONString(commentVoTemp));
                 String redisComment = redisSever.getRedisKV(commentVoRedisKey);
                 if (redisComment != null) {
                     commentVo.setSupportNumber((Integer) JSONObject.parseObject(redisComment, Result.class).getData());
@@ -119,6 +130,26 @@ public class CacheAspect {
                 newCommentVo.add(commentVo);
             }
             result.setData(newCommentVo);
+            redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
+        }
+
+        // 获取题目列表更新题目 评论数,题解数,提交数等
+        if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
+                StringUtils.compare(methodName, REDIS_KEY_METHOD_PROBLEM_LIST) == 0) {
+
+            List<ProblemVo> newProblemVo = new ArrayList<>();
+            for (ProblemVo problemVo : JSONArray.parseArray(JSONObject.toJSONString(result.getData()), ProblemVo.class)) {
+                String problemVoRedisKey = REDIS_KEY_CACHE_NAME_PROBLEM + ":" +
+                        REDIS_KAY_PROBLEM_CONTROLLER + ":" +
+                        REDIS_KRY_METHOD_PROBLEM + ":" +
+                        DigestUtils.md5Hex(problemVo.getId());
+                String redisProblemValue = redisSever.getRedisKV(problemVoRedisKey);
+                if (redisProblemValue != null) {
+                    problemVo.setCommentNumber((Integer) JSONObject.parseObject(redisProblemValue, Result.class).getData());
+                }
+                newProblemVo.add(problemVo);
+            }
+            result.setData(newProblemVo);
             redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
         }
 

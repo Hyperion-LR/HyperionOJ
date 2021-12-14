@@ -115,12 +115,13 @@ public class ProblemController {
 
     /**
      * 题目下该评论的点赞数
+     *
      * @param commentVo 评论参数
      * @return 目前得赞数
      */
     @Cache(name = "ProblemCommentNumber", time = 60 * 60 * 1000)
     @PostMapping("/support/comment")
-    public Result supportComment(@RequestBody CommentVo commentVo){
+    public Result supportComment(@RequestBody CommentVo commentVo) {
         return Result.success(problemService.support(commentVo));
     }
 

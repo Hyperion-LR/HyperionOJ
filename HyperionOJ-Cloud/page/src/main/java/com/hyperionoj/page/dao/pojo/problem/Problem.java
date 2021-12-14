@@ -22,17 +22,17 @@ public class Problem {
 
     private Long categoryId;
 
-    private Integer acNumber = 0;
+    private Integer acNumber;
 
-    private Integer submitNumber = 0;
+    private Integer submitNumber;
 
-    private Integer solutionNumber = 0;
+    private Integer solutionNumber;
 
-    private Integer commentNumber = 0;
+    private Integer commentNumber;
 
-    private Integer runTime = 1;
+    private Integer runTime;
 
-    private Integer runMemory = 256;
+    private Integer runMemory;
 
     private Integer caseNumber;
 
