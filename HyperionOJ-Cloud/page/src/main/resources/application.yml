@@ -13,7 +13,7 @@ spring:
         ephemeral: true
         namespace: 0e00e406-05ce-4cc8-a5d0-e5038753b730
   redis:
-    host: 127.0.0.1
+    host: localhost
     port: 6379
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

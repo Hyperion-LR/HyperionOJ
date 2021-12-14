@@ -129,4 +129,22 @@ public interface RedisSever {
      */
     void delKey(String key);
 
+    /**
+     * 开启事务支持
+     *
+     * @param op 参数
+     */
+    void setEnableTransactionSupport(Boolean op);
+
+    /**
+     * 开启事务
+     */
+    void multi();
+
+    /**
+     * 提交事务
+     *
+     * @return 是否运行成功
+     */
+    Boolean exec();
 }

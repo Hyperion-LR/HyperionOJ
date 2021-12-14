@@ -123,6 +123,11 @@ public interface Constants {
     /**
      * 获取题目方法名
      */
+    String REDIS_KRY_CLASS_NAME_PROBLEM = "problemId";
+
+    /**
+     * 获取题目方法名
+     */
     String REDIS_KRY_METHOD_PROBLEM = "getProblemById";
 
 }

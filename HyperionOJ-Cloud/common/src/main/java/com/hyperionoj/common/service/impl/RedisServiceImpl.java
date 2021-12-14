@@ -6,10 +6,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.time.Duration;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl implements RedisSever {
 
+    private static Random random = new Random();
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -65,31 +64,37 @@ public class RedisServiceImpl implements RedisSever {
 
     @Override
     public String getRedisKV(String key) {
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30 + random.nextInt(15)));
         return stringRedisTemplate.opsForValue().get(key);
     }
 
     @Override
     public List<String> getRedisList(String key, long start, long end) {
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30 + random.nextInt(15)));
         return stringRedisTemplate.opsForList().range(key, start, end);
     }
 
     @Override
     public Set<String> getRedisSet(String key) {
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30 + random.nextInt(15)));
         return stringRedisTemplate.opsForSet().members(key);
     }
 
     @Override
     public Set<String> getRedisZSet(String key) {
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30 + random.nextInt(15)));
         return stringRedisTemplate.opsForZSet().range(key, 0, -1);
     }
 
     @Override
     public String getRedisHash(String key, String field) {
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30 + random.nextInt(15)));
         return (String) stringRedisTemplate.opsForHash().get(key, field);
     }
 
     @Override
     public String getRedisObj(String key) {
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30 + random.nextInt(15)));
         return stringRedisTemplate.opsForValue().get(key);
     }
 
@@ -107,4 +112,24 @@ public class RedisServiceImpl implements RedisSever {
         stringRedisTemplate.delete(key);
     }
 
+    @Override
+    public void setEnableTransactionSupport(Boolean op) {
+        stringRedisTemplate.setEnableTransactionSupport(op);
+    }
+
+    @Override
+    public void multi() {
+        stringRedisTemplate.multi();
+    }
+
+
+    @Override
+    public Boolean exec() {
+        Boolean res = true;
+        List<Object> exec = stringRedisTemplate.exec();
+        for (Object o : exec) {
+            res &= (boolean) o;
+        }
+        return res;
+    }
 }

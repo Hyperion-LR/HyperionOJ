@@ -40,7 +40,6 @@ public class ProblemController {
      *
      * @return 题目所有类别
      */
-    @Cache(name = "problemList")
     @GetMapping("/category")
     public Result getCategory() {
         return Result.success(problemService.getCategory());
@@ -53,7 +52,7 @@ public class ProblemController {
      * @param id 题目id
      * @return 题目具体情况
      */
-    @Cache(name = "problemList", time = 60 * 60 * 1000)
+    @Cache(name = "problemId", time = 60 * 60 * 1000)
     @GetMapping("/{id}")
     public Result getProblemById(@PathVariable Long id) {
         ProblemVo problem = problemService.getProblemById(id);
@@ -64,7 +63,7 @@ public class ProblemController {
     }
 
     /**
-     * 提交题目
+     * 提交代码
      *
      * @param submitVo 用户提交数据
      * @return 本次提交情况
@@ -96,7 +95,7 @@ public class ProblemController {
      * @param id 提交id
      * @return 提交结果
      */
-    @Cache(name = "problemList", time = 60 * 60 * 1000)
+    @Cache(name = "submitList", time = 60 * 60 * 1000)
     @GetMapping("/submit/{id}")
     public Result getSubmit(@PathVariable("id") Long id) {
         return Result.success(problemService.getSubmitById(id));
@@ -142,7 +141,6 @@ public class ProblemController {
      * @param pageParams 分页参数
      * @return 评论列表
      */
-    @Cache(name = "problemList", time = 60 * 60 * 1000)
     @GetMapping("/comments")
     public Result getComments(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getCommentList(pageParams));

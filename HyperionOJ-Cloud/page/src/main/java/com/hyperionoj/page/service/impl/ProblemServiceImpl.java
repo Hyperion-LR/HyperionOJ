@@ -6,13 +6,16 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.pojo.SysUser;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.dao.mapper.problem.*;
 import com.hyperionoj.page.dao.pojo.problem.*;
 import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -60,6 +63,9 @@ public class ProblemServiceImpl implements ProblemService {
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Resource
+    private RedisSever redisSever;
+
     /**
      * 返回题目列表
      *
@@ -96,10 +102,10 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Object submit(SubmitVo submitVo) {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
-        Problem problem = problemMapper.selectById(submitVo.getProblemId());
-        submitVo.setCaseNumber(problem.getCaseNumber());
-        submitVo.setRunTime(problem.getRunTime());
-        submitVo.setRunMemory(problem.getRunMemory());
+        ProblemVo problemVo = problemToVo(problemMapper.selectById(submitVo.getProblemId()), false);
+        submitVo.setCaseNumber(problemVo.getCaseNumber());
+        submitVo.setRunTime(problemVo.getRunTime());
+        submitVo.setRunMemory(problemVo.getRunMemory());
         if (!check(submitVo)) {
             RunResult runResult = new RunResult();
             runResult.setAuthorId(sysUser.getId().toString());
@@ -137,8 +143,27 @@ public class ProblemServiceImpl implements ProblemService {
             updateSubmitVo.setAuthorId(problemSubmit.getAuthorId());
             updateSubmitVo.setStatus(problemSubmit.getStatus());
             kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_PAGE, JSONObject.toJSONString(updateSubmitVo));
+            problemVo.setSubmitNumber(problemVo.getSubmitNumber() + 1);
+            if (result.getVerdict().equals(AC)) {
+                problemVo.setAcNumber(problemVo.getAcNumber() + 1);
+            }
+            this.updateProblemCache(problemVo);
         }
         return result;
+    }
+
+    /**
+     * 通过kafka接收消息
+     *
+     * @param record 运算结果
+     */
+    @KafkaListener(topics = {KAFKA_TOPIC_SUBMIT_RESULT}, groupId = "pageTest")
+    public void kafkaResult(ConsumerRecord<?, ?> record) {
+        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
+        if (kafkaMessage.isPresent()) {
+            RunResult message = JSONObject.parseObject((String) kafkaMessage.get(), RunResult.class);
+            SUBMIT_RESULT.put(message.getAuthorId() + UNDERLINE + message.getProblemId(), message);
+        }
     }
 
 
@@ -171,8 +196,8 @@ public class ProblemServiceImpl implements ProblemService {
         problemBodyVo.setId(problemVo.getBodyId());
         problemBodyMapper.updateById(voToProblemBody(problemBodyVo));
         problemMapper.updateById(voToProblem(problemVo));
+        this.deleteProblemCache(problemVo);
     }
-
 
     private ProblemBody voToProblemBody(ProblemBodyVo problemBodyVo) {
         ProblemBody problemBody = new ProblemBody();
@@ -220,6 +245,7 @@ public class ProblemServiceImpl implements ProblemService {
     public void deleteProblem(ProblemVo problemVo) {
         problemBodyMapper.deleteById(problemVo.getBodyId());
         problemMapper.deleteById(problemVo.getId());
+        this.deleteProblemCache(problemVo);
     }
 
     /**
@@ -261,6 +287,13 @@ public class ProblemServiceImpl implements ProblemService {
         ProblemComment comment = voToComment(commentVo);
         problemCommentMapper.insert(comment);
         commentVo.setId(comment.getId().toString());
+        String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
+                REDIS_KAY_PROBLEM_CONTROLLER + ":" +
+                REDIS_KRY_METHOD_PROBLEM + ":" +
+                DigestUtils.md5Hex(commentVo.getProblemId());
+        ProblemVo problemVo = JSONObject.parseObject(JSONObject.toJSONString(JSONObject.parseObject(redisSever.getRedisKV(problemVoRedisKey), Result.class).getData()), ProblemVo.class);
+        problemVo.setCommentNumber(problemVo.getCommentNumber() + 1);
+        redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
         return commentVo;
     }
 
@@ -275,6 +308,13 @@ public class ProblemServiceImpl implements ProblemService {
         updateWrapper.eq(ProblemComment::getId, commentVo.getId());
         updateWrapper.set(ProblemComment::getIsDelete, 1);
         problemCommentMapper.update(null, updateWrapper);
+        String problemVoRedisKey = "problemId" + ":" +
+                "ProblemController" + ":" +
+                "getProblemById" + ":" +
+                DigestUtils.md5Hex(commentVo.getProblemId());
+        ProblemVo problemVo = JSONObject.parseObject((String) JSONObject.parseObject(redisSever.getRedisKV(problemVoRedisKey), Result.class).getData(), ProblemVo.class);
+        problemVo.setCommentNumber(problemVo.getCommentNumber() - 1);
+        redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
     }
 
     /**
@@ -333,21 +373,6 @@ public class ProblemServiceImpl implements ProblemService {
             problemComment.setToUid(0L);
         }
         return problemComment;
-    }
-
-    /**
-     * 修改问题的评论数
-     * 此方法用于redis定时回写数据库
-     *
-     * @param problemId     题目id
-     * @param commentNumber 评论数量
-     */
-    @Override
-    public void updateProblemCommentNumber(Long problemId, Integer commentNumber) {
-        LambdaUpdateWrapper<Problem> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Problem::getId, problemId);
-        updateWrapper.set(Problem::getCommentNumber, commentNumber);
-        problemMapper.update(null, updateWrapper);
     }
 
     /**
@@ -454,13 +479,6 @@ public class ProblemServiceImpl implements ProblemService {
         return !StringUtils.contains(submitVo.getCodeBody(), ILLEGAL_CHAR_SYSTEM);
     }
 
-    /**
-     * 转换problem和vo对象
-     *
-     * @param problemPage problem页
-     * @param isBody      是否需要加上body
-     * @return vo对象列表
-     */
     private List<ProblemVo> copyProblemList(List<Problem> problemPage, Boolean isBody) {
         List<ProblemVo> problemVoList = new ArrayList<>();
         for (Problem problem : problemPage) {
@@ -469,13 +487,6 @@ public class ProblemServiceImpl implements ProblemService {
         return problemVoList;
     }
 
-    /**
-     * 转换problem和vo对象
-     *
-     * @param problem problem对象
-     * @param isBody  是否需要加上body
-     * @return vo对象
-     */
     private ProblemVo problemToVo(Problem problem, boolean isBody) {
         ProblemVo problemVo = new ProblemVo();
         problemVo.setId(problem.getId().toString());
@@ -493,12 +504,6 @@ public class ProblemServiceImpl implements ProblemService {
         return problemVo;
     }
 
-    /**
-     * 转换problem和vo对象
-     *
-     * @param problemBody problemBody对象
-     * @return vo对象
-     */
     private ProblemBodyVo problemBodyToVo(ProblemBody problemBody) {
         if (ObjectUtils.isEmpty(problemBody)) {
             return null;
@@ -509,17 +514,31 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     /**
-     * 通过kafka接收消息
+     * 更新问题的缓存
      *
-     * @param record 运算结果
+     * @param problemVo 新的问题的所有参数
      */
-    @KafkaListener(topics = {KAFKA_TOPIC_SUBMIT_RESULT}, groupId = "pageTest")
-    public void kafkaResult(ConsumerRecord<?, ?> record) {
-        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
-        if (kafkaMessage.isPresent()) {
-            RunResult message = JSONObject.parseObject((String) kafkaMessage.get(), RunResult.class);
-            SUBMIT_RESULT.put(message.getAuthorId() + UNDERLINE + message.getProblemId(), message);
-        }
+    @Override
+    public void updateProblemCache(ProblemVo problemVo) {
+        String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
+                REDIS_KAY_PROBLEM_CONTROLLER + ":" +
+                REDIS_KRY_METHOD_PROBLEM + ":" +
+                DigestUtils.md5Hex(problemVo.getId());
+        redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
     }
+
+    /**
+     * 删除问题的缓存
+     *
+     * @param problemVo 问题参数
+     */
+    private void deleteProblemCache(ProblemVo problemVo) {
+        String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
+                REDIS_KAY_PROBLEM_CONTROLLER + ":" +
+                REDIS_KRY_METHOD_PROBLEM + ":" +
+                DigestUtils.md5Hex(problemVo.getId());
+        redisSever.delKey(problemVoRedisKey);
+    }
+
 
 }

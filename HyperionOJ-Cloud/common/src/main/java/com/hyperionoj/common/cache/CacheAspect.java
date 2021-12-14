@@ -16,6 +16,7 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -43,6 +44,9 @@ public class CacheAspect {
     private static final Random RANDOM = new Random();
     @Resource
     private RedisSever redisSever;
+
+    @Resource
+    private StringRedisTemplate redisTemplate;
 
     @Pointcut("@annotation(com.hyperionoj.common.cache.Cache)")
     public void pt() {
@@ -86,8 +90,21 @@ public class CacheAspect {
             String redisValue = redisSever.getRedisKV(redisKey);
             if (StringUtils.isNotEmpty(redisValue)) {
                 log.info("读取缓存: {},{}", className, methodName);
+
+                // 开启事务支持
+                redisSever.setEnableTransactionSupport(true);
+
+                // 开始事务
+                redisSever.multi();
+
                 // 判断当前请求是否会改变其他变量如浏览量之类的数据
-                return checkMethodName(className, methodName, redisKey, redisValue, time);
+                Object result;
+                do {
+                    result = checkMethodName(className, methodName, redisKey, redisValue);
+
+                    // 提交事务
+                } while (redisSever.exec());
+                return result;
             }
             Object proceed = pjp.proceed();
             redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed));
@@ -99,7 +116,7 @@ public class CacheAspect {
         return Result.fail(ErrorCode.SYSTEM_ERROR);
     }
 
-    private Object checkMethodName(String className, String methodName, String redisKey, String redisValue, long expire) {
+    private Result checkMethodName(String className, String methodName, String redisKey, String redisValue) {
 
         Result result = JSON.parseObject(redisValue, Result.class);
 
@@ -123,6 +140,7 @@ public class CacheAspect {
                         REDIS_KAY_PROBLEM_CONTROLLER + ":" +
                         REDIS_KEY_METHOD_SUPPORT_COMMENT + ":" +
                         DigestUtils.md5Hex(JSONObject.toJSONString(commentVoTemp));
+
                 String redisComment = redisSever.getRedisKV(commentVoRedisKey);
                 if (redisComment != null) {
                     commentVo.setSupportNumber((Integer) JSONObject.parseObject(redisComment, Result.class).getData());
@@ -136,20 +154,31 @@ public class CacheAspect {
         // 获取题目列表更新题目 评论数,题解数,提交数等
         if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
                 StringUtils.compare(methodName, REDIS_KEY_METHOD_PROBLEM_LIST) == 0) {
-
-            List<ProblemVo> newProblemVo = new ArrayList<>();
+            List<ProblemVo> newProblemVoList = new ArrayList<>();
             for (ProblemVo problemVo : JSONArray.parseArray(JSONObject.toJSONString(result.getData()), ProblemVo.class)) {
-                String problemVoRedisKey = REDIS_KEY_CACHE_NAME_PROBLEM + ":" +
+                String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
                         REDIS_KAY_PROBLEM_CONTROLLER + ":" +
                         REDIS_KRY_METHOD_PROBLEM + ":" +
                         DigestUtils.md5Hex(problemVo.getId());
                 String redisProblemValue = redisSever.getRedisKV(problemVoRedisKey);
                 if (redisProblemValue != null) {
-                    problemVo.setCommentNumber((Integer) JSONObject.parseObject(redisProblemValue, Result.class).getData());
+                    ProblemVo newProblemVo = JSONObject.parseObject(JSONObject.toJSONString(JSONObject.parseObject(redisProblemValue, Result.class).getData()), ProblemVo.class);
+                    // 评论数量
+                    problemVo.setCommentNumber(newProblemVo.getCommentNumber());
+
+                    // 题解数量
+                    problemVo.setSolutionNumber(newProblemVo.getSolutionNumber());
+
+                    // 提交数量
+                    problemVo.setSubmitNumber(newProblemVo.getSubmitNumber());
+
+                    // 通过数量
+                    problemVo.setAcNumber(newProblemVo.getAcNumber());
+
                 }
-                newProblemVo.add(problemVo);
+                newProblemVoList.add(problemVo);
             }
-            result.setData(newProblemVo);
+            result.setData(newProblemVoList);
             redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
         }
 

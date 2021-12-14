@@ -102,15 +102,6 @@ public interface ProblemService {
     List<CommentVo> getCommentList(PageParams pageParams);
 
     /**
-     * 修改问题的评论数
-     * 此方法用于redis定时回写数据库
-     *
-     * @param problemId     题目id
-     * @param commentNumber 评论数量
-     */
-    void updateProblemCommentNumber(Long problemId, Integer commentNumber);
-
-    /**
      * 获取提交列表
      *
      * @param pageParams 分页查询参数
@@ -133,4 +124,14 @@ public interface ProblemService {
      * @return 目前得赞数
      */
     Integer support(CommentVo commentVo);
+
+
+    /**
+     * 修改问题的缓存
+     * 此方法用于redis定时回写数据库
+     *
+     * @param problemVo 更新的问题参数
+     */
+    void updateProblemCache(ProblemVo problemVo);
+
 }
