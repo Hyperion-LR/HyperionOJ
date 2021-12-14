@@ -84,7 +84,7 @@ public interface ProblemService {
      * @param commentVo 用户提交评论
      * @return 本次提交情况
      */
-    boolean comment(CommentVo commentVo);
+    CommentVo comment(CommentVo commentVo);
 
     /**
      * 删除评论
@@ -126,4 +126,10 @@ public interface ProblemService {
      */
     SubmitVo getSubmitById(Long id);
 
+    /**
+     * 题目下该评论的点赞数
+     * @param commentVo 评论参数
+     * @return 目前得赞数
+     */
+    Integer support(CommentVo commentVo);
 }

@@ -527,6 +527,34 @@
 }
 ```
 
+
+
+### 给评论点赞
+
+接口url：localhost:9000/problem/support/comment
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1470582267798310913"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": 7,		// 当前赞数
+    "msg": null
+}
+```
+
+
+
 ### 获取评论列表(分页查询)
 
 接口urllocalhost:9000/problem/comments
@@ -937,42 +965,55 @@
 
 
 
-### 需求
+### 删除题目
 
-接口url：
+接口url：localhost:9000/admin/delete/problem
 
-请求方式：
+请求方式：delete
 
 请求参数：
 
 ```json
-
+{
+    "id":"1470389250931982337",
+    "bodyId": "1470389250806153218",
+}
 ```
 
 返回参数：
 
 ```json
-
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
 ```
 
 
 
-### 需求
+### 删除用户评论
 
-接口url：
+接口url：localhost:9000/problem/admin/delete/comment
 
-请求方式：
+请求方式：post
 
 请求参数：
 
 ```json
-
+{
+    "id": "1469944007879221250"
+}
 ```
 
 返回参数：
 
 ```json
-
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
 ```
 
 

@@ -110,12 +110,18 @@ public class ProblemController {
      */
     @PostMapping("/comment")
     public Result comment(@RequestBody CommentVo commentVo) {
-        boolean isComment = problemService.comment(commentVo);
-        if (!isComment) {
-            return Result.fail(ErrorCode.PARAMS_ERROR);
-        } else {
-            return Result.success(null);
-        }
+        return Result.success(problemService.comment(commentVo));
+    }
+
+    /**
+     * 题目下该评论的点赞数
+     * @param commentVo 评论参数
+     * @return 目前得赞数
+     */
+    @Cache(name = "ProblemCommentNumber", time = 60 * 60 * 1000)
+    @PostMapping("/support/comment")
+    public Result supportComment(@RequestBody CommentVo commentVo){
+        return Result.success(problemService.support(commentVo));
     }
 
     /**

@@ -245,9 +245,11 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 本次提交情况
      */
     @Override
-    public boolean comment(CommentVo commentVo) {
-        problemCommentMapper.insert(voToComment(commentVo));
-        return true;
+    public CommentVo comment(CommentVo commentVo) {
+        ProblemComment comment = voToComment(commentVo);
+        problemCommentMapper.insert(comment);
+        commentVo.setId(comment.getId().toString());
+        return commentVo;
     }
 
     /**
@@ -294,6 +296,7 @@ public class ProblemServiceImpl implements ProblemService {
         commentVo.setId(comment.getId().toString());
         commentVo.setParentId(comment.getParentId().toString());
         commentVo.setToUid(comment.getToUid().toString());
+        commentVo.setSupportNumber(comment.getSupportNumber());
         return commentVo;
     }
 
@@ -303,6 +306,7 @@ public class ProblemServiceImpl implements ProblemService {
         problemComment.setContent(commentVo.getContent());
         problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorId()));
         problemComment.setIsDelete(0);
+        problemComment.setSupportNumber(0);
         problemComment.setCreateTime(System.currentTimeMillis());
         problemComment.setLevel(commentVo.getLevel());
         problemComment.setParentId(Long.getLong(commentVo.getParentId()));
@@ -362,6 +366,16 @@ public class ProblemServiceImpl implements ProblemService {
         LambdaQueryWrapper<ProblemSubmit> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProblemSubmit::getId, id);
         return submitToVo(problemSubmitMapper.selectOne(queryWrapper), true);
+    }
+
+    /**
+     * 题目下该评论的点赞数
+     * @param commentVo 评论参数
+     * @return 目前得赞数
+     */
+    @Override
+    public Integer support(CommentVo commentVo) {
+        return problemCommentMapper.support(Long.valueOf(commentVo.getId()));
     }
 
     private List<SubmitVo> submitToVoList(List<ProblemSubmit> submits) {

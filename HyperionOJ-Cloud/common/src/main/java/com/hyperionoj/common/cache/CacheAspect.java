@@ -1,7 +1,10 @@
 package com.hyperionoj.common.cache;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.service.RedisSever;
+import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -82,11 +87,7 @@ public class CacheAspect {
                 return checkMethodName(className, methodName, redisKey, redisValue, time);
             }
             Object proceed = pjp.proceed();
-            if (time > 0) {
-                redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed), time + RANDOM.nextInt(60 * 1000));
-            } else {
-                redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed));
-            }
+            redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed));
             log.info("更新缓存: {},{}", className, methodName);
             return proceed;
         } catch (Throwable throwable) {
@@ -97,9 +98,29 @@ public class CacheAspect {
 
     private Object checkMethodName(String className, String methodName, String redisKey, String redisValue, long expire) {
 
-        Object result = JSON.parseObject(redisValue, Result.class);
+        Result result = JSON.parseObject(redisValue, Result.class);
 
-        // 如果访问某篇文章则浏览量+1
+        // 对评论点赞
+        if (StringUtils.compare(className, "ProblemController") == 0 && StringUtils.compare(methodName, "supportComment") == 0) {
+            result.setData((Integer) result.getData() + 1);
+            redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
+        }
+        // 查看评论列表(有些评论的点赞数已经修改了)
+        if (StringUtils.compare(className, "ProblemController") == 0 && StringUtils.compare(methodName, "getComments") == 0) {
+            List<CommentVo> newCommentVo = new ArrayList<>();
+            CommentVo commentVoTemp = new CommentVo();
+            for (CommentVo commentVo : JSONArray.parseArray(JSONObject.toJSONString(result.getData()), CommentVo.class)) {
+                commentVoTemp.setId(commentVo.getId());
+                String commentVoRedisKey = "ProblemCommentNumber:ProblemController:supportComment:" + DigestUtils.md5Hex(JSONObject.toJSONString(commentVoTemp));
+                String redisComment = redisSever.getRedisKV(commentVoRedisKey);
+                if (redisComment != null) {
+                    commentVo.setSupportNumber((Integer) JSONObject.parseObject(redisComment, Result.class).getData());
+                }
+                newCommentVo.add(commentVo);
+            }
+            result.setData(newCommentVo);
+            redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
+        }
 
         return result;
     }
