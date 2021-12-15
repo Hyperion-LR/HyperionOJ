@@ -287,13 +287,16 @@ public class ProblemServiceImpl implements ProblemService {
         ProblemComment comment = voToComment(commentVo);
         problemCommentMapper.insert(comment);
         commentVo.setId(comment.getId().toString());
-        String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
-                REDIS_KAY_PROBLEM_CONTROLLER + ":" +
-                REDIS_KRY_METHOD_PROBLEM + ":" +
+        String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                PROBLEM_CONTROLLER + ":" +
+                GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(commentVo.getProblemId());
-        ProblemVo problemVo = JSONObject.parseObject(JSONObject.toJSONString(JSONObject.parseObject(redisSever.getRedisKV(problemVoRedisKey), Result.class).getData()), ProblemVo.class);
-        problemVo.setCommentNumber(problemVo.getCommentNumber() + 1);
-        redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
+        String redisKV = redisSever.getRedisKV(problemVoRedisKey);
+        if (redisKV != null) {
+            ProblemVo problemVo = JSONObject.parseObject(JSONObject.toJSONString(JSONObject.parseObject(redisKV, Result.class).getData()), ProblemVo.class);
+            problemVo.setCommentNumber(problemVo.getCommentNumber() + 1);
+            redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
+        }
         return commentVo;
     }
 
@@ -520,9 +523,9 @@ public class ProblemServiceImpl implements ProblemService {
      */
     @Override
     public void updateProblemCache(ProblemVo problemVo) {
-        String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
-                REDIS_KAY_PROBLEM_CONTROLLER + ":" +
-                REDIS_KRY_METHOD_PROBLEM + ":" +
+        String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                PROBLEM_CONTROLLER + ":" +
+                GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(problemVo.getId());
         redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
     }
@@ -533,9 +536,9 @@ public class ProblemServiceImpl implements ProblemService {
      * @param problemVo 问题参数
      */
     private void deleteProblemCache(ProblemVo problemVo) {
-        String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
-                REDIS_KAY_PROBLEM_CONTROLLER + ":" +
-                REDIS_KRY_METHOD_PROBLEM + ":" +
+        String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                PROBLEM_CONTROLLER + ":" +
+                GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(problemVo.getId());
         redisSever.delKey(problemVoRedisKey);
     }

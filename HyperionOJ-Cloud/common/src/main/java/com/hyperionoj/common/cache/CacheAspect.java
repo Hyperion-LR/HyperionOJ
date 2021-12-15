@@ -16,7 +16,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -44,9 +43,6 @@ public class CacheAspect {
     private static final Random RANDOM = new Random();
     @Resource
     private RedisSever redisSever;
-
-    @Resource
-    private StringRedisTemplate redisTemplate;
 
     @Pointcut("@annotation(com.hyperionoj.common.cache.Cache)")
     public void pt() {
@@ -91,20 +87,8 @@ public class CacheAspect {
             if (StringUtils.isNotEmpty(redisValue)) {
                 log.info("读取缓存: {},{}", className, methodName);
 
-                // 开启事务支持
-                redisSever.setEnableTransactionSupport(true);
-
-                // 开始事务
-                redisSever.multi();
-
                 // 判断当前请求是否会改变其他变量如浏览量之类的数据
-                Object result;
-                do {
-                    result = checkMethodName(className, methodName, redisKey, redisValue);
-
-                    // 提交事务
-                } while (redisSever.exec());
-                return result;
+                return checkMethodName(className, methodName, redisKey, redisValue);
             }
             Object proceed = pjp.proceed();
             redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed));
@@ -121,24 +105,24 @@ public class CacheAspect {
         Result result = JSON.parseObject(redisValue, Result.class);
 
         // 对评论点赞
-        if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
-                StringUtils.compare(methodName, REDIS_KEY_METHOD_SUPPORT_COMMENT) == 0) {
+        if (StringUtils.compare(className, PROBLEM_CONTROLLER) == 0 &&
+                StringUtils.compare(methodName, PROBLEM_SUPPORT_COMMENT) == 0) {
 
             result.setData((Integer) result.getData() + 1);
             redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
         }
 
         // 查看评论列表(有些评论的点赞数已经修改了)
-        if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
-                StringUtils.compare(methodName, REDIS_KEY_METHOD_GET_COMMENTS) == 0) {
+        if (StringUtils.compare(className, PROBLEM_CONTROLLER) == 0 &&
+                StringUtils.compare(methodName, GET_COMMENTS) == 0) {
 
             List<CommentVo> newCommentVo = new ArrayList<>();
             CommentVo commentVoTemp = new CommentVo();
             for (CommentVo commentVo : JSONArray.parseArray(JSONObject.toJSONString(result.getData()), CommentVo.class)) {
                 commentVoTemp.setId(commentVo.getId());
-                String commentVoRedisKey = REDIS_KEY_CACHE_NAME + ":" +
-                        REDIS_KAY_PROBLEM_CONTROLLER + ":" +
-                        REDIS_KEY_METHOD_SUPPORT_COMMENT + ":" +
+                String commentVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                        PROBLEM_CONTROLLER + ":" +
+                        PROBLEM_SUPPORT_COMMENT + ":" +
                         DigestUtils.md5Hex(JSONObject.toJSONString(commentVoTemp));
 
                 String redisComment = redisSever.getRedisKV(commentVoRedisKey);
@@ -152,13 +136,13 @@ public class CacheAspect {
         }
 
         // 获取题目列表更新题目 评论数,题解数,提交数等
-        if (StringUtils.compare(className, REDIS_KAY_PROBLEM_CONTROLLER) == 0 &&
-                StringUtils.compare(methodName, REDIS_KEY_METHOD_PROBLEM_LIST) == 0) {
+        if (StringUtils.compare(className, PROBLEM_CONTROLLER) == 0 &&
+                StringUtils.compare(methodName, GET_PROBLEM_LIST) == 0) {
             List<ProblemVo> newProblemVoList = new ArrayList<>();
             for (ProblemVo problemVo : JSONArray.parseArray(JSONObject.toJSONString(result.getData()), ProblemVo.class)) {
-                String problemVoRedisKey = REDIS_KRY_CLASS_NAME_PROBLEM + ":" +
-                        REDIS_KAY_PROBLEM_CONTROLLER + ":" +
-                        REDIS_KRY_METHOD_PROBLEM + ":" +
+                String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                        PROBLEM_CONTROLLER + ":" +
+                        GET_PROBLEM_ID + ":" +
                         DigestUtils.md5Hex(problemVo.getId());
                 String redisProblemValue = redisSever.getRedisKV(problemVoRedisKey);
                 if (redisProblemValue != null) {

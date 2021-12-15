@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import static com.hyperionoj.common.constants.Constants.REDIS_KAY_PROBLEM_CACHE;
+
 /**
  * @author Hyperion
  * @date 2021/12/9
@@ -29,7 +31,7 @@ public class ProblemController {
      * @param pageParams 分页参数
      * @return 返回查询分页
      */
-    @Cache(name = "problemList", time = 60 * 60 * 1000)
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/list")
     public Result getProblemList(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getProblemList(pageParams));
@@ -52,7 +54,7 @@ public class ProblemController {
      * @param id 题目id
      * @return 题目具体情况
      */
-    @Cache(name = "problemId", time = 60 * 60 * 1000)
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/{id}")
     public Result getProblemById(@PathVariable Long id) {
         ProblemVo problem = problemService.getProblemById(id);
@@ -95,7 +97,7 @@ public class ProblemController {
      * @param id 提交id
      * @return 提交结果
      */
-    @Cache(name = "submitList", time = 60 * 60 * 1000)
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/submit/{id}")
     public Result getSubmit(@PathVariable("id") Long id) {
         return Result.success(problemService.getSubmitById(id));
@@ -118,7 +120,7 @@ public class ProblemController {
      * @param commentVo 评论参数
      * @return 目前得赞数
      */
-    @Cache(name = "ProblemCommentNumber", time = 60 * 60 * 1000)
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @PostMapping("/support/comment")
     public Result supportComment(@RequestBody CommentVo commentVo) {
         return Result.success(problemService.support(commentVo));
@@ -141,6 +143,7 @@ public class ProblemController {
      * @param pageParams 分页参数
      * @return 评论列表
      */
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/comments")
     public Result getComments(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getCommentList(pageParams));

@@ -91,43 +91,38 @@ public interface Constants {
     String AC = "AC";
 
     /**
-     * 题目评论类名
+     * 题目缓存名
      */
-    String REDIS_KAY_PROBLEM_CONTROLLER = "ProblemController";
+    String REDIS_KAY_PROBLEM_CACHE = "problem";
 
     /**
-     * 题目评论方法名
+     * 题目类名
      */
-    String REDIS_KEY_METHOD_SUPPORT_COMMENT = "supportComment";
+    String PROBLEM_CONTROLLER = "ProblemController";
+
+    /**
+     * 获取题目列表方法名
+     */
+    String GET_PROBLEM_LIST = "getProblemList";
+
+    /**
+     * 获取题目方法名
+     */
+    String GET_PROBLEM_ID = "getProblemById";
+
+    /**
+     * 获取提交
+     */
+    String GET_SUBMIT = "getSubmit";
+
+    /**
+     * 点赞数
+     */
+    String PROBLEM_SUPPORT_COMMENT = "supportComment";
 
     /**
      * 获取评论列表
      */
-    String REDIS_KEY_METHOD_GET_COMMENTS = "getComments";
-
-    /**
-     * 评论缓存名
-     */
-    String REDIS_KEY_CACHE_NAME = "ProblemCommentNumber";
-
-    /**
-     * 方法名
-     */
-    String REDIS_KEY_METHOD_PROBLEM_LIST = "getProblemList";
-
-    /**
-     * 问题缓存名
-     */
-    String REDIS_KEY_CACHE_NAME_PROBLEM = "problemList";
-
-    /**
-     * 获取题目方法名
-     */
-    String REDIS_KRY_CLASS_NAME_PROBLEM = "problemId";
-
-    /**
-     * 获取题目方法名
-     */
-    String REDIS_KRY_METHOD_PROBLEM = "getProblemById";
+    String GET_COMMENTS = "getComments";
 
 }

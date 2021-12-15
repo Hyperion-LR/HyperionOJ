@@ -132,4 +132,9 @@ public class RedisServiceImpl implements RedisSever {
         }
         return res;
     }
+
+    @Override
+    public Set<String> getKeys(String prefix) {
+        return stringRedisTemplate.keys(prefix.concat("*"));
+    }
 }

@@ -147,4 +147,12 @@ public interface RedisSever {
      * @return 是否运行成功
      */
     Boolean exec();
+
+    /**
+     * 获取键
+     *
+     * @param prefix 匹配前缀
+     * @return 键值
+     */
+    Set<String> getKeys(String prefix);
 }
