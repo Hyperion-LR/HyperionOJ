@@ -5,9 +5,9 @@ import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.CommentVo;
-import com.hyperionoj.page.vo.PageParams;
 import com.hyperionoj.page.vo.ProblemVo;
 import com.hyperionoj.page.vo.SubmitVo;
+import com.hyperionoj.page.vo.params.PageParams;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

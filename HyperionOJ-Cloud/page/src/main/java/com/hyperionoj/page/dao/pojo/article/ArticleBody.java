@@ -18,4 +18,6 @@ public class ArticleBody {
 
     private String contentHtml;
 
+    private String articleId;
+
 }

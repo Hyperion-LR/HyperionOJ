@@ -1,4 +1,4 @@
-package com.hyperionoj.page.vo;
+package com.hyperionoj.page.vo.params;
 
 import lombok.Data;
 
@@ -32,6 +32,11 @@ public class PageParams {
     private String categoryId;
 
     /**
+     * 标签id
+     */
+    private String tagId;
+
+    /**
      * 题目id
      */
     private String problemId;
@@ -50,5 +55,15 @@ public class PageParams {
      * 代码语言
      */
     private String codeLang;
+
+    /**
+     * 年
+     */
+    private String year;
+
+    /**
+     * 月
+     */
+    private String month;
 
 }

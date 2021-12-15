@@ -1,4 +1,4 @@
-package com.hyperionoj.page.dao.pojo.article;
+package com.hyperionoj.page.dao.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2021/11/30
  */
 @Data
-public class ArticleCategory {
+public class PageCategory {
 
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;

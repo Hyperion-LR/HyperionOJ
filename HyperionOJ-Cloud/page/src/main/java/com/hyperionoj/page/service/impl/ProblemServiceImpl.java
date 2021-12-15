@@ -11,9 +11,14 @@ import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.dao.mapper.problem.*;
-import com.hyperionoj.page.dao.pojo.problem.*;
+import com.hyperionoj.page.dao.pojo.PageCategory;
+import com.hyperionoj.page.dao.pojo.problem.Problem;
+import com.hyperionoj.page.dao.pojo.problem.ProblemBody;
+import com.hyperionoj.page.dao.pojo.problem.ProblemComment;
+import com.hyperionoj.page.dao.pojo.problem.ProblemSubmit;
 import com.hyperionoj.page.service.ProblemService;
 import com.hyperionoj.page.vo.*;
+import com.hyperionoj.page.vo.params.PageParams;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -255,20 +260,20 @@ public class ProblemServiceImpl implements ProblemService {
      */
     @Override
     public List<ProblemCategoryVo> getCategory() {
-        LambdaQueryWrapper<ProblemCategory> queryWrapper = new LambdaQueryWrapper<>();
-        List<ProblemCategory> problemCategories = problemCategoryMapper.selectList(queryWrapper);
+        LambdaQueryWrapper<PageCategory> queryWrapper = new LambdaQueryWrapper<>();
+        List<PageCategory> problemCategories = problemCategoryMapper.selectList(queryWrapper);
         return problemCategoryToVoList(problemCategories);
     }
 
-    private List<ProblemCategoryVo> problemCategoryToVoList(List<ProblemCategory> problemCategories) {
+    private List<ProblemCategoryVo> problemCategoryToVoList(List<PageCategory> problemCategories) {
         ArrayList<ProblemCategoryVo> problemCategoryVos = new ArrayList<>();
-        for (ProblemCategory category : problemCategories) {
+        for (PageCategory category : problemCategories) {
             problemCategoryVos.add(problemCategoryToVo(category));
         }
         return problemCategoryVos;
     }
 
-    private ProblemCategoryVo problemCategoryToVo(ProblemCategory category) {
+    private ProblemCategoryVo problemCategoryToVo(PageCategory category) {
         ProblemCategoryVo problemCategoryVo = new ProblemCategoryVo();
         problemCategoryVo.setId(category.getId().toString());
         problemCategoryVo.setCategoryName(category.getCategoryName());
@@ -451,7 +456,7 @@ public class ProblemServiceImpl implements ProblemService {
      */
     @Override
     public ProblemCategoryVo addCategory(ProblemCategoryVo problemCategoryVo) {
-        ProblemCategory category = new ProblemCategory();
+        PageCategory category = new PageCategory();
         BeanUtils.copyProperties(problemCategoryVo, category);
         problemCategoryMapper.insert(category);
         problemCategoryVo.setId(category.getId().toString());
