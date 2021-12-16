@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 
 @SpringBootApplication(scanBasePackages = {"com.hyperionoj"})
-@MapperScan("com.hyperionoj.page.dao.mapper")
+@MapperScan("com.hyperionoj.page.*.dao.mapper")
 @EnableScheduling
 public class PageApplication {
     public static void main(String[] args) {

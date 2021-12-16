@@ -23,6 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/update/*")
                 .addPathPatterns("/destroy")
                 .addPathPatterns("/problem/submit")
+                .addPathPatterns("/article/publish")
         ;
     }
 }

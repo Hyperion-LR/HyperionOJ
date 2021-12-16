@@ -1,10 +1,10 @@
 package com.hyperionoj.page.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hyperionoj.page.dao.mapper.article.ArticleCommentMapper;
-import com.hyperionoj.page.dao.mapper.problem.ProblemCommentMapper;
-import com.hyperionoj.page.dao.pojo.article.ArticleComment;
-import com.hyperionoj.page.dao.pojo.problem.ProblemComment;
+import com.hyperionoj.page.article.dao.mapper.ArticleCommentMapper;
+import com.hyperionoj.page.article.dao.pojo.ArticleComment;
+import com.hyperionoj.page.problem.dao.mapper.ProblemCommentMapper;
+import com.hyperionoj.page.problem.dao.pojo.ProblemComment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

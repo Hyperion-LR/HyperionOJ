@@ -30,7 +30,7 @@ spring:
         - id: page-service
           uri: lb://page
           predicates:
-            - Path=/problem/*,/problem/*/*,/problem/*/*/*,/problem/*/*/*/*, /article/*, /contests/*,
+            - Path=/problem/**, /article/**, /contests/**,
         - id: admin-service
           uri: lb://admin
           predicates:
