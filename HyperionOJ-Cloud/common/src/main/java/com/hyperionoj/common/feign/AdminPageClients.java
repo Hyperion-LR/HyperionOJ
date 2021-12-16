@@ -22,7 +22,7 @@ public interface AdminPageClients {
      * @param problemCategoryVo 分类信息
      * @return 分类情况
      */
-    @RequestMapping(value = "/problem/admin/add/problem/category", method = RequestMethod.POST)
+    @RequestMapping(value = "/problem/admin/add/problem/category", method = RequestMethod.POST, consumes = "application/json")
     Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo);
 
     /**
@@ -31,7 +31,7 @@ public interface AdminPageClients {
      * @param problemCategoryVo 分类参数
      * @return null
      */
-    @RequestMapping(value = "/problem/admin/delete/problem/category", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/problem/admin/delete/problem/category", method = RequestMethod.DELETE, consumes = "application/json")
     Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo);
 
     /**
@@ -40,7 +40,7 @@ public interface AdminPageClients {
      * @param problemVo 题目对象
      * @return 新加的题目
      */
-    @RequestMapping(value = "/problem/admin/add/problem", method = RequestMethod.POST)
+    @RequestMapping(value = "/problem/admin/add/problem", method = RequestMethod.POST, consumes = "application/json")
     Result addProblem(@RequestBody ProblemVo problemVo);
 
     /**
@@ -49,7 +49,7 @@ public interface AdminPageClients {
      * @param problemVo 题目信息
      * @return result
      */
-    @RequestMapping(value = "/problem/admin/update/problem", method = RequestMethod.POST)
+    @RequestMapping(value = "/problem/admin/update/problem", method = RequestMethod.POST, consumes = "application/json")
     Result updateProblem(@RequestBody ProblemVo problemVo);
 
     /**
@@ -58,7 +58,7 @@ public interface AdminPageClients {
      * @param problemVo 题目信息
      * @return result
      */
-    @RequestMapping(value = "/problem/admin/delete/problem", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/problem/admin/delete/problem", method = RequestMethod.DELETE, consumes = "application/json")
     Result deleteProblem(@RequestBody ProblemVo problemVo);
 
     /**
@@ -67,7 +67,7 @@ public interface AdminPageClients {
      * @param commentVo 评论参数
      * @return result
      */
-    @RequestMapping(value = "/problem/admin/delete/comment", method = RequestMethod.POST)
+    @RequestMapping(value = "/problem/admin/delete/comment", method = RequestMethod.POST, consumes = "application/json")
     Result deleteComment(@RequestBody CommentVo commentVo);
 
 }

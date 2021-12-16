@@ -17,7 +17,7 @@ public class ArticleComment {
 
     private Long createTime;
 
-    private Long problemId;
+    private Long articleId;
 
     private Long authorId;
 

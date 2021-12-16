@@ -1,5 +1,6 @@
 package com.hyperionoj.page.article.controller;
 
+import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.article.service.ArticleService;
@@ -47,6 +48,7 @@ public class ArticleController {
     }
 
     @GetMapping("/view/{id}")
+    @Cache(name = "Article", time = 30 * 60 * 60)
     public Result findArticleById(@PathVariable("id") String articleId) {
         Object data = articleService.findArticleById(articleId);
         if (data == null) {

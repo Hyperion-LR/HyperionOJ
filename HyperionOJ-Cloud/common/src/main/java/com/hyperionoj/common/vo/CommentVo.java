@@ -15,13 +15,15 @@ public class CommentVo {
 
     private String problemId;
 
-    private String authorId;
+    private SysUserVo authorVo;
 
     private String parentId;
 
-    private String toUid;
+    private SysUserVo toUser;
 
     private Integer supportNumber;
+
+    private String createDate;
 
     private Integer level;
 

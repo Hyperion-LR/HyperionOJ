@@ -1,7 +1,7 @@
 package com.hyperionoj.page.problem.controller;
 
+import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.page.common.vo.CommentVo;
 import com.hyperionoj.page.problem.service.ProblemService;
 import com.hyperionoj.page.problem.vo.ProblemCategoryVo;
 import com.hyperionoj.page.problem.vo.ProblemVo;

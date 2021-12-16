@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 16/12/2021 11:23:25
+ Date: 16/12/2021 19:27:39
 */
 
 SET NAMES utf8mb4;
@@ -86,8 +86,9 @@ CREATE TABLE `oj_article`  (
 -- ----------------------------
 -- Records of oj_article
 -- ----------------------------
-INSERT INTO `oj_article` VALUES (1, '测试文章', 15570357290, '这是...', 1, 1, 1, 0, 0, 0, 0, 0, 0);
+INSERT INTO `oj_article` VALUES (1, '测试文章', 15570357290, '这是...', 1, 1, 1, 1, 0, 0, 0, 0, 0);
 INSERT INTO `oj_article` VALUES (1471319518832435201, 'test title', 15570357290, 'test', 1471319518899544067, 1, 1639624883755, 0, 0, 0, 0, 1, 0);
+INSERT INTO `oj_article` VALUES (1471321831475212290, 'test title', 15570357290, 'test', 1471321831525543938, 1, 1639625435108, 0, 0, 0, 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for oj_article_article_tag
@@ -104,6 +105,7 @@ CREATE TABLE `oj_article_article_tag`  (
 -- Records of oj_article_article_tag
 -- ----------------------------
 INSERT INTO `oj_article_article_tag` VALUES (1471319518899544066, 1471319518832435201, 1);
+INSERT INTO `oj_article_article_tag` VALUES (1471321831475212291, 1471321831475212290, 1);
 
 -- ----------------------------
 -- Table structure for oj_article_body
@@ -122,6 +124,7 @@ CREATE TABLE `oj_article_body`  (
 -- ----------------------------
 INSERT INTO `oj_article_body` VALUES (1, '这是测试文字', '<p>这是测试文字</p>', 1);
 INSERT INTO `oj_article_body` VALUES (1471319518899544067, '这是一段测试文字', '<p>这是一段测试文字</p>', 1471319518832435201);
+INSERT INTO `oj_article_body` VALUES (1471321831525543938, '这是一段测试文字', '<p>这是一段测试文字</p>', 1471321831475212290);
 
 -- ----------------------------
 -- Table structure for oj_article_comment
@@ -143,6 +146,7 @@ CREATE TABLE `oj_article_comment`  (
 -- ----------------------------
 -- Records of oj_article_comment
 -- ----------------------------
+INSERT INTO `oj_article_comment` VALUES (1471441486713868289, '测试内容', 1639653963146, 1, 15570357290, 0, 15570357290, '1', 0);
 
 -- ----------------------------
 -- Table structure for oj_contest
@@ -311,14 +315,16 @@ CREATE TABLE `oj_problem_comment`  (
 -- ----------------------------
 -- Records of oj_problem_comment
 -- ----------------------------
-INSERT INTO `oj_problem_comment` VALUES (1470694184046977025, '评论测试3', 1639475792316, 1, 15570357290, 0, 0, 0, 4207, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471036857794617345, '评论测试3', 1639557492091, 1, 15570357290, 0, 0, 0, 0, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471036863888941058, '评论测试3', 1639557493557, 1, 15570357290, 0, 0, 0, 0, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471038806384402434, '评论测试3', 1639557956671, 1, 15570357290, 0, 0, 0, 0, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471038960017563650, '评论测试3', 1639557993319, 1, 15570357290, 0, 0, 0, 0, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471039140167114754, '评论测试3', 1639558036270, 1, 15570357290, 0, 0, 0, 0, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471040114428436481, '评论测试3', 1639558268551, 1, 15570357290, 0, 0, 0, 0, 0);
-INSERT INTO `oj_problem_comment` VALUES (1471040527894482946, '评论测试3', 1639558367111, 1, 15570357290, 0, 0, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1470694184046977025, '评论测试3', 1639475792316, 1, 15570357290, 0, 15570357290, 0, 4209, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471036857794617345, '评论测试3', 1639557492091, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471036863888941058, '评论测试3', 1639557493557, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471038806384402434, '评论测试3', 1639557956671, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471038960017563650, '评论测试3', 1639557993319, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471039140167114754, '评论测试3', 1639558036270, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471040114428436481, '评论测试3', 1639558268551, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471040527894482946, '评论测试3', 1639558367111, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471322339334123521, '评论测试3', 1639625556214, 1, 15570357290, 0, 15570357290, 0, 0, 0);
+INSERT INTO `oj_problem_comment` VALUES (1471436141732007937, '评论测试3', 1639652688799, 1, 15570357290, 0, 0, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for oj_problem_problem_tag

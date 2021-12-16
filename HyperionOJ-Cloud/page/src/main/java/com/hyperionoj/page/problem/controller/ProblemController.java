@@ -1,9 +1,9 @@
 package com.hyperionoj.page.problem.controller;
 
 import com.hyperionoj.common.cache.Cache;
+import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.page.common.vo.CommentVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.problem.service.ProblemService;
 import com.hyperionoj.page.problem.vo.ProblemVo;

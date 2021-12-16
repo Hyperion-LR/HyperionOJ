@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2021/12/1
  */
 @Data
-public class Result {
+public class Result<T> {
     /**
      * 状态码
      */
@@ -16,14 +16,14 @@ public class Result {
     /**
      * 返回数据
      */
-    private Object data;
+    private T data;
 
     /**
      * 定义信息
      */
     private String msg;
 
-    public Result(Integer code, Object data, String msg) {
+    public Result(Integer code, T data, String msg) {
         this.code = code;
         this.data = data;
         this.msg = msg;

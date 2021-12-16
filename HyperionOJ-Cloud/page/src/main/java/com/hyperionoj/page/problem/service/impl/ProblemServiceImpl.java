@@ -5,15 +5,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.common.dao.mapper.CategoryMapper;
 import com.hyperionoj.page.common.dao.mapper.TagMapper;
 import com.hyperionoj.page.common.dao.pojo.PageCategory;
-import com.hyperionoj.page.common.vo.CommentVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.problem.dao.mapper.ProblemBodyMapper;
 import com.hyperionoj.page.problem.dao.mapper.ProblemCommentMapper;
@@ -76,6 +78,9 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Resource
     private RedisSever redisSever;
+
+    @Resource
+    private OSSClients ossClients;
 
     /**
      * 返回题目列表
@@ -356,12 +361,12 @@ public class ProblemServiceImpl implements ProblemService {
     private CommentVo commentToVo(ProblemComment comment) {
         CommentVo commentVo = new CommentVo();
         commentVo.setProblemId(comment.getProblemId().toString());
-        commentVo.setAuthorId(comment.getAuthorId().toString());
+        commentVo.setAuthorVo(SysUserVo.userToVo(ossClients.findUserById(comment.getAuthorId().toString()).getData()));
         commentVo.setContent(comment.getContent());
         commentVo.setLevel(comment.getLevel());
         commentVo.setId(comment.getId().toString());
         commentVo.setParentId(comment.getParentId().toString());
-        commentVo.setToUid(comment.getToUid().toString());
+        commentVo.setToUser(SysUserVo.userToVo(ossClients.findUserById(comment.getToUid().toString()).getData()));
         commentVo.setSupportNumber(comment.getSupportNumber());
         return commentVo;
     }
@@ -370,13 +375,13 @@ public class ProblemServiceImpl implements ProblemService {
         ProblemComment problemComment = new ProblemComment();
         problemComment.setProblemId(Long.parseLong(commentVo.getProblemId()));
         problemComment.setContent(commentVo.getContent());
-        problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorId()));
+        problemComment.setAuthorId(Long.parseLong(commentVo.getAuthorVo().getId()));
         problemComment.setIsDelete(0);
         problemComment.setSupportNumber(0);
         problemComment.setCreateTime(System.currentTimeMillis());
         problemComment.setLevel(commentVo.getLevel());
         problemComment.setParentId(Long.getLong(commentVo.getParentId()));
-        problemComment.setToUid(Long.getLong(commentVo.getToUid()));
+        problemComment.setToUid(Long.getLong(commentVo.getToUser().getId()));
         if (problemComment.getLevel() == null) {
             problemComment.setLevel(0);
         }
