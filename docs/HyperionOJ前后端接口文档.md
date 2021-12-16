@@ -508,11 +508,19 @@
 
 ```json
 {
-    "content": "评论测试",
+    "content": "评论测试3",
     "problemId": "1",
-    "authorId": "15570357290",
+    "authorVo": {
+        "id": "15570357290",
+        "username": null,
+        "mail": null
+    },
     "parentId": null,
-    "toUid": null,
+    "toUser": {
+        "id": "15570357290",
+        "username": null,
+        "mail": null
+    },
     "level": null
 }
 ```
@@ -522,7 +530,25 @@
 ```json
 {
     "code": 200,
-    "data": null,
+    "data": {
+        "id": "1471436141732007937",
+        "content": "评论测试3",
+        "problemId": "1",
+        "authorVo": {
+            "id": "15570357290",
+            "username": null,
+            "mail": null
+        },
+        "parentId": null,
+        "toUser": {
+            "id": "15570357290",
+            "username": null,
+            "mail": null
+        },
+        "supportNumber": null,
+        "createDate": null,
+        "level": null
+    },
     "msg": null
 }
 ```
@@ -578,30 +604,60 @@
     "code": 200,
     "data": [
         {
-            "id": "1469944256601407490",
-            "content": "评论测试",
+            "id": "1471036863888941058",
+            "content": "评论测试3",
             "problemId": "1",
-            "authorId": "15570357290",
+            "authorVo": {
+                "id": "15570357290",
+                "username": null,
+                "mail": null
+            },
             "parentId": "0",
-            "toUid": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": null,
+                "mail": null
+            },
+            "supportNumber": 0,
+            "createDate": null,
             "level": 0
         },
         {
-            "id": "1469944007879221250",
-            "content": "评论测试",
+            "id": "1471036857794617345",
+            "content": "评论测试3",
             "problemId": "1",
-            "authorId": "15570357290",
+            "authorVo": {
+                "id": "15570357290",
+                "username": null,
+                "mail": null
+            },
             "parentId": "0",
-            "toUid": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": null,
+                "mail": null
+            },
+            "supportNumber": 0,
+            "createDate": null,
             "level": 0
         },
         {
-            "id": "1469943945635749889",
-            "content": "评论测试",
+            "id": "1470694184046977025",
+            "content": "评论测试3",
             "problemId": "1",
-            "authorId": "15570357290",
+            "authorVo": {
+                "id": "15570357290",
+                "username": null,
+                "mail": null
+            },
             "parentId": "0",
-            "toUid": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": null,
+                "mail": null
+            },
+            "supportNumber": 4209,
+            "createDate": null,
             "level": 0
         }
     ],
@@ -1014,6 +1070,857 @@
     "data": null,
     "msg": null
 }
+```
+
+
+
+## 文章模块
+
+### 获取文章列表
+
+接口url：localhost:9000/article/articles
+
+请求方式：get
+
+请求参数：
+
+```json
+{
+    "page": 1,
+    "pageSize": 2,
+    "categoryId": 1,			//分类id	备注的只是示例
+    "tagId": 1,					// 标签id
+    "problemId": 1,				// 题目id
+    "username": "冰箱的主人", 	//	作者id
+    "year": "2021",   			// 发布年
+    "month": "1" 				// 发布月
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1471321831475212290",
+            "title": "test title",
+            "authorName": null,
+            "authorId": null,
+            "summary": "test",
+            "createDate": "2021-12-16 11:30",
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": 0,
+            "body": null,
+            "tags": [],
+            "category": {
+                "id": null,
+                "categoryName": null,
+                "description": null
+            }
+        },
+        {
+            "id": "1471319518832435201",
+            "title": "test title",
+            "authorName": null,
+            "authorId": null,
+            "summary": "test",
+            "createDate": "2021-12-16 11:21",
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": 0,
+            "body": null,
+            "tags": [],
+            "category": {
+                "id": null,
+                "categoryName": null,
+                "description": null
+            }
+        },
+        {
+            "id": "1",
+            "title": "测试文章",
+            "authorName": null,
+            "authorId": null,
+            "summary": "这是...",
+            "createDate": "1970-01-01 08:00",
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": 0,
+            "body": null,
+            "tags": [],
+            "category": {
+                "id": null,
+                "categoryName": null,
+                "description": null
+            }
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取最新的文章
+
+接口url：localhost:9000/article/new
+
+请求方式：get
+
+请求参数：
+
+```json
+{
+    "pageSize": 6
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1471321831475212290",
+            "title": "test title",
+            "authorName": null,
+            "authorId": null,
+            "summary": null,
+            "createDate": null,
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": null,
+            "body": null,
+            "tags": null,
+            "category": null
+        },
+        {
+            "id": "1471319518832435201",
+            "title": "test title",
+            "authorName": null,
+            "authorId": null,
+            "summary": null,
+            "createDate": null,
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": null,
+            "body": null,
+            "tags": null,
+            "category": null
+        },
+        {
+            "id": "1",
+            "title": "测试文章",
+            "authorName": null,
+            "authorId": null,
+            "summary": null,
+            "createDate": null,
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": null,
+            "body": null,
+            "tags": null,
+            "category": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 近期热门文章
+
+接口url：localhost:9000/article/hot
+
+请求方式：get
+
+请求参数：
+
+```json
+{
+    "pageSize": 6
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1",
+            "title": "测试文章",
+            "authorName": null,
+            "authorId": null,
+            "summary": null,
+            "createDate": null,
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": null,
+            "body": null,
+            "tags": null,
+            "category": null
+        },
+        {
+            "id": "1471319518832435201",
+            "title": "test title",
+            "authorName": null,
+            "authorId": null,
+            "summary": null,
+            "createDate": null,
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": null,
+            "body": null,
+            "tags": null,
+            "category": null
+        },
+        {
+            "id": "1471321831475212290",
+            "title": "test title",
+            "authorName": null,
+            "authorId": null,
+            "summary": null,
+            "createDate": null,
+            "commentCounts": null,
+            "viewCounts": null,
+            "weight": null,
+            "body": null,
+            "tags": null,
+            "category": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取文章归档
+
+接口url： localhost:9000/article/listArchives
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "year": 1970,
+            "month": 1,
+            "count": 1
+        },
+        {
+            "year": 2021,
+            "month": 12,
+            "count": 2
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 查看文章详情
+
+接口url： localhost:9000/article/view/1
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1",
+        "title": "测试文章",
+        "author": {
+            "id": "15570357290",
+            "username": "冰箱的主人",
+            "mail": "Hyperion_LR@foxmail.com"
+        },
+        "summary": "这是...",
+        "createDate": "1970-01-01 08:00",
+        "commentCounts": 1,
+        "viewCounts": 0,
+        "weight": 0,
+        "body": {
+            "content": "这是测试文字"
+        },
+        "tags": [
+            {
+                "id": "1",
+                "tagName": "测试标签"
+            }
+        ],
+        "category": {
+            "id": "1",
+            "categoryName": "test",
+            "description": "测试分类"
+        }
+    },
+    "msg": null
+}
+```
+
+
+
+### 发布文章
+
+接口url： localhost:9000/article/publish
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "title": "test title",
+    "body": {
+        "content": "这是一段测试文字",
+        "contentHtml": "<p>这是一段测试文字</p>"
+    },
+    "category": {
+        "id": 1,
+        "categoryName": "test",
+        "description": "测试专用"
+    },
+    "summary": "test",
+    "tags": [
+        {
+            "id": 1,
+            "tagName": "test"
+        }
+    ],
+    "isSolution": "0",
+    "problemId": "1"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1471453432829939714",
+        "title": "test title",
+        "author": {
+            "id": "15570357290",
+            "username": "冰箱的主人",
+            "mail": "Hyperion_LR@foxmail.com"
+        },
+        "summary": "test",
+        "createDate": "2021-12-16 20:13",
+        "commentCounts": 0,
+        "viewCounts": 0,
+        "weight": 0,
+        "body": {
+            "content": "这是一段测试文字"
+        },
+        "tags": [
+            {
+                "id": "1",
+                "tagName": "测试标签"
+            }
+        ],
+        "category": {
+            "id": "1",
+            "categoryName": "test",
+            "description": "测试分类"
+        }
+    },
+    "msg": null
+}
+```
+
+
+
+### 热门标签
+
+接口url： localhost:9000/article/tag/hot
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": 1,
+            "tagName": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取标签
+
+接口url： localhost:9000/article/category/detail
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": 1,
+            "categoryName": "test",
+            "description": "测试分类"
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 标签详情
+
+接口url：
+
+请求方式：get
+
+请求参数： localhost:9000/article/category/detail/1
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1",
+        "categoryName": "test",
+        "description": "测试分类"
+    },
+    "msg": null
+}
+```
+
+
+
+### 获取文章下评论
+
+接口url：localhost:9000/article/comments/article/1
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1471441486713868289",
+            "content": "测试内容",
+            "problemId": null,
+            "authorVo": null,
+            "parentId": null,
+            "toUser": null,
+            "supportNumber": null,
+            "createDate": "2021-12-16 19:26:03",
+            "level": 1
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 提交评论
+
+接口url：localhost:9000/article/comments/comment
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "articleId": "1",
+    "content": "测试内容",
+    "parent": null,				// 是哪个评论下的子评论
+    "toUserId": "15570357290"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1471459657550290946",
+        "content": "测试内容",
+        "problemId": null,
+        "authorVo": {
+            "id": "15570357290",
+            "username": "冰箱的主人",
+            "mail": "Hyperion_LR@foxmail.com"
+        },
+        "parentId": "0",
+        "toUser": null,
+        "supportNumber": 0,
+        "createDate": "2021-12-16 20:38:15",
+        "level": 1
+    },
+    "msg": null
+}
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
+
+### 需求
+
+接口url：
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
 ```
 
 

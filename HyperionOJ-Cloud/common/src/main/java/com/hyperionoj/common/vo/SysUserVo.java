@@ -19,8 +19,8 @@ public class SysUserVo {
     public static SysUserVo userToVo(SysUser sysUser) {
         SysUserVo sysUserVo = new SysUserVo();
         sysUserVo.setId(sysUser.getId().toString());
-        sysUserVo.setUsername(sysUserVo.getUsername());
-        sysUserVo.setMail(sysUserVo.getMail());
+        sysUserVo.setUsername(sysUser.getUsername());
+        sysUserVo.setMail(sysUser.getMail());
         return sysUserVo;
     }
 

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/article/comments")
-public class CommentsController {
+public class ArticleCommentsController {
 
     @Resource
     private ArticleCommentService commentService;
@@ -24,8 +24,7 @@ public class CommentsController {
 
     @PostMapping("/comment")
     public Result createComment(@RequestBody CommentParam commentParam) {
-        commentService.createComment(commentParam);
-        return Result.success(null);
+        return Result.success(commentService.createComment(commentParam));
     }
 
 }

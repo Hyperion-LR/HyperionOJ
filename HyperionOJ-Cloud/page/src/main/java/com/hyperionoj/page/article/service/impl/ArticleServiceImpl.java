@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.article.dao.dos.Archives;
 import com.hyperionoj.page.article.dao.mapper.ArticleBodyMapper;
 import com.hyperionoj.page.article.dao.mapper.ArticleCommentMapper;
@@ -62,6 +64,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Resource
     private ArticleCategoryService articleCategoryService;
 
+    @Resource
+    private OSSClients ossClients;
+
     private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTag) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         for (Article article : records) {
@@ -80,8 +85,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     private ArticleVo copy(Article article, boolean isAuthor, boolean isTag, boolean isBody, boolean isCategory) {
         ArticleVo articleVo = new ArticleVo();
-        BeanUtils.copyProperties(article, articleVo);
         articleVo.setId(String.valueOf(article.getId()));
+        articleVo.setCommentCounts(article.getCommentCount());
+        articleVo.setWeight(article.getWeight());
+        articleVo.setSummary(article.getSummary());
+        articleVo.setTitle(article.getTitle());
+        articleVo.setViewCounts(article.getViewCount());
         if (article.getCreateTime() != null) {
             articleVo.setCreateDate(dateFormat.format(article.getCreateTime()));
         }
@@ -91,7 +100,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
         if (isAuthor) {
             Long authorId = article.getAuthorId();
-            //articleVo.setAuthorName(sysUserService.findAuthorByAuthorId(authorId).getNickname());
+            articleVo.setAuthor(SysUserVo.userToVo(ossClients.findUserById(authorId.toString()).getData()));
         }
         if (isBody) {
             Long bodyId = article.getBodyId();
@@ -217,7 +226,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleBodyMapper.insert(articleBody);
         article.setBodyId(articleBody.getId());
         articleMapper.updateById(article);
-        return copy(article, false, false, false, false);
+        return copy(article, true, true, true, true);
     }
 
     private ArticleBodyVo findArticleBodyById(Long bodyId) {

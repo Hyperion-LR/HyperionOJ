@@ -33,7 +33,9 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
         PageCategory category = categoryMapper.selectById(categoryId);
         CategoryVo categoryVo = new CategoryVo();
         if (category != null) {
-            BeanUtils.copyProperties(category, categoryVo);
+            categoryVo.setId(categoryId.toString());
+            categoryVo.setCategoryName(category.getCategoryName());
+            categoryVo.setDescription(category.getDescription());
         }
         return categoryVo;
     }

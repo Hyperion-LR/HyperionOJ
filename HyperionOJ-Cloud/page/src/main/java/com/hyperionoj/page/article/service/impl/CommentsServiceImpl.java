@@ -2,9 +2,11 @@ package com.hyperionoj.page.article.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.CommentVo;
+import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.article.dao.mapper.ArticleCommentMapper;
 import com.hyperionoj.page.article.dao.mapper.ArticleMapper;
 import com.hyperionoj.page.article.dao.pojo.Article;
@@ -33,6 +35,8 @@ public class CommentsServiceImpl implements ArticleCommentService {
     private ArticleCommentMapper commentMapper;
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private OSSClients ossClients;
 
     /**
      * 返回文章的评论
@@ -59,21 +63,28 @@ public class CommentsServiceImpl implements ArticleCommentService {
      * @param commentParam 文章和评论信息
      */
     @Override
-    public void createComment(CommentParam commentParam) {
+    public CommentVo createComment(CommentParam commentParam) {
+        CommentVo commentVo = new CommentVo();
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
         ArticleComment comment = new ArticleComment();
         comment.setCreateTime(System.currentTimeMillis());
+        commentVo.setCreateDate(dateFormat.format(comment.getCreateTime()));
         comment.setArticleId(Long.parseLong(commentParam.getArticleId()));
         comment.setContent(commentParam.getContent());
+        commentVo.setContent(comment.getContent());
         comment.setAuthorId(sysUser.getId());
-        Long parent = 0L;
+        commentVo.setAuthorVo(SysUserVo.userToVo(sysUser));
+        long parent = 0L;
         if (commentParam.getParent() != null) {
-            parent = Long.valueOf(commentParam.getParent());
+            parent = Long.parseLong(commentParam.getParent());
             comment.setLevel(2);
+            commentVo.setLevel(2);
         } else {
             comment.setLevel(1);
+            commentVo.setLevel(1);
         }
         comment.setParentId(parent);
+        commentVo.setParentId(Long.toString(parent));
         Long toUserId = Long.valueOf(commentParam.getToUserId());
         if (toUserId == 0) {
             toUserId = commentMapper.selectById(parent).getAuthorId();
@@ -86,6 +97,9 @@ public class CommentsServiceImpl implements ArticleCommentService {
         Article article = articleMapper.selectOne(queryWrapper);
         article.setCommentCount(article.getCommentCount() + 1);
         articleMapper.updateById(article);
+        commentVo.setId(comment.getId().toString());
+        commentVo.setSupportNumber(0);
+        return commentVo;
     }
 
     List<CommentVo> copyList(List<ArticleComment> comments) {
@@ -102,21 +116,13 @@ public class CommentsServiceImpl implements ArticleCommentService {
         commentVo.setId(String.valueOf(comment.getId()));
         commentVo.setId(String.valueOf(comment.getId()));
         commentVo.setCreateDate(dateFormat.format(new Date(comment.getCreateTime())));
-        Long authorId = comment.getAuthorId();
-        // SysUserVo authorUserVo = sysUserService.findUserVoById(authorId);
-        // commentVo.setAuthorVo(authorUserVo);
+        SysUserVo authorUserVo = SysUserVo.userToVo(ossClients.findUserById(comment.getAuthorId().toString()).getData());
+        commentVo.setAuthorVo(authorUserVo);
         Integer level = comment.getLevel();
-        if (1 == level) {
-            LambdaQueryWrapper<ArticleComment> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(ArticleComment::getParentId, comment.getId());
-            queryWrapper.eq(ArticleComment::getLevel, 2);
-            List<ArticleComment> commentList = commentMapper.selectList(queryWrapper);
-            // commentVo.setChildrens(copyList(commentList));
-        }
         if (level > 1) {
             Long toUid = comment.getToUid();
-            // SysUserVo toUser = sysUserService.findUserVoById(toUid);
-            // commentVo.setToUser(toUser);
+            SysUserVo toUser = SysUserVo.userToVo(ossClients.findUserById(toUid.toString()).getData());
+            commentVo.setToUser(toUser);
         }
         return commentVo;
     }

@@ -22,6 +22,7 @@ public interface ArticleCommentService {
      * 文章评论
      *
      * @param commentParam 文章和评论信息
+     * @return 评论详情
      */
-    void createComment(CommentParam commentParam);
+    CommentVo createComment(CommentParam commentParam);
 }

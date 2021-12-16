@@ -1,5 +1,6 @@
 package com.hyperionoj.page.article.vo;
 
+import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.common.vo.CategoryVo;
 import com.hyperionoj.page.common.vo.TagVo;
 import lombok.Data;
@@ -17,9 +18,7 @@ public class ArticleVo {
 
     private String title;
 
-    private String authorName;
-
-    private String authorId;
+    private SysUserVo author;
 
     private String summary;
 
