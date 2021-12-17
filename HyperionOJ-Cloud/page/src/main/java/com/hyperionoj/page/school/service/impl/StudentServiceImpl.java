@@ -159,6 +159,9 @@ public class StudentServiceImpl implements StudentService {
     public SysClassVo getSysClass(Long id) {
         SysClassVo classVo = new SysClassVo();
         SysClass sysClass = classMapper.selectById(id);
+        if (sysClass == null) {
+            return null;
+        }
         classVo.setId(sysClass.getId().toString());
         classVo.setCourseName(sysClass.getCourseName());
         classVo.setTeacherId(sysClass.getTeacherId().toString());
@@ -187,6 +190,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public SysHomeworkVo homeworkToVo(SysHomework homework, boolean isProblem, boolean isSubmit) {
         SysHomeworkVo sysHomeworkVo = new SysHomeworkVo();
+        if (homework == null) {
+            return null;
+        }
         sysHomeworkVo.setId(homework.getId().toString());
         sysHomeworkVo.setClassId(homework.getClassId().toString());
         sysHomeworkVo.setName(homework.getName());

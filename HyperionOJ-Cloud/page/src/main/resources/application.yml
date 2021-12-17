@@ -11,7 +11,7 @@ spring:
       discovery:
         cluster-name: HyperionOJ
         ephemeral: true
-        namespace: 0e00e406-05ce-4cc8-a5d0-e5038753b730
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
   redis:
     host: localhost
     port: 6379

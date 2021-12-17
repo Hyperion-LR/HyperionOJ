@@ -10,7 +10,7 @@ spring:
       server-addr: localhost:8848
       discovery:
         cluster-name: HyperionOJ
-        namespace: 0e00e406-05ce-4cc8-a5d0-e5038753b730
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
         ephemeral: true
     gateway:
       routes:
@@ -30,7 +30,7 @@ spring:
         - id: page-service
           uri: lb://page
           predicates:
-            - Path=/problem/**, /article/**, /contests/**,
+            - Path=/problem/**, /article/**, /contests/**,/school/**
         - id: admin-service
           uri: lb://admin
           predicates:
