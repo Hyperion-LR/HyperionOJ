@@ -72,9 +72,10 @@ public interface TeacherService {
 
     /**
      * 更新作业
-     * @exception ParseException 格式错误
+     *
      * @param homeworkParam 作业参数
      * @return 作业情况
+     * @throws ParseException 格式错误
      */
     SysHomeworkVo updateHomework(SysHomeworkParam homeworkParam) throws ParseException;
 

@@ -201,24 +201,24 @@
     "code": 200,
     "data": [
         {
-            "id": "1",
-            "title": "test",
-            "bodyId": "1",
-            "problemLevel": 1,
-            "acNumber": 1,
-            "submitNumber": 1,
-            "solutionNumber": 0,
-            "commentNumber": 1,
-            "caseNumber": null,
-            "runMemory": 256,
-            "runTime": 1000,
-            "problemBodyVo": null,
-            "category": {
+            "id": "1",				// 题目id
+            "title": "test", 		// 题目标题
+            "bodyId": "1",			// 题目详细id
+            "problemLevel": 1,		// 题目难度1:简单， 2:中等，3:困难
+            "acNumber": 1,			// 通过数量
+            "submitNumber": 1,		// 提交数量
+            "solutionNumber": 0,	// 题解数量
+            "commentNumber": 1,		// 评论数量
+            "caseNumber": null,		// 测试点数量，一般返回null
+            "runMemory": 256,		// 运行内存限制
+            "runTime": 1000,		// 运行时间限制
+            "problemBodyVo": null,	// 题目详情
+            "category": {			// 分类
                 "id": "1",
                 "categoryName": "test",
                 "description": "测试分类"
             },
-            "tags": [
+            "tags": [				// 标签
                 {
                     "id": "1",
                     "tagName": "测试标签"
@@ -280,13 +280,13 @@
 {
     "code": 200,
     "data": {
-        "commentNumber": 1,
+        "commentNumber": 1,							// 题目详细信息
         "problemBodyVo": {
-            "problemBodyHtml": "<p>这是测试</p>"
+            "problemBodyHtml": "<p>这是测试</p>"		// 文章体
         },
-        "problemLevel": 1,
+        "problemLevel": 1,							// 题目难度
         "title": "test",
-        "solutionNumber": 0,
+        "solutionNumber": 0,						
         "tags": [
             {
                 "id": "1",
@@ -347,8 +347,9 @@
         "problemId": 1,
         "verdict": "AC",
         "msg": "Hyperion\n3\n5\n5\nHyperion\n",
-        "runTime": 129,
-        "runMemory": 0
+        "runTime": 137,
+        "runMemory": 0,
+        "submitTime": "2021-12-18 16:47"
     },
     "msg": null
 }
@@ -417,6 +418,30 @@
     "code": 200,
     "data": [
         {
+            "id": "1472126314742784001",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 137,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "2021-12-18 16:47"
+        },
+        {
+            "id": "1472113584614805506",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 129,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "2021-12-18 15:56"
+        },
+        {
             "id": "1469934295938920449",
             "authorId": "15570357290",
             "problemId": "1",
@@ -426,7 +451,7 @@
             "runMemory": 0,
             "caseNumber": null,
             "verdict": "AC",
-            "createTime": "1639294620868"
+            "createTime": "2021-12-12 15:37"
         },
         {
             "id": "1469934165613506561",
@@ -438,7 +463,7 @@
             "runMemory": 0,
             "caseNumber": null,
             "verdict": "CE",
-            "createTime": "1639294589797"
+            "createTime": "2021-12-12 15:36"
         },
         {
             "id": "1469934088903880705",
@@ -450,7 +475,67 @@
             "runMemory": 0,
             "caseNumber": null,
             "verdict": "CE",
-            "createTime": "1639294571520"
+            "createTime": "2021-12-12 15:36"
+        },
+        {
+            "id": "1469933996805353473",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 126,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "2021-12-12 15:35"
+        },
+        {
+            "id": "1469933926999552002",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 120,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "2021-12-12 15:35"
+        },
+        {
+            "id": "1469932994488332290",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 116,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "WA",
+            "createTime": "2021-12-12 15:31"
+        },
+        {
+            "id": "1469932890868051970",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 134,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "WA",
+            "createTime": "2021-12-12 15:31"
+        },
+        {
+            "id": "1469932688937480194",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": null,
+            "runTime": 126,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "2021-12-12 15:30"
         }
     ],
     "msg": null
@@ -486,7 +571,7 @@
         "runMemory": 0,
         "caseNumber": null,
         "verdict": "AC",
-        "createTime": "1639294545628"
+        "createTime": "2021-12-12 15:35"
     },
     "msg": null
 }
@@ -600,22 +685,166 @@
     "code": 200,
     "data": [
         {
+            "id": "1471436141732007937",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": null,
+            "supportNumber": 0,
+            "createDate": "2021-12-16 19:04",
+            "level": 0
+        },
+        {
+            "id": "1471322339334123521",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "supportNumber": 0,
+            "createDate": "2021-12-16 11:32",
+            "level": 0
+        },
+        {
+            "id": "1471040527894482946",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "supportNumber": 0,
+            "createDate": "2021-12-15 16:52",
+            "level": 0
+        },
+        {
+            "id": "1471040114428436481",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "supportNumber": 0,
+            "createDate": "2021-12-15 16:51",
+            "level": 0
+        },
+        {
+            "id": "1471039140167114754",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "supportNumber": 0,
+            "createDate": "2021-12-15 16:47",
+            "level": 0
+        },
+        {
+            "id": "1471038960017563650",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "supportNumber": 0,
+            "createDate": "2021-12-15 16:46",
+            "level": 0
+        },
+        {
+            "id": "1471038806384402434",
+            "content": "评论测试3",
+            "problemId": "1",
+            "authorVo": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "parentId": "0",
+            "toUser": {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            },
+            "supportNumber": 0,
+            "createDate": "2021-12-15 16:45",
+            "level": 0
+        },
+        {
             "id": "1471036863888941058",
             "content": "评论测试3",
             "problemId": "1",
             "authorVo": {
                 "id": "15570357290",
-                "username": null,
-                "mail": null
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
             },
             "parentId": "0",
             "toUser": {
                 "id": "15570357290",
-                "username": null,
-                "mail": null
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
             },
             "supportNumber": 0,
-            "createDate": null,
+            "createDate": "2021-12-15 16:38",
             "level": 0
         },
         {
@@ -624,17 +853,19 @@
             "problemId": "1",
             "authorVo": {
                 "id": "15570357290",
-                "username": null,
-                "mail": null
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
             },
             "parentId": "0",
             "toUser": {
                 "id": "15570357290",
-                "username": null,
-                "mail": null
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
             },
             "supportNumber": 0,
-            "createDate": null,
+            "createDate": "2021-12-15 16:38",
             "level": 0
         },
         {
@@ -643,17 +874,19 @@
             "problemId": "1",
             "authorVo": {
                 "id": "15570357290",
-                "username": null,
-                "mail": null
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
             },
             "parentId": "0",
             "toUser": {
                 "id": "15570357290",
-                "username": null,
-                "mail": null
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
             },
             "supportNumber": 4209,
-            "createDate": null,
+            "createDate": "2021-12-14 17:56",
             "level": 0
         }
     ],
@@ -665,7 +898,7 @@
 
 ## 管理员
 
-**（该模块所有请求的请求头请携带"Admin-Token",同时权限等级不够会被拦截）**
+**（该模块所有请求(除了登录)的请求头请携带"Admin-Token",同时权限等级不够会被拦截）**
 
 ### 管理员登录
 

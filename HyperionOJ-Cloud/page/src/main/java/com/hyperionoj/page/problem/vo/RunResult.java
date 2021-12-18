@@ -23,4 +23,6 @@ public class RunResult {
 
     private Integer runMemory;
 
+    private String submitTime;
+
 }

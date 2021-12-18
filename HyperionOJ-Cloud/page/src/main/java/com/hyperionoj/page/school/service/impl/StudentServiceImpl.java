@@ -66,7 +66,7 @@ public class StudentServiceImpl implements StudentService {
         ArrayList<SysClassVo> classVos = new ArrayList<>();
         for (SysClassStudent classStudent : sysClassStudents) {
             SysClass sysClass = classMapper.selectById(classStudent.getClassId());
-            if(sysClass != null){
+            if (sysClass != null) {
                 classVos.add(classToVo(sysClass, false));
             }
         }

@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 17/12/2021 17:17:07
+ Date: 18/12/2021 17:32:30
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `oj_admin`  (
   `permission_level` int NOT NULL COMMENT '权限等级(1:根管理员 2:管理员 3:老师)',
   `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '加密盐(加密密码)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1235 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1234 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_admin
@@ -46,7 +46,7 @@ CREATE TABLE `oj_admin_action`  (
   `action_time` bigint NOT NULL COMMENT '什么时候',
   `action_status` int NOT NULL COMMENT '状态(0:成功 1:撤销)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1470390324246024195 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1470390324246024194 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_admin_action
@@ -81,7 +81,7 @@ CREATE TABLE `oj_article`  (
   `problem_id` bigint NOT NULL COMMENT '题目id',
   `is_delete` int NOT NULL COMMENT '是否删除(0:正常 1:删除)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1471453432829939715 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1471453432829939714 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_article
@@ -102,7 +102,7 @@ CREATE TABLE `oj_article_article_tag`  (
   `article_id` bigint NOT NULL COMMENT '文章id',
   `tag_id` bigint NOT NULL COMMENT '标签id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1471453432829939716 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1471453432829939715 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_article_article_tag
@@ -123,7 +123,7 @@ CREATE TABLE `oj_article_body`  (
   `content_html` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容(html)',
   `article_id` bigint NOT NULL COMMENT '文章id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1471453432829939717 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1471453432829939716 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_article_body
@@ -176,7 +176,7 @@ CREATE TABLE `oj_contest`  (
   `ac_number` int NOT NULL COMMENT '通过的提交数',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '参加比赛密码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_contest
@@ -191,7 +191,7 @@ CREATE TABLE `oj_contest_problem`  (
   `contests_id` bigint NOT NULL COMMENT '比赛id',
   `problem_id` bigint NOT NULL COMMENT '题目id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_contest_problem
@@ -212,7 +212,7 @@ CREATE TABLE `oj_contest_submit`  (
   `run_time` int NOT NULL COMMENT '运行多少毫秒(ms)',
   `run_memory` int NOT NULL COMMENT '运行使用多少内存(mb)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_contest_submit
@@ -227,7 +227,7 @@ CREATE TABLE `oj_contest_user`  (
   `contests_is` bigint NOT NULL COMMENT '比赛id',
   `user_id` bigint NOT NULL COMMENT '参与者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_contest_user
@@ -242,7 +242,7 @@ CREATE TABLE `oj_page_category`  (
   `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类名称',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类描述',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_page_category
@@ -257,7 +257,7 @@ CREATE TABLE `oj_page_tag`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '标签id',
   `tag_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标签名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_page_tag
@@ -283,12 +283,12 @@ CREATE TABLE `oj_problem`  (
   `run_memory` int NOT NULL COMMENT '限制运行内存(mb)',
   `case_number` int NOT NULL COMMENT '测试点数量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1470389250931982338 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1470389250931982337 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_problem
 -- ----------------------------
-INSERT INTO `oj_problem` VALUES (1, 'test', 1, 1, 1, 0, 0, 0, 1, 1000, 256, 1);
+INSERT INTO `oj_problem` VALUES (1, 'test', 1, 1, 1, 2, 2, 0, 1, 1000, 256, 1);
 INSERT INTO `oj_problem` VALUES (2, 'test2', 2, 1, 1, 0, 0, 0, 0, 1000, 256, 1);
 
 -- ----------------------------
@@ -300,7 +300,7 @@ CREATE TABLE `oj_problem_body`  (
   `problem_body` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '题目描述(md)',
   `problem_body_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '题目描述(html)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1470389250806153219 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1470389250806153218 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_problem_body
@@ -346,14 +346,17 @@ INSERT INTO `oj_problem_comment` VALUES (1471436141732007937, '评论测试3', 1
 DROP TABLE IF EXISTS `oj_problem_problem_tag`;
 CREATE TABLE `oj_problem_problem_tag`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `article_id` bigint NOT NULL COMMENT '文章id',
+  `problem_id` bigint NOT NULL COMMENT '文章id',
   `tag_id` bigint NOT NULL COMMENT '标签id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_problem_problem_tag
 -- ----------------------------
+INSERT INTO `oj_problem_problem_tag` VALUES (1, 1, 1);
+INSERT INTO `oj_problem_problem_tag` VALUES (2, 1, 2);
+INSERT INTO `oj_problem_problem_tag` VALUES (3, 2, 2);
 
 -- ----------------------------
 -- Table structure for oj_problem_submit
@@ -371,7 +374,7 @@ CREATE TABLE `oj_problem_submit`  (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '代码运行结果',
   `create_time` bigint NOT NULL COMMENT '提交时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1469934295938920450 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1469934295938920449 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_problem_submit
@@ -386,6 +389,8 @@ INSERT INTO `oj_problem_submit` VALUES (1469933996805353473, 1, 15570357290, '�
 INSERT INTO `oj_problem_submit` VALUES (1469934088903880705, 1, 15570357290, '冰箱的主人', 'java', 'import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name)\n}\n}', 0, 0, 'CE', 1639294571520);
 INSERT INTO `oj_problem_submit` VALUES (1469934165613506561, 1, 15570357290, '冰箱的主人', 'java', 'import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}', 0, 0, 'CE', 1639294589797);
 INSERT INTO `oj_problem_submit` VALUES (1469934295938920449, 1, 15570357290, '冰箱的主人', 'java', 'import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t++ > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}', 151, 0, 'AC', 1639294620868);
+INSERT INTO `oj_problem_submit` VALUES (1472113584614805506, 1, 15570357290, '冰箱的主人', 'java', 'import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}', 129, 0, 'AC', 1639814203768);
+INSERT INTO `oj_problem_submit` VALUES (1472126314742784001, 1, 15570357290, '冰箱的主人', 'java', 'import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}', 137, 0, 'AC', 1639817220000);
 
 -- ----------------------------
 -- Table structure for oj_sys_class
@@ -398,11 +403,13 @@ CREATE TABLE `oj_sys_class`  (
   `course_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '课程名称',
   `academy` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '学院',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_sys_class
 -- ----------------------------
+INSERT INTO `oj_sys_class` VALUES (1472029371140030465, 1, 'Hyperion', '测试课程', '测试学院');
+INSERT INTO `oj_sys_class` VALUES (1472059833363439617, 1, 'Hyperion', '测试课程2', '测试学院');
 
 -- ----------------------------
 -- Table structure for oj_sys_class_student
@@ -413,11 +420,13 @@ CREATE TABLE `oj_sys_class_student`  (
   `class_id` bigint NOT NULL COMMENT '班级id',
   `student_number` bigint NOT NULL COMMENT '学生学号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_sys_class_student
 -- ----------------------------
+INSERT INTO `oj_sys_class_student` VALUES (1472053590628421633, 1472029371140030465, 2019213037);
+INSERT INTO `oj_sys_class_student` VALUES (1472060239732776962, 1472059833363439617, 2019213037);
 
 -- ----------------------------
 -- Table structure for oj_sys_homework
@@ -431,11 +440,16 @@ CREATE TABLE `oj_sys_homework`  (
   `end_time` bigint NOT NULL COMMENT '结束时间',
   `teacher_id` bigint NOT NULL COMMENT '布置作业的老师id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_sys_homework
 -- ----------------------------
+INSERT INTO `oj_sys_homework` VALUES (1472041160938569730, 1, '第一次测试作业', 1639800000000, 1639800000000, 1);
+INSERT INTO `oj_sys_homework` VALUES (1472041215334498305, 1, '第二次测试作业', 1639800000000, 1639800000000, 1);
+INSERT INTO `oj_sys_homework` VALUES (1472041260456820738, 1, '第二次测试作业', 1639800000000, 1639800000000, 1);
+INSERT INTO `oj_sys_homework` VALUES (1472041681653022722, 1, '第二次测试作业', 1639800000000, 1639800000000, 1);
+INSERT INTO `oj_sys_homework` VALUES (1472041764129816578, 1, '第二次测试作业', 1639800000000, 1639800000000, 1);
 
 -- ----------------------------
 -- Table structure for oj_sys_homework_problem
@@ -446,11 +460,48 @@ CREATE TABLE `oj_sys_homework_problem`  (
   `homework_id` bigint NOT NULL COMMENT '作业id',
   `problem_id` bigint NOT NULL COMMENT '题目id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_sys_homework_problem
 -- ----------------------------
+INSERT INTO `oj_sys_homework_problem` VALUES (1472037698213482498, 1472037698054098945, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472037778203054082, 1472037778135945217, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038070395047937, 1472037974832025602, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038371910905857, 1472038371881545730, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038371910905858, 1472038371881545730, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038447622287361, 1472038447555178498, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038447622287362, 1472038447555178498, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038603977551873, 1472038603918831617, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472038603977551874, 1472038603918831617, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039548560031746, 1472039548547448834, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039548560031747, 1472039548547448834, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039636376174595, 1472039636376174594, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039636443283458, 1472039636376174594, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039655279902722, 1472039655212793857, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039655279902723, 1472039655212793857, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039666399002626, 1472039666399002625, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039666399002627, 1472039666399002625, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039694714748930, 1472039694714748929, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039694714748931, 1472039694714748929, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039701752791043, 1472039701752791042, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039701752791044, 1472039701752791042, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039704692998145, 1472039704625889282, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039704692998146, 1472039704625889282, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039707381547010, 1472039707314438146, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039707381547011, 1472039707314438146, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039709617111042, 1472039709550002178, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472039709617111043, 1472039709550002178, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041161068593154, 1472041160938569730, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041161068593155, 1472041160938569730, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041215401607170, 1472041215334498305, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041215401607171, 1472041215334498305, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041260523929601, 1472041260456820738, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041260523929602, 1472041260456820738, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041681783046146, 1472041681653022722, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041681783046147, 1472041681653022722, 2);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041764129816579, 1472041764129816578, 1);
+INSERT INTO `oj_sys_homework_problem` VALUES (1472041764129816580, 1472041764129816578, 2);
 
 -- ----------------------------
 -- Table structure for oj_sys_homework_submit
@@ -463,7 +514,7 @@ CREATE TABLE `oj_sys_homework_submit`  (
   `student_id` bigint NOT NULL COMMENT '学生id',
   `submit_id` bigint NOT NULL COMMENT '提交id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oj_sys_homework_submit
@@ -493,6 +544,6 @@ CREATE TABLE `oj_sys_user`  (
 -- ----------------------------
 -- Records of oj_sys_user
 -- ----------------------------
-INSERT INTO `oj_sys_user` VALUES (15570357290, '冰箱的主人', '...', 'e56f47a5d842342487be1fee4ae0752d', NULL, 'Hyperion_LR@foxmail.com', 1638620737893, 1638620737893, 1, 11, 7, 'HyperionOJ', 0);
+INSERT INTO `oj_sys_user` VALUES (15570357290, '冰箱的主人', '...', 'e56f47a5d842342487be1fee4ae0752d', '2019213037', 'Hyperion_LR@foxmail.com', 1638620737893, 1638620737893, 1, 13, 9, 'HyperionOJ', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

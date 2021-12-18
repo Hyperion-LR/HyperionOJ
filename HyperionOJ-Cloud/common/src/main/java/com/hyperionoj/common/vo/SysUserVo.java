@@ -19,6 +19,9 @@ public class SysUserVo {
     private String studentNumber;
 
     public static SysUserVo userToVo(SysUser sysUser) {
+        if (sysUser == null) {
+            return null;
+        }
         SysUserVo sysUserVo = new SysUserVo();
         sysUserVo.setId(sysUser.getId().toString());
         sysUserVo.setUsername(sysUser.getUsername());

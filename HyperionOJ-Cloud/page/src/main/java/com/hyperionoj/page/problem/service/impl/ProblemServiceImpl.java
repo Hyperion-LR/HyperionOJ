@@ -35,6 +35,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +53,7 @@ import static com.hyperionoj.common.constants.Constants.*;
 public class ProblemServiceImpl implements ProblemService {
 
     private static final ConcurrentHashMap<String, RunResult> SUBMIT_RESULT = new ConcurrentHashMap<>();
-
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm");
     @Resource
     private ProblemMapper problemMapper;
 
@@ -119,6 +121,7 @@ public class ProblemServiceImpl implements ProblemService {
     public Object submit(SubmitVo submitVo) {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
         ProblemVo problemVo = problemToVo(problemMapper.selectById(submitVo.getProblemId()), false, false);
+        submitVo.setCreateTime(dateFormat.format(System.currentTimeMillis()));
         submitVo.setCaseNumber(problemVo.getCaseNumber());
         submitVo.setRunTime(problemVo.getRunTime());
         submitVo.setRunMemory(problemVo.getRunMemory());
@@ -152,7 +155,12 @@ public class ProblemServiceImpl implements ProblemService {
             problemSubmit.setCodeLang(submitVo.getCodeLang());
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
-            problemSubmit.setCreateTime(System.currentTimeMillis());
+            try {
+                problemSubmit.setCreateTime(dateFormat.parse(submitVo.getCreateTime()).getTime());
+            } catch (ParseException e) {
+                log.info(e.toString());
+                problemSubmit.setCreateTime(System.currentTimeMillis());
+            }
             problemSubmitMapper.insert(problemSubmit);
             UpdateSubmitVo updateSubmitVo = new UpdateSubmitVo();
             updateSubmitVo.setProblemId(problemSubmit.getProblemId());
@@ -164,6 +172,7 @@ public class ProblemServiceImpl implements ProblemService {
                 problemVo.setAcNumber(problemVo.getAcNumber() + 1);
             }
             this.updateProblemCache(problemVo);
+            result.setSubmitTime(submitVo.getCreateTime());
         }
         return result;
     }
@@ -303,6 +312,7 @@ public class ProblemServiceImpl implements ProblemService {
         ProblemComment comment = voToComment(commentVo);
         problemCommentMapper.insert(comment);
         commentVo.setId(comment.getId().toString());
+        commentVo.setCreateDate(dateFormat.format(comment.getCreateTime()));
         String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
                 PROBLEM_CONTROLLER + ":" +
                 GET_PROBLEM_ID + ":" +
@@ -366,8 +376,11 @@ public class ProblemServiceImpl implements ProblemService {
         commentVo.setLevel(comment.getLevel());
         commentVo.setId(comment.getId().toString());
         commentVo.setParentId(comment.getParentId().toString());
-        commentVo.setToUser(SysUserVo.userToVo(ossClients.findUserById(comment.getToUid().toString()).getData()));
+        if (comment.getToUid() != null || comment.getToUid() != 0) {
+            commentVo.setToUser(SysUserVo.userToVo(ossClients.findUserById(comment.getToUid().toString()).getData()));
+        }
         commentVo.setSupportNumber(comment.getSupportNumber());
+        commentVo.setCreateDate(dateFormat.format(comment.getCreateTime()));
         return commentVo;
     }
 
@@ -449,7 +462,7 @@ public class ProblemServiceImpl implements ProblemService {
         submitVo.setProblemId(submit.getProblemId().toString());
         submitVo.setAuthorId(submit.getAuthorId().toString());
         submitVo.setCodeLang(submit.getCodeLang());
-        submitVo.setCreateTime(submit.getCreateTime().toString());
+        submitVo.setCreateTime(dateFormat.format(submit.getCreateTime()));
         submitVo.setRunTime(submit.getRunTime());
         submitVo.setRunMemory(submit.getRunMemory());
         submitVo.setVerdict(submit.getStatus());

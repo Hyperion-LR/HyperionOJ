@@ -19,7 +19,7 @@ public class UserController {
     private StudentService studentService;
 
     @GetMapping("/class")
-    public Result getClassList(){
+    public Result getClassList() {
         return Result.success(studentService.getClassList());
     }
 
