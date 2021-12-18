@@ -45,13 +45,13 @@ db.password=123212321
 docker pull zookeeper:3.6
 
 // 创建并运行zookeeper容器
-docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime zookeeper:3.6
+docker run --name zoo -p 2181:2181 -d zookeeper
 
 // 开始拉取kafka
-docker pull wurstmeister/kafka:2.12-2.5.0
+docker pull bitnami/kafka
 
 // 创建并运行kafka容器
-docker run -d --restart=always --log-driver json-file --log-opt max-size=100m --log-opt max-file=2 --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.3:2181/kafka -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://172.17.0.3:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -v /etc/localtime:/etc/localtime wurstmeister/kafka:2.12-2.5.0
+docker run --name kafka -p 9092:9092  -e KAFKA_ZOOKEEPER_CONNECT=192.168.1.101:2181 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -d  bitnami/kafka
 ```
 
 上面的`172.23.192.1`要改成自己的本地地址

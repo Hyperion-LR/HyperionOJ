@@ -16,16 +16,12 @@ import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.common.dao.mapper.CategoryMapper;
 import com.hyperionoj.page.common.dao.mapper.TagMapper;
 import com.hyperionoj.page.common.dao.pojo.PageCategory;
+import com.hyperionoj.page.common.dao.pojo.PageTag;
 import com.hyperionoj.page.common.vo.CategoryVo;
+import com.hyperionoj.page.common.vo.TagVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
-import com.hyperionoj.page.problem.dao.mapper.ProblemBodyMapper;
-import com.hyperionoj.page.problem.dao.mapper.ProblemCommentMapper;
-import com.hyperionoj.page.problem.dao.mapper.ProblemMapper;
-import com.hyperionoj.page.problem.dao.mapper.ProblemSubmitMapper;
-import com.hyperionoj.page.problem.dao.pojo.Problem;
-import com.hyperionoj.page.problem.dao.pojo.ProblemBody;
-import com.hyperionoj.page.problem.dao.pojo.ProblemComment;
-import com.hyperionoj.page.problem.dao.pojo.ProblemSubmit;
+import com.hyperionoj.page.problem.dao.mapper.*;
+import com.hyperionoj.page.problem.dao.pojo.*;
 import com.hyperionoj.page.problem.service.ProblemService;
 import com.hyperionoj.page.problem.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +65,10 @@ public class ProblemServiceImpl implements ProblemService {
     private ProblemCommentMapper problemCommentMapper;
 
     @Resource
-    private TagMapper problemTagMapper;
+    private TagMapper tagMapper;
+
+    @Resource
+    private ProblemTagMapper problemTagMapper;
 
     @Resource
     private ProblemSubmitMapper problemSubmitMapper;
@@ -93,7 +92,7 @@ public class ProblemServiceImpl implements ProblemService {
     public List<ProblemVo> getProblemList(PageParams pageParams) {
         Page<Problem> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<Problem> problemPage = problemMapper.problemList(page, pageParams.getLevel(), Long.getLong(pageParams.getCategoryId()));
-        return copyProblemList(problemPage.getRecords(), false);
+        return copyProblemList(problemPage.getRecords(), false, true);
     }
 
     /**
@@ -107,7 +106,7 @@ public class ProblemServiceImpl implements ProblemService {
         if (ObjectUtils.isEmpty(id)) {
             return null;
         }
-        return problemToVo(problemMapper.selectById(id), true);
+        return problemToVo(problemMapper.selectById(id), true, true);
     }
 
     /**
@@ -119,7 +118,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Object submit(SubmitVo submitVo) {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
-        ProblemVo problemVo = problemToVo(problemMapper.selectById(submitVo.getProblemId()), false);
+        ProblemVo problemVo = problemToVo(problemMapper.selectById(submitVo.getProblemId()), false, false);
         submitVo.setCaseNumber(problemVo.getCaseNumber());
         submitVo.setRunTime(problemVo.getRunTime());
         submitVo.setRunMemory(problemVo.getRunMemory());
@@ -499,15 +498,15 @@ public class ProblemServiceImpl implements ProblemService {
         return !StringUtils.contains(submitVo.getCodeBody(), ILLEGAL_CHAR_SYSTEM);
     }
 
-    private List<ProblemVo> copyProblemList(List<Problem> problemPage, Boolean isBody) {
+    private List<ProblemVo> copyProblemList(List<Problem> problemPage, boolean isBody, boolean isTag) {
         List<ProblemVo> problemVoList = new ArrayList<>();
         for (Problem problem : problemPage) {
-            problemVoList.add(problemToVo(problem, isBody));
+            problemVoList.add(problemToVo(problem, isBody, isTag));
         }
         return problemVoList;
     }
 
-    private ProblemVo problemToVo(Problem problem, boolean isBody) {
+    private ProblemVo problemToVo(Problem problem, boolean isBody, boolean isTag) {
         ProblemVo problemVo = new ProblemVo();
         problemVo.setId(problem.getId().toString());
         problemVo.setTitle(problem.getTitle());
@@ -525,7 +524,24 @@ public class ProblemServiceImpl implements ProblemService {
         if (isBody) {
             problemVo.setProblemBodyVo(problemBodyToVo(problemBodyMapper.selectById(problem.getBodyId())));
         }
+        if (isTag) {
+            ArrayList<TagVo> tagVos = new ArrayList<>();
+            LambdaQueryWrapper<ProblemProblemTag> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(ProblemProblemTag::getProblemId, problem.getId());
+            List<ProblemProblemTag> problemProblemTags = problemTagMapper.selectList(queryWrapper);
+            for (ProblemProblemTag problemTag : problemProblemTags) {
+                tagVos.add(tagToVo(tagMapper.selectById(problemTag.getTagId())));
+            }
+            problemVo.setTags(tagVos);
+        }
         return problemVo;
+    }
+
+    private TagVo tagToVo(PageTag tag) {
+        TagVo tagVo = new TagVo();
+        tagVo.setId(tag.getId().toString());
+        tagVo.setTagName(tag.getTagName());
+        return tagVo;
     }
 
     private CategoryVo categoryToVo(PageCategory pageCategory) {

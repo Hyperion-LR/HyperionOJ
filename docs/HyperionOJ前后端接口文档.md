@@ -177,64 +177,6 @@
 
 ## page
 
-### 获取题目归档
-
-接口url：localhost:9000/problem/list
-
-请求方式：get
-
-请求参数：
-
-```json
-{
-    "page": 1,
-    "pageSize": 10,
-    "level": null,
-    "categoryId": null
-}
-```
-
-返回参数
-
-```json
-{
-    "code": 200,
-    "data": [
-        {
-            "id": "1",
-            "title": "test",
-            "bodyId": "1",
-            "problemLevel": 1,
-            "category": {
-                "id": null,
-                "categoryName": null,
-                "description": null
-            },
-            "acNumber": 0,
-            "submitNumber": 0,
-            "solutionNumber": 0,
-            "commentNumber": 0
-        },
-        {
-            "id": "2",
-            "title": "test2",
-            "bodyId": "2",
-            "problemLevel": 1,
-            "categoryId": "1",
-            "acNumber": 0,
-            "submitNumber": 0,
-            "solutionNumber": 0,
-            "commentNumber": 0
-        }
-    ],
-    "msg": null
-}
-```
-
-
-
-
-
 ### 获取题目列表（分页查询）
 
 接口url：localhost:9000/problem/list
@@ -263,32 +205,54 @@
             "title": "test",
             "bodyId": "1",
             "problemLevel": 1,
-            "category": {
-                "id": null,
-                "categoryName": null,
-                "description": null
-            },
-            "acNumber": 0,
-            "submitNumber": 0,
+            "acNumber": 1,
+            "submitNumber": 1,
             "solutionNumber": 0,
-            "commentNumber": 0,
-            "problemBodyVo": null
+            "commentNumber": 1,
+            "caseNumber": null,
+            "runMemory": 256,
+            "runTime": 1000,
+            "problemBodyVo": null,
+            "category": {
+                "id": "1",
+                "categoryName": "test",
+                "description": "测试分类"
+            },
+            "tags": [
+                {
+                    "id": "1",
+                    "tagName": "测试标签"
+                },
+                {
+                    "id": "2",
+                    "tagName": "test2"
+                }
+            ]
         },
         {
             "id": "2",
             "title": "test2",
             "bodyId": "2",
             "problemLevel": 1,
-            "category": {
-                "id": null,
-                "categoryName": null,
-                "description": null
-            },
             "acNumber": 0,
             "submitNumber": 0,
             "solutionNumber": 0,
             "commentNumber": 0,
-            "problemBodyVo": null
+            "caseNumber": null,
+            "runMemory": 256,
+            "runTime": 1000,
+            "problemBodyVo": null,
+            "category": {
+                "id": "1",
+                "categoryName": "test",
+                "description": "测试分类"
+            },
+            "tags": [
+                {
+                    "id": "2",
+                    "tagName": "test2"
+                }
+            ]
         }
     ],
     "msg": null
@@ -316,19 +280,35 @@
 {
     "code": 200,
     "data": {
-        "id": "1",
-        "title": "test",
-        "bodyId": "1",
-        "problemLevel": 1,
-        "category": {
-            "id": null,
-            "categoryName": null,
-            "description": null
+        "commentNumber": 1,
+        "problemBodyVo": {
+            "problemBodyHtml": "<p>这是测试</p>"
         },
-        "acNumber": 0,
-        "submitNumber": 0,
+        "problemLevel": 1,
+        "title": "test",
         "solutionNumber": 0,
-        "commentNumber": 0
+        "tags": [
+            {
+                "id": "1",
+                "tagName": "测试标签"
+            },
+            {
+                "id": "2",
+                "tagName": "test2"
+            }
+        ],
+        "acNumber": 1,
+        "runMemory": 256,
+        "caseNumber": 1,
+        "bodyId": "1",
+        "id": "1",
+        "runTime": 1000,
+        "category": {
+            "description": "测试分类",
+            "id": "1",
+            "categoryName": "test"
+        },
+        "submitNumber": 1
     },
     "msg": null
 }
@@ -366,8 +346,8 @@
         "submitId": null,
         "problemId": 1,
         "verdict": "AC",
-        "msg": "Hyperion\n3\n7\n5\nHyperion\n",
-        "runTime": 126,
+        "msg": "Hyperion\n3\n5\n5\nHyperion\n",
+        "runTime": 129,
         "runMemory": 0
     },
     "msg": null
@@ -425,8 +405,8 @@
     "pageSize": 3,
     "problemId": null,
     "username": null,
-    "verdict": null,
-    "codeLang": null
+    "verdict": null, 	// AC,WA,PE,CE,RE，TLE,MLE这几个表示通过，答案错误，格式错误，编译错误，运行时错误,超时超内存
+    "codeLang": null	// 目前只有java,c++,python
 }
 ```
 
