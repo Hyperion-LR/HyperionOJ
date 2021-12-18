@@ -141,4 +141,18 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return false;
     }
+
+    /**
+     * 通过id查找用户
+     *
+     * @param id 学生学号
+     * @return 用户基本信息
+     */
+    @Override
+    public SysUser findUserByStudentNumber(String id) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getStudentNumber, id);
+        queryWrapper.last("limit 1");
+        return sysUserMapper.selectOne(queryWrapper);
+    }
 }

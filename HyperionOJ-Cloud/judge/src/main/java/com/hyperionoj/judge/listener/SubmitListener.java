@@ -32,8 +32,8 @@ public class SubmitListener {
     public void submit(ConsumerRecord<?, ?> record) {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
-            RunResult submit = submitService.submit(JSONObject.parseObject((String) kafkaMessage.get(), SubmitVo.class));
-            kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_RESULT, JSONObject.toJSONString(submit));
+            RunResult runResult = submitService.submit(JSONObject.parseObject((String) kafkaMessage.get(), SubmitVo.class));
+            kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_RESULT, JSONObject.toJSONString(runResult));
         }
     }
 

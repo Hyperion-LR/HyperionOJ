@@ -32,4 +32,15 @@ public class FindController {
         return Result.success(userService.findUserById(id));
     }
 
+    /**
+     * 通过id查找用户
+     *
+     * @param id 学生学号
+     * @return 用户基本信息
+     */
+    @GetMapping(value = "/student/{id}")
+    public Result<SysUser> findUserByStudentNumber(@PathVariable("id") String id) {
+        return Result.success(userService.findUserByStudentNumber(id));
+    }
+
 }

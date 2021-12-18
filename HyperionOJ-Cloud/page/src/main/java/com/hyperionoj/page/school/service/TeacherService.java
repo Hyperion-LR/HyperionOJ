@@ -14,6 +14,14 @@ import java.util.List;
  * @date 2021/12/17
  */
 public interface TeacherService {
+
+    /**
+     * 获取班级列表
+     *
+     * @return 班级列表
+     */
+    List<SysClassVo> getClassList();
+
     /**
      * 创建班级
      *
@@ -64,7 +72,7 @@ public interface TeacherService {
 
     /**
      * 更新作业
-     *
+     * @exception ParseException 格式错误
      * @param homeworkParam 作业参数
      * @return 作业情况
      */

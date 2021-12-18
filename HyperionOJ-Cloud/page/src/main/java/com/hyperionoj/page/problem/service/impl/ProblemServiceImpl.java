@@ -16,6 +16,7 @@ import com.hyperionoj.common.vo.UpdateSubmitVo;
 import com.hyperionoj.page.common.dao.mapper.CategoryMapper;
 import com.hyperionoj.page.common.dao.mapper.TagMapper;
 import com.hyperionoj.page.common.dao.pojo.PageCategory;
+import com.hyperionoj.page.common.vo.CategoryVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.problem.dao.mapper.ProblemBodyMapper;
 import com.hyperionoj.page.problem.dao.mapper.ProblemCommentMapper;
@@ -232,7 +233,7 @@ public class ProblemServiceImpl implements ProblemService {
         }
         problem.setTitle(problemVo.getTitle());
         problem.setBodyId(Long.valueOf(problemVo.getBodyId()));
-        problem.setCategoryId(Long.valueOf(problemVo.getCategoryId()));
+        problem.setCategoryId(Long.valueOf(problemVo.getCategory().getId()));
         problem.setProblemLevel(problemVo.getProblemLevel());
         problem.setRunMemory(problemVo.getRunMemory());
         problem.setRunTime(problemVo.getRunTime());
@@ -512,15 +513,27 @@ public class ProblemServiceImpl implements ProblemService {
         problemVo.setTitle(problem.getTitle());
         problemVo.setBodyId(problem.getBodyId().toString());
         problemVo.setProblemLevel(problem.getProblemLevel());
-        problemVo.setCategoryId(problem.getCategoryId().toString());
+        PageCategory pageCategory = problemCategoryMapper.selectById(problem.getCategoryId());
+        problemVo.setCategory(categoryToVo(pageCategory));
         problemVo.setAcNumber(problem.getAcNumber());
         problemVo.setSubmitNumber(problem.getSubmitNumber());
         problemVo.setSolutionNumber(problem.getSolutionNumber());
         problemVo.setCommentNumber(problem.getCommentNumber());
+        problemVo.setRunTime(problem.getRunTime());
+        problemVo.setRunMemory(problem.getRunMemory());
+        problemVo.setCaseNumber(problem.getCaseNumber());
         if (isBody) {
             problemVo.setProblemBodyVo(problemBodyToVo(problemBodyMapper.selectById(problem.getBodyId())));
         }
         return problemVo;
+    }
+
+    private CategoryVo categoryToVo(PageCategory pageCategory) {
+        CategoryVo categoryVo = new CategoryVo();
+        categoryVo.setId(pageCategory.getId().toString());
+        categoryVo.setCategoryName(pageCategory.getCategoryName());
+        categoryVo.setDescription(pageCategory.getDescription());
+        return categoryVo;
     }
 
     private ProblemBodyVo problemBodyToVo(ProblemBody problemBody) {

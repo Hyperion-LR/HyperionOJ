@@ -1,5 +1,6 @@
 package com.hyperionoj.page.school.controller;
 
+import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.school.service.StudentService;
 import com.hyperionoj.page.school.service.TeacherService;
@@ -40,14 +41,14 @@ public class TeacherController {
     }
 
     @PostMapping("/add/{id}")
-    public Result addStudent(@RequestBody String studentId, @PathVariable("id") Long classId) {
-        teacherService.addStudent(studentId, classId);
+    public Result addStudent(@RequestBody SysUser student, @PathVariable("id") Long classId) {
+        teacherService.addStudent(student.getStudentNumber(), classId);
         return Result.success(this.getSysClass(classId));
     }
 
     @PostMapping("/remove/{id}")
-    public Result removeStudent(@RequestBody String studentId, @PathVariable("id") Long classId) {
-        teacherService.removeStudent(studentId, classId);
+    public Result removeStudent(@RequestBody SysUser student, @PathVariable("id") Long classId) {
+        teacherService.removeStudent(student.getStudentNumber(), classId);
         return Result.success(this.getSysClass(classId));
     }
 
@@ -72,8 +73,8 @@ public class TeacherController {
     }
 
     @DeleteMapping("delete/homework")
-    private Result deleteHomework(@RequestBody String homeworkId) {
-        return Result.success(teacherService.deleteHomework(homeworkId));
+    private Result deleteHomework(@RequestBody SysHomeworkParam homeworkParam) {
+        return Result.success(teacherService.deleteHomework(homeworkParam.getId().toString()));
     }
 
     @GetMapping("/submits/{id}")

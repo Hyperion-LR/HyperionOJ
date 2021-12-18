@@ -62,4 +62,12 @@ public interface SysUserService {
      * @return 是否注销成功
      */
     boolean destroy(Long account, String password);
+
+    /**
+     * 通过id查找用户
+     *
+     * @param id 学生学号
+     * @return 用户基本信息
+     */
+    SysUser findUserByStudentNumber(String id);
 }

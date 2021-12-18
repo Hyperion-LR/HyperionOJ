@@ -1,5 +1,6 @@
 package com.hyperionoj.page.problem.vo;
 
+import com.hyperionoj.page.common.vo.CategoryVo;
 import com.hyperionoj.page.common.vo.TagVo;
 import lombok.Data;
 
@@ -20,8 +21,6 @@ public class ProblemVo {
 
     private Integer problemLevel;
 
-    private String categoryId;
-
     private Integer acNumber = 0;
 
     private Integer submitNumber = 0;
@@ -37,6 +36,8 @@ public class ProblemVo {
     private Integer runTime;
 
     private ProblemBodyVo problemBodyVo;
+
+    private CategoryVo category;
 
     private List<TagVo> tags;
 

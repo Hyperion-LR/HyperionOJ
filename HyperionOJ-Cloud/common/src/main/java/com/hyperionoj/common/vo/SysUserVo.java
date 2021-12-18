@@ -16,6 +16,8 @@ public class SysUserVo {
 
     private String mail;
 
+    private String studentNumber;
+
     public static SysUserVo userToVo(SysUser sysUser) {
         SysUserVo sysUserVo = new SysUserVo();
         sysUserVo.setId(sysUser.getId().toString());

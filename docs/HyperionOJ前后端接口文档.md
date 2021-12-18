@@ -205,7 +205,11 @@
             "title": "test",
             "bodyId": "1",
             "problemLevel": 1,
-            "categoryId": "1",
+            "category": {
+                "id": null,
+                "categoryName": null,
+                "description": null
+            },
             "acNumber": 0,
             "submitNumber": 0,
             "solutionNumber": 0,
@@ -259,7 +263,11 @@
             "title": "test",
             "bodyId": "1",
             "problemLevel": 1,
-            "categoryId": "1",
+            "category": {
+                "id": null,
+                "categoryName": null,
+                "description": null
+            },
             "acNumber": 0,
             "submitNumber": 0,
             "solutionNumber": 0,
@@ -271,7 +279,11 @@
             "title": "test2",
             "bodyId": "2",
             "problemLevel": 1,
-            "categoryId": "1",
+            "category": {
+                "id": null,
+                "categoryName": null,
+                "description": null
+            },
             "acNumber": 0,
             "submitNumber": 0,
             "solutionNumber": 0,
@@ -308,7 +320,11 @@
         "title": "test",
         "bodyId": "1",
         "problemLevel": 1,
-        "categoryId": "1",
+        "category": {
+            "id": null,
+            "categoryName": null,
+            "description": null
+        },
         "acNumber": 0,
         "submitNumber": 0,
         "solutionNumber": 0,

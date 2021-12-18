@@ -18,6 +18,11 @@ public class UserController {
     @Resource
     private StudentService studentService;
 
+    @GetMapping("/class")
+    public Result getClassList(){
+        return Result.success(studentService.getClassList());
+    }
+
     @GetMapping("/class/{id}")
     public Result getSysClass(@PathVariable("id") Long id) {
         return Result.success(studentService.getSysClass(id));

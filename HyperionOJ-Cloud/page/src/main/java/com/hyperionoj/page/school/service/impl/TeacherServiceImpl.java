@@ -2,8 +2,10 @@ package com.hyperionoj.page.school.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.Teacher;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.problem.service.ProblemService;
 import com.hyperionoj.page.problem.vo.ProblemVo;
 import com.hyperionoj.page.problem.vo.SubmitVo;
@@ -53,6 +55,27 @@ public class TeacherServiceImpl implements TeacherService {
     @Resource
     private ClassStudentMapper classStudentMapper;
 
+    @Resource
+    private OSSClients ossClients;
+
+    /**
+     * 获取班级列表
+     *
+     * @return 班级列表
+     */
+    @Override
+    public List<SysClassVo> getClassList() {
+        Teacher teacher = JSONObject.parseObject((String) ThreadLocalUtils.get(), Teacher.class);
+        LambdaQueryWrapper<SysClass> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysClass::getTeacherId, teacher.getId());
+        List<SysClass> sysClasses = classMapper.selectList(queryWrapper);
+        ArrayList<SysClassVo> classList = new ArrayList<>();
+        for (SysClass sysClass : sysClasses) {
+            classList.add(classToVo(sysClass, false));
+        }
+        return classList;
+    }
+
     /**
      * 创建班级
      *
@@ -86,7 +109,7 @@ public class TeacherServiceImpl implements TeacherService {
     public void addStudent(String studentId, Long classId) {
         SysClassStudent sysClassStudent = new SysClassStudent();
         sysClassStudent.setStudentNumber(Long.valueOf(studentId));
-        sysClassStudent.setStudentNumber(classId);
+        sysClassStudent.setClassId(classId);
         classStudentMapper.insert(sysClassStudent);
     }
 
@@ -114,7 +137,7 @@ public class TeacherServiceImpl implements TeacherService {
         SysHomework homework = new SysHomework();
         homework.setTeacherId(Long.valueOf(homeworkParam.getTeacherId()));
         homework.setClassId(homeworkParam.getClassId());
-        homework.setEndTime(dateFormat.parse(homeworkParam.getStartDate()).getTime());
+        homework.setStartTime(dateFormat.parse(homeworkParam.getStartDate()).getTime());
         homework.setEndTime(dateFormat.parse(homeworkParam.getEndDate()).getTime());
         homework.setName(homeworkParam.getName());
         homeworkMapper.insert(homework);
@@ -123,6 +146,7 @@ public class TeacherServiceImpl implements TeacherService {
         for (ProblemVo problemVo : homeworkParam.getProblemVos()) {
             homeworkProblem.setProblemId(Long.valueOf(problemVo.getId()));
             homeworkProblemMapper.insert(homeworkProblem);
+            homeworkProblem.setId(null);
         }
         return getHomeworkById(homework.getId());
     }
@@ -160,9 +184,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public SysHomeworkVo updateHomework(SysHomeworkParam homeworkParam) throws ParseException {
         SysHomework homework = new SysHomework();
+        homework.setId(homeworkParam.getId());
         homework.setClassId(homeworkParam.getClassId());
         homework.setTeacherId(Long.valueOf(homeworkParam.getTeacherId()));
-        homework.setEndTime(dateFormat.parse(homeworkParam.getStartDate()).getTime());
+        homework.setStartTime(dateFormat.parse(homeworkParam.getStartDate()).getTime());
         homework.setEndTime(dateFormat.parse(homeworkParam.getEndDate()).getTime());
         homework.setName(homeworkParam.getName());
         homeworkMapper.updateById(homework);
@@ -174,6 +199,7 @@ public class TeacherServiceImpl implements TeacherService {
         for (ProblemVo problemVo : homeworkParam.getProblemVos()) {
             homeworkProblem.setProblemId(Long.valueOf(problemVo.getId()));
             homeworkProblemMapper.insert(homeworkProblem);
+            homeworkProblem.setId(null);
         }
         return getHomeworkById(homework.getId());
     }
@@ -214,4 +240,25 @@ public class TeacherServiceImpl implements TeacherService {
         }
         return submitVoList;
     }
+
+    private SysClassVo classToVo(SysClass sysClass, boolean isStudent) {
+        SysClassVo classVo = new SysClassVo();
+        classVo.setId(sysClass.getId().toString());
+        classVo.setAcademy(sysClass.getAcademy());
+        classVo.setTeacherId(sysClass.getTeacherId().toString());
+        classVo.setTeacherName(sysClass.getTeacherName());
+        classVo.setCourseName(sysClass.getCourseName());
+        if (isStudent) {
+            ArrayList<SysUserVo> students = new ArrayList<>();
+            LambdaQueryWrapper<SysClassStudent> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SysClassStudent::getClassId, sysClass.getId());
+            List<SysClassStudent> sysClassStudents = classStudentMapper.selectList(queryWrapper);
+            for (SysClassStudent classStudent : sysClassStudents) {
+                students.add(SysUserVo.userToVo(ossClients.findUserById(classStudent.getStudentNumber().toString()).getData()));
+            }
+            classVo.setStudents(students);
+        }
+        return classVo;
+    }
+
 }

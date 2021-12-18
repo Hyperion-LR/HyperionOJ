@@ -5,6 +5,8 @@ import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.page.problem.dao.mapper.ProblemMapper;
+import com.hyperionoj.page.problem.dao.pojo.Problem;
 import com.hyperionoj.page.problem.service.ProblemService;
 import com.hyperionoj.page.problem.vo.ProblemVo;
 import com.hyperionoj.page.problem.vo.SubmitVo;
@@ -24,6 +26,9 @@ public class ProblemController {
 
     @Resource
     private ProblemService problemService;
+
+    @Resource
+    private ProblemMapper problemMapper;
 
     /**
      * 题目列表
@@ -72,6 +77,10 @@ public class ProblemController {
      */
     @PostMapping("/submit")
     public Result submit(@RequestBody SubmitVo submitVo) {
+        Problem problem = problemMapper.selectById(submitVo.getProblemId());
+        submitVo.setRunTime(problem.getRunTime());
+        submitVo.setRunMemory(problem.getRunMemory());
+        submitVo.setCaseNumber(problem.getCaseNumber());
         Object result = problemService.submit(submitVo);
         if (result == null) {
             return Result.fail(ErrorCode.SYSTEM_ERROR);

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
-import com.hyperionoj.common.pojo.Teacher;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.problem.service.ProblemService;
@@ -60,29 +59,32 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public List<SysClassVo> getClassList() {
-        Teacher teacher = JSONObject.parseObject((String) ThreadLocalUtils.get(), Teacher.class);
-        LambdaQueryWrapper<SysClass> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysClass::getTeacherId, teacher.getId());
-        List<SysClass> sysClasses = classMapper.selectList(queryWrapper);
-        ArrayList<SysClassVo> classList = new ArrayList<>();
-        for (SysClass sysClass : sysClasses) {
-            classList.add(classToVo(sysClass, false));
+        SysUser student = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
+        LambdaQueryWrapper<SysClassStudent> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysClassStudent::getStudentNumber, student.getStudentNumber());
+        List<SysClassStudent> sysClassStudents = classStudentMapper.selectList(queryWrapper);
+        ArrayList<SysClassVo> classVos = new ArrayList<>();
+        for (SysClassStudent classStudent : sysClassStudents) {
+            SysClass sysClass = classMapper.selectById(classStudent.getClassId());
+            if(sysClass != null){
+                classVos.add(classToVo(sysClass, false));
+            }
         }
-        return classList;
+        return classVos;
     }
 
     private SysClassVo classToVo(SysClass sysClass, boolean isStudent) {
         SysClassVo classVo = new SysClassVo();
         classVo.setId(sysClass.getId().toString());
-        classVo.setAcademy(sysClass.getAcademy());
         classVo.setTeacherId(sysClass.getTeacherId().toString());
         classVo.setTeacherName(sysClass.getTeacherName());
+        classVo.setAcademy(sysClass.getAcademy());
         classVo.setCourseName(sysClass.getCourseName());
         if (isStudent) {
-            ArrayList<SysUserVo> students = new ArrayList<>();
             LambdaQueryWrapper<SysClassStudent> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SysClassStudent::getClassId, sysClass.getId());
             List<SysClassStudent> sysClassStudents = classStudentMapper.selectList(queryWrapper);
+            ArrayList<SysUserVo> students = new ArrayList<>();
             for (SysClassStudent classStudent : sysClassStudents) {
                 students.add(SysUserVo.userToVo(ossClients.findUserById(classStudent.getStudentNumber().toString()).getData()));
             }
@@ -172,7 +174,7 @@ public class StudentServiceImpl implements StudentService {
         List<SysClassStudent> sysClassStudents = classStudentMapper.selectList(queryWrapper);
         ArrayList<SysUserVo> students = new ArrayList<>();
         for (SysClassStudent sysClassStudent : sysClassStudents) {
-            students.add(SysUserVo.userToVo(ossClients.findUserById(sysClassStudent.getStudentNumber().toString()).getData()));
+            students.add(SysUserVo.userToVo(ossClients.findUserByStudentNumber(sysClassStudent.getStudentNumber().toString()).getData()));
         }
         classVo.setStudents(students);
         return classVo;
@@ -197,7 +199,9 @@ public class StudentServiceImpl implements StudentService {
         sysHomeworkVo.setClassId(homework.getClassId().toString());
         sysHomeworkVo.setName(homework.getName());
         sysHomeworkVo.setTeacherId(homework.getTeacherId().toString());
-        sysHomeworkVo.setTeacherName(classMapper.selectById(homework.getTeacherId()).getTeacherName());
+        LambdaQueryWrapper<SysClass> queryWrapperTeacher = new LambdaQueryWrapper<>();
+        queryWrapperTeacher.eq(SysClass::getTeacherId, homework.getTeacherId());
+        sysHomeworkVo.setTeacherName(classMapper.selectOne(queryWrapperTeacher).getTeacherName());
         sysHomeworkVo.setStartTime(dateFormat.format(homework.getStartTime()));
         sysHomeworkVo.setEndTime(dateFormat.format(homework.getEndTime()));
         if (isProblem) {

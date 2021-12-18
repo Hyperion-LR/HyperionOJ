@@ -51,7 +51,7 @@ docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime zoo
 docker pull wurstmeister/kafka:2.12-2.5.0
 
 // 创建并运行kafka容器
-docker run -d --restart=always --log-driver json-file --log-opt max-size=100m --log-opt max-file=2 --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.16.152.136:2181/kafka -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://172.16.152.136:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -v /etc/localtime:/etc/localtime wurstmeister/kafka:2.12-2.5.0
+docker run -d --restart=always --log-driver json-file --log-opt max-size=100m --log-opt max-file=2 --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.3:2181/kafka -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://172.17.0.3:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -v /etc/localtime:/etc/localtime wurstmeister/kafka:2.12-2.5.0
 ```
 
 上面的`172.23.192.1`要改成自己的本地地址

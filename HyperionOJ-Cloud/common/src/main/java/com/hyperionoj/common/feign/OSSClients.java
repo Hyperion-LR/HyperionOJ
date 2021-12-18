@@ -21,4 +21,13 @@ public interface OSSClients {
      */
     @GetMapping(value = "/find/user/{id}")
     Result<SysUser> findUserById(@PathVariable("id") String id);
+
+    /**
+     * 通过id查找用户
+     *
+     * @param id 学生学号
+     * @return 用户基本信息
+     */
+    @GetMapping(value = "/find/student/{id}")
+    Result<SysUser> findUserByStudentNumber(@PathVariable("id") String id);
 }
