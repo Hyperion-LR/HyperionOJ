@@ -35,6 +35,10 @@ spring:
           uri: lb://admin
           predicates:
             - Path=/admin/**
+        - id: common-server
+          uri: lb://common
+          predicates:
+            - Path=/upload/**
         - id: finduser-service
           uri: lb://consumer
           predicates:

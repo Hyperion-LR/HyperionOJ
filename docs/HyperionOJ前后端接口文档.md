@@ -91,6 +91,30 @@
 
 
 
+### 上传文件
+
+接口url：localhost:9000/upload/image
+
+请求方式：post
+
+请求参数：
+
+```json
+file:本地文件
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": "r3gq8bup7.hd-bkt.clouddn.com/41996348-7bff-475f-bc16-29390a585bde.jpg",
+    "msg": null
+}
+```
+
+
+
 ### 更新用户数据
 
 接口url：localhost:9000/update/user
