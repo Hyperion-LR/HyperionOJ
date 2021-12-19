@@ -239,10 +239,10 @@ public class ArticleServiceImpl implements ArticleService {
     public Boolean deleteArticle(String id) {
         SysUser author = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
         Article article = articleMapper.selectById(id);
-        if(article == null){
+        if (article == null) {
             return null;
         }
-        if(article.getAuthorId().equals(author.getId())){
+        if (article.getAuthorId().equals(author.getId())) {
             LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(Article::getId, id);
             updateWrapper.set(Article::getIsDelete, 1);

@@ -65,12 +65,12 @@ public class ArticleController {
     }
 
     @PostMapping("/delete/article")
-    public Result deleteArticle(@RequestBody ArticleParam articleParam){
+    public Result deleteArticle(@RequestBody ArticleParam articleParam) {
         return Result.success(articleService.deleteArticle(articleParam.getId()));
     }
 
     @PostMapping("/delete/comment")
-    public Result deleteComment(@RequestBody CommentParam commentParam){
+    public Result deleteComment(@RequestBody CommentParam commentParam) {
         articleService.deleteComment(commentParam.getId());
         return Result.success(null);
     }

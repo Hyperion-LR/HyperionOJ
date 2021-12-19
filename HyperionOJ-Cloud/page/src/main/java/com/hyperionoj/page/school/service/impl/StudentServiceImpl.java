@@ -108,12 +108,14 @@ public class StudentServiceImpl implements StudentService {
     /**
      * 获取作业详情
      *
-     * @param id 作业id
+     * @param isProblem 是否需要加上题目
+     * @param isSubmit  是否加上提交
+     * @param id        作业id
      * @return 作业详情
      */
     @Override
-    public SysHomeworkVo getHomework(Long id) {
-        return homeworkToVo(homeworkMapper.selectById(id), true, true);
+    public SysHomeworkVo getHomework(Long id, Boolean isProblem, Boolean isSubmit) {
+        return homeworkToVo(homeworkMapper.selectById(id), isProblem, isSubmit);
     }
 
     /**
@@ -147,6 +149,14 @@ public class StudentServiceImpl implements StudentService {
         SysClassStudent classStudent = new SysClassStudent();
         classStudent.setClassId(id);
         classStudent.setStudentNumber(Long.valueOf(student.getStudentNumber()));
+        LambdaQueryWrapper<SysClassStudent> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysClassStudent::getStudentNumber, classStudent.getStudentNumber());
+        queryWrapper.eq(SysClassStudent::getClassId, classStudent.getClassId());
+        queryWrapper.last("limit 1");
+        SysClassStudent one = classStudentMapper.selectOne(queryWrapper);
+        if (one != null) {
+            return null;
+        }
         classStudentMapper.insert(classStudent);
         return getSysClass(id);
     }
@@ -201,6 +211,7 @@ public class StudentServiceImpl implements StudentService {
         sysHomeworkVo.setTeacherId(homework.getTeacherId().toString());
         LambdaQueryWrapper<SysClass> queryWrapperTeacher = new LambdaQueryWrapper<>();
         queryWrapperTeacher.eq(SysClass::getTeacherId, homework.getTeacherId());
+        queryWrapperTeacher.last("limit 1");
         sysHomeworkVo.setTeacherName(classMapper.selectOne(queryWrapperTeacher).getTeacherName());
         sysHomeworkVo.setStartTime(dateFormat.format(homework.getStartTime()));
         sysHomeworkVo.setEndTime(dateFormat.format(homework.getEndTime()));

@@ -27,12 +27,12 @@ public class TeacherController {
 
     @GetMapping("/class")
     public Result getClassList() {
-        return Result.success(studentService.getClassList());
+        return Result.success(teacherService.getClassList());
     }
 
     @GetMapping("/class/{id}")
     public Result getSysClass(@PathVariable("id") Long id) {
-        return Result.success(studentService.getSysClass(id));
+        return Result.success(teacherService.getSysClass(id));
     }
 
     @PostMapping("/create")
@@ -57,9 +57,9 @@ public class TeacherController {
         return Result.success(teacherService.pushHomework(homeworkParam));
     }
 
-    @GetMapping("/homeworks")
-    public Result getHomeworkList() {
-        return Result.success(teacherService.getHomeworks());
+    @GetMapping("/homeworks/{id}")
+    public Result getHomeworkList(@PathVariable("id") Long classId) {
+        return Result.success(teacherService.getHomeworks(classId));
     }
 
     @GetMapping("/homework/{id}")

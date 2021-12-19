@@ -173,6 +173,7 @@ public class ProblemServiceImpl implements ProblemService {
             }
             this.updateProblemCache(problemVo);
             result.setSubmitTime(submitVo.getCreateTime());
+            result.setSubmitId(problemSubmit.getId());
         }
         return result;
     }

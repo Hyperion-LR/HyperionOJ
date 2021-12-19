@@ -1837,6 +1837,8 @@ file:本地文件
 
 此模块下的请求请携带token
 
+### 学生端
+
 ### 查看所有课程
 
 接口url：localhost:9000/school/user/class
@@ -1880,7 +1882,7 @@ file:本地文件
 
 ### 查看班级具体情况
 
-接口url：localhost:9000/school/user/class/1472029371140030465
+接口url：localhost:9000/school/user/class/{班级id}
 
 请求方式：get
 
@@ -1918,7 +1920,7 @@ file:本地文件
 
 ### 查看课程所有作业
 
-接口url：localhost:9000/school/user/homeworks/1
+接口url：localhost:9000/school/user/homeworks/{课程id}
 
 请求方式：get
 
@@ -1931,7 +1933,920 @@ file:本地文件
 返回参数：
 
 ```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1472041160938569730",
+            "classId": "1",
+            "name": "第一次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041215334498305",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041260456820738",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041681653022722",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041764129816578",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        }
+    ],
+    "msg": null
+}
+```
 
+
+
+### 查看作业具体详情
+
+接口url：localhost:9000/school/user/homework/{作业id}
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472041160938569730",
+        "classId": "1",
+        "name": "第一次测试作业",
+        "startTime": "2021-12-18 12:00",
+        "endTime": "2021-12-18 12:00",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "problems": [
+            {
+                "id": "1",
+                "title": "test",
+                "bodyId": "1",
+                "problemLevel": 1,
+                "acNumber": 2,
+                "submitNumber": 2,
+                "solutionNumber": 0,
+                "commentNumber": 1,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "1",
+                        "tagName": "测试标签"
+                    },
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "title": "test2",
+                "bodyId": "2",
+                "problemLevel": 1,
+                "acNumber": 0,
+                "submitNumber": 0,
+                "solutionNumber": 0,
+                "commentNumber": 0,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            }
+        ],
+        "submitVos": []
+    },
+    "msg": null
+}
+```
+
+
+
+### 加入课程
+
+接口url：localhost:9000/school/user/class/join/{课程id}
+
+请求方式：
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+1. 班级详情
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472059833363439617",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "courseName": "测试课程2",
+        "academy": "测试学院",
+        "students": [
+            {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            }
+        ]
+    },
+    "msg": null
+}
+```
+
+2. 已经在班级里面了
+
+```json
+{
+    "code": 200,
+    "data": "已经在班级里了!",
+    "msg": null
+}
+```
+
+
+
+### 提交作业
+
+接口url：localhost:9000/school/user/submit/1472041160938569730
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "authorId": 15570357290,
+    "problemId": 1,
+    "codeLang": "java",
+    "codeBody": "import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "authorId": "15570357290",
+        "submitId": 1472394075930800130,
+        "problemId": 1,
+        "verdict": "AC",
+        "msg": "Hyperion\n3\n5\n5\nHyperion\n",
+        "runTime": 156,
+        "runMemory": 0,
+        "submitTime": "2021-12-19 10:31"
+    },
+    "msg": null
+}
+```
+
+
+
+### 教师端
+
+### 查看班级列表
+
+接口url：localhost:9000/school/teacher/class
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1472029371140030465",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "courseName": "测试课程",
+            "academy": "测试学院",
+            "students": null
+        },
+        {
+            "id": "1472059833363439617",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "courseName": "测试课程2",
+            "academy": "测试学院",
+            "students": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+
+
+### 查看班级
+
+接口url：localhost:9000/school/class/1
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472029371140030465",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "courseName": "测试课程",
+        "academy": "测试学院",
+        "students": [
+            {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            }
+        ]
+    },
+    "msg": null
+}
+```
+
+
+
+### 创建班级
+
+接口url：localhost:9000/school/create
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "teacherId": "1",
+    "teacherName": "Hyperion",
+    "courseName": "测试课程2",
+    "academy": "测试学院"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472394890775015425",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "courseName": "测试课程2",
+        "academy": "测试学院",
+        "students": null
+    },
+    "msg": null
+}
+```
+
+
+
+### 添加学生
+
+接口url：localhost:9000/school/add/{课程id}
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "studentNumber": "1"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 移除学生
+
+接口url：localhost:9000/school/remove/{课程id}
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "studentNumber": "1"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 发布作业
+
+接口url：localhost:9000/school/teacher/push
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "classId": "1",
+    "name": "第一次测试作业",
+    "startDate": "2021-12-18 12:00",
+    "endDate": "2021-12-18 12:00",
+    "teacherId": "1",
+    "problemVos": [
+        {
+            "id": 1
+        },
+        {
+            "id": 2
+        }
+    ]
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472395994707439617",
+        "classId": "1",
+        "name": "第一次测试作业",
+        "startTime": "2021-12-18 12:00",
+        "endTime": "2021-12-18 12:00",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "problems": [
+            {
+                "id": "1",
+                "title": "test",
+                "bodyId": "1",
+                "problemLevel": 1,
+                "acNumber": 5,
+                "submitNumber": 5,
+                "solutionNumber": 0,
+                "commentNumber": 1,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "1",
+                        "tagName": "测试标签"
+                    },
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "title": "test2",
+                "bodyId": "2",
+                "problemLevel": 1,
+                "acNumber": 0,
+                "submitNumber": 0,
+                "solutionNumber": 0,
+                "commentNumber": 0,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            }
+        ],
+        "submitVos": []
+    },
+    "msg": null
+}
+```
+
+
+
+### 更新作业
+
+接口url：localhost:9000/school/update/homework
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1472039743838437378",
+    "classId": "1",
+    "name": "第二次测试作业",
+    "startDate": "2021-12-18 12:00",
+    "endDate": "2021-12-18 12:00",
+    "teacherId": "1",
+    "problemVos": [
+        {
+            "id": 1
+        },
+                {
+            "id": 2
+        }
+    ]
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472395994707439617",
+        "classId": "1",
+        "name": "第二次测试作业",
+        "startTime": "2021-12-18 12:00",
+        "endTime": "2021-12-18 12:00",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "problems": [
+            {
+                "id": "1",
+                "title": "test",
+                "bodyId": "1",
+                "problemLevel": 1,
+                "acNumber": 5,
+                "submitNumber": 5,
+                "solutionNumber": 0,
+                "commentNumber": 1,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "1",
+                        "tagName": "测试标签"
+                    },
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "title": "test2",
+                "bodyId": "2",
+                "problemLevel": 1,
+                "acNumber": 0,
+                "submitNumber": 0,
+                "solutionNumber": 0,
+                "commentNumber": 0,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            }
+        ],
+        "submitVos": []
+    },
+    "msg": null
+}
+```
+
+
+
+### 删除作业
+
+接口url：localhost:9000/school/delete/homework
+
+请求方式：delete
+
+请求参数：
+
+```json
+{
+    "id": "1472039748997431297"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1472041160938569730",
+            "classId": "1",
+            "name": "第一次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041215334498305",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041260456820738",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041681653022722",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041764129816578",
+            "classId": "1",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取作业列表
+
+接口url：localhost:9000/school/teacher/homeworks/{课程id}
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1472041160938569730",
+            "classId": "1472029371140030465",
+            "name": "第一次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041215334498305",
+            "classId": "1472029371140030465",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        },
+        {
+            "id": "1472041260456820738",
+            "classId": "1472029371140030465",
+            "name": "第二次测试作业",
+            "startTime": "2021-12-18 12:00",
+            "endTime": "2021-12-18 12:00",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "problems": null,
+            "submitVos": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取作业情况
+
+接口url：localhost:9000/school/homework/1472039743838437378
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1472041160938569730",
+        "classId": "1472029371140030465",
+        "name": "第一次测试作业",
+        "startTime": "2021-12-18 12:00",
+        "endTime": "2021-12-18 12:00",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "problems": [
+            {
+                "id": "1",
+                "title": "test",
+                "bodyId": "1",
+                "problemLevel": 1,
+                "acNumber": 5,
+                "submitNumber": 5,
+                "solutionNumber": 0,
+                "commentNumber": 1,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "1",
+                        "tagName": "测试标签"
+                    },
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "title": "test2",
+                "bodyId": "2",
+                "problemLevel": 1,
+                "acNumber": 0,
+                "submitNumber": 0,
+                "solutionNumber": 0,
+                "commentNumber": 0,
+                "caseNumber": 1,
+                "runMemory": 256,
+                "runTime": 1000,
+                "problemBodyVo": {
+                    "id": null,
+                    "problemBody": null,
+                    "problemBodyHtml": "<p>这是测试</p>"
+                },
+                "category": {
+                    "id": "1",
+                    "categoryName": "test",
+                    "description": "测试分类"
+                },
+                "tags": [
+                    {
+                        "id": "2",
+                        "tagName": "test2"
+                    }
+                ]
+            }
+        ],
+        "submitVos": null
+    },
+    "msg": null
+}
+```
+
+
+
+### 获取提交情况
+
+接口url：localhost:9000/school/submits/{作业id}
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1472394075930800130",
+            "authorId": "15570357290",
+            "problemId": "1",
+            "codeLang": "java",
+            "codeBody": "import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}",
+            "runTime": 156,
+            "runMemory": 0,
+            "caseNumber": null,
+            "verdict": "AC",
+            "createTime": "2021-12-19 10:31"
+        }
+    ],
+    "msg": null
+}
 ```
 
 
@@ -1954,423 +2869,4 @@ file:本地文件
 
 ```
 
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
-
-
-
-### 需求
-
-接口url：
-
-请求方式：
-
-请求参数：
-
-```json
-
-```
-
-返回参数：
-
-```json
-
-```
 

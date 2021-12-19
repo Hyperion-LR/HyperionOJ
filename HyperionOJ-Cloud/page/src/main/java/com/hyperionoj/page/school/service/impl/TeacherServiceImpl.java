@@ -77,6 +77,35 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     /**
+     * 获取班级详情
+     *
+     * @param id 班级id
+     * @return 班级详情
+     */
+    @Override
+    public SysClassVo getSysClass(Long id) {
+        SysClassVo classVo = new SysClassVo();
+        SysClass sysClass = classMapper.selectById(id);
+        if (sysClass == null) {
+            return null;
+        }
+        classVo.setId(sysClass.getId().toString());
+        classVo.setCourseName(sysClass.getCourseName());
+        classVo.setTeacherId(sysClass.getTeacherId().toString());
+        classVo.setTeacherName(sysClass.getTeacherName());
+        classVo.setAcademy(sysClass.getAcademy());
+        LambdaQueryWrapper<SysClassStudent> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysClassStudent::getClassId, id);
+        List<SysClassStudent> sysClassStudents = classStudentMapper.selectList(queryWrapper);
+        ArrayList<SysUserVo> students = new ArrayList<>();
+        for (SysClassStudent sysClassStudent : sysClassStudents) {
+            students.add(SysUserVo.userToVo(ossClients.findUserByStudentNumber(sysClassStudent.getStudentNumber().toString()).getData()));
+        }
+        classVo.setStudents(students);
+        return classVo;
+    }
+
+    /**
      * 创建班级
      *
      * @param classParam 班级对象
@@ -157,10 +186,11 @@ public class TeacherServiceImpl implements TeacherService {
      * @return 该老师发布的作业列表
      */
     @Override
-    public List<SysHomeworkVo> getHomeworks() {
+    public List<SysHomeworkVo> getHomeworks(Long classId) {
         Teacher teacher = JSONObject.parseObject((String) ThreadLocalUtils.get(), Teacher.class);
         LambdaQueryWrapper<SysHomework> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysHomework::getTeacherId, teacher.getId());
+        queryWrapper.eq(SysHomework::getClassId, classId);
         return studentService.homeworksToVo(homeworkMapper.selectList(queryWrapper));
     }
 
@@ -172,7 +202,7 @@ public class TeacherServiceImpl implements TeacherService {
      */
     @Override
     public SysHomeworkVo getHomeworkById(Long id) {
-        return studentService.getHomework(id);
+        return studentService.getHomework(id, true, false);
     }
 
     /**

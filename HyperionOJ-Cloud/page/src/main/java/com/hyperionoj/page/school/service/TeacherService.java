@@ -23,6 +23,14 @@ public interface TeacherService {
     List<SysClassVo> getClassList();
 
     /**
+     * 获取班级详情
+     *
+     * @param id 班级id
+     * @return 班级详情
+     */
+    SysClassVo getSysClass(Long id);
+
+    /**
      * 创建班级
      *
      * @param classVo 班级对象
@@ -60,7 +68,7 @@ public interface TeacherService {
      *
      * @return 该老师发布的作业列表
      */
-    List<SysHomeworkVo> getHomeworks();
+    List<SysHomeworkVo> getHomeworks(Long classId);
 
     /**
      * 通过id获取作业
@@ -94,4 +102,5 @@ public interface TeacherService {
      * @return 改作业学生的提交情况
      */
     List<SubmitVo> getSubmits(Long homeworkId);
+
 }

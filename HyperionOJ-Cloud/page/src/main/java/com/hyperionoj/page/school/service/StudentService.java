@@ -31,10 +31,12 @@ public interface StudentService {
     /**
      * 获取作业详情
      *
-     * @param id 作业id
+     * @param isProblem 是否需要加上题目
+     * @param isSubmit  是否加上提交
+     * @param id        作业id
      * @return 作业详情
      */
-    SysHomeworkVo getHomework(Long id);
+    SysHomeworkVo getHomework(Long id, Boolean isProblem, Boolean isSubmit);
 
     /**
      * 提交作业
