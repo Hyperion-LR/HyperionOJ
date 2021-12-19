@@ -4,6 +4,7 @@ import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.article.service.ArticleService;
+import com.hyperionoj.page.article.vo.ArticleVo;
 import com.hyperionoj.page.article.vo.params.ArticleParam;
 import com.hyperionoj.page.article.vo.params.CommentParam;
 import com.hyperionoj.page.common.vo.params.PageParams;
@@ -49,19 +50,25 @@ public class ArticleController {
     }
 
     @GetMapping("/view/{id}")
-    @Cache(name = "Article", time = 30 * 60 * 60)
+    @Cache(name = "article", time = 30 * 60 * 60)
     public Result findArticleById(@PathVariable("id") String articleId) {
-        Object data = articleService.findArticleById(articleId);
-        if (data == null) {
+        ArticleVo articleVo = articleService.findArticleById(articleId);
+        if (articleVo == null) {
             return Result.fail(ErrorCode.PARAMS_ERROR);
         } else {
-            return Result.success(data);
+            return Result.success(articleVo);
         }
     }
 
     @PostMapping("/publish")
     public Result articlePublish(@RequestBody ArticleParam articleParam) {
         return Result.success(articleService.publish(articleParam));
+    }
+
+    @PostMapping("/support/article")
+    @Cache(name = "article", time = 30 * 60 * 60)
+    public Result support(@RequestBody ArticleParam articleParam) {
+        return Result.success(articleService.support(articleParam.getId()));
     }
 
     @PostMapping("/delete/article")

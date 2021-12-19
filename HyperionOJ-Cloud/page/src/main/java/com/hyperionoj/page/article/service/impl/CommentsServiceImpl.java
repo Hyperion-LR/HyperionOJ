@@ -4,15 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.CommentVo;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.article.dao.mapper.ArticleCommentMapper;
 import com.hyperionoj.page.article.dao.mapper.ArticleMapper;
 import com.hyperionoj.page.article.dao.pojo.Article;
 import com.hyperionoj.page.article.dao.pojo.ArticleComment;
 import com.hyperionoj.page.article.service.ArticleCommentService;
+import com.hyperionoj.page.article.vo.ArticleVo;
 import com.hyperionoj.page.article.vo.params.CommentParam;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +41,8 @@ public class CommentsServiceImpl implements ArticleCommentService {
     private ArticleMapper articleMapper;
     @Resource
     private OSSClients ossClients;
+    @Resource
+    private RedisSever redisSever;
 
     /**
      * 返回文章的评论
@@ -70,6 +76,7 @@ public class CommentsServiceImpl implements ArticleCommentService {
         comment.setCreateTime(System.currentTimeMillis());
         commentVo.setCreateDate(dateFormat.format(comment.getCreateTime()));
         comment.setArticleId(Long.parseLong(commentParam.getArticleId()));
+        commentVo.setArticleId(commentParam.getArticleId());
         comment.setContent(commentParam.getContent());
         commentVo.setContent(comment.getContent());
         comment.setAuthorId(sysUser.getId());
@@ -91,6 +98,10 @@ public class CommentsServiceImpl implements ArticleCommentService {
         }
         comment.setToUid(toUserId == null ? 0 : toUserId);
         comment.setIsDelete(0);
+        if (commentVo.getSupportNumber() == null) {
+            commentVo.setSupportNumber(0);
+        }
+        comment.setSupport(commentVo.getSupportNumber());
         commentMapper.insert(comment);
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Article::getId, commentParam.getArticleId());
@@ -99,6 +110,16 @@ public class CommentsServiceImpl implements ArticleCommentService {
         articleMapper.updateById(article);
         commentVo.setId(comment.getId().toString());
         commentVo.setSupportNumber(0);
+        String articleVoRedisKey = "article" + ":" +
+                "ArticleController" + ":" +
+                "findArticleById" + ":" +
+                DigestUtils.md5Hex(JSONObject.toJSONString(commentVo.getArticleId()));
+        String redisKV = redisSever.getRedisKV(articleVoRedisKey);
+        if (redisKV != null) {
+            ArticleVo articleVo = JSONObject.parseObject(JSONObject.toJSONString(JSONObject.parseObject(redisKV, Result.class).getData()), ArticleVo.class);
+            articleVo.setCommentCounts(articleVo.getCommentCounts() + 1);
+            redisSever.setRedisKV(articleVoRedisKey, JSONObject.toJSONString(Result.success(articleVo)));
+        }
         return commentVo;
     }
 

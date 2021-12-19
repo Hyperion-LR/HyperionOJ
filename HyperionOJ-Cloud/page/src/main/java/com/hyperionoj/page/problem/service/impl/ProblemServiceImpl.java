@@ -338,9 +338,9 @@ public class ProblemServiceImpl implements ProblemService {
         updateWrapper.eq(ProblemComment::getId, commentVo.getId());
         updateWrapper.set(ProblemComment::getIsDelete, 1);
         problemCommentMapper.update(null, updateWrapper);
-        String problemVoRedisKey = "problemId" + ":" +
-                "ProblemController" + ":" +
-                "getProblemById" + ":" +
+        String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                PROBLEM_CONTROLLER + ":" +
+                GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(commentVo.getProblemId());
         ProblemVo problemVo = JSONObject.parseObject((String) JSONObject.parseObject(redisSever.getRedisKV(problemVoRedisKey), Result.class).getData(), ProblemVo.class);
         problemVo.setCommentNumber(problemVo.getCommentNumber() - 1);

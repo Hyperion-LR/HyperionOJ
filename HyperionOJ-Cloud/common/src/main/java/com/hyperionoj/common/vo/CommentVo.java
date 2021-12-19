@@ -15,6 +15,8 @@ public class CommentVo {
 
     private String problemId;
 
+    private String articleId;
+
     private SysUserVo authorVo;
 
     private String parentId;

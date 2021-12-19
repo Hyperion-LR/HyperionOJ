@@ -25,6 +25,8 @@ public class ArticleComment {
 
     private Long toUid;
 
+    private Integer support;
+
     private Integer level;
 
     private Integer isDelete;

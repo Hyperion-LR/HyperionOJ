@@ -30,6 +30,8 @@ public class Article {
 
     private Integer viewCount;
 
+    private Integer support;
+
     private Integer weight;
 
     private Integer isSolution;

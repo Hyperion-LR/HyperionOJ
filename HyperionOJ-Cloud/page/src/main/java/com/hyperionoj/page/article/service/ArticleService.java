@@ -74,4 +74,13 @@ public interface ArticleService {
      * @param id 评论id
      */
     void deleteComment(String id);
+
+    /**
+     * 给文章点赞
+     *
+     * @param id 文章id
+     * @return 点赞数
+     */
+    Integer support(String id);
+
 }

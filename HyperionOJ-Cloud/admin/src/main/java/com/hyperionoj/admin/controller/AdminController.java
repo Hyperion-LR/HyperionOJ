@@ -4,8 +4,10 @@ import com.hyperionoj.admin.aop.PermissionAnnotation;
 import com.hyperionoj.admin.service.AdminService;
 import com.hyperionoj.admin.vo.ActionPageParams;
 import com.hyperionoj.common.feign.AdminClients;
-import com.hyperionoj.common.feign.AdminPageClients;
-import com.hyperionoj.common.vo.*;
+import com.hyperionoj.common.vo.AdminVo;
+import com.hyperionoj.common.vo.RegisterParam;
+import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.SysUserVo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,9 +25,6 @@ public class AdminController {
 
     @Resource
     private AdminClients adminClients;
-
-    @Resource
-    private AdminPageClients adminPageClients;
 
     @Resource
     private AdminService adminService;
@@ -93,74 +92,6 @@ public class AdminController {
     @RequestMapping(value = "/query/action", method = RequestMethod.GET)
     public Result queryAdminActionList(@RequestBody ActionPageParams pageParams) {
         return Result.success(adminService.queryActionList(pageParams));
-    }
-
-    /**
-     * 添加题目分类
-     *
-     * @param problemCategoryVo 分类信息
-     * @return 分类情况
-     */
-    @PermissionAnnotation(level = 3)
-    @RequestMapping(value = "/add/problem/category", method = RequestMethod.POST)
-    public Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
-        return adminPageClients.addProblemCategory(problemCategoryVo);
-    }
-
-    /**
-     * 删除题目分类
-     *
-     * @param problemCategoryVo 分类参数
-     */
-    @PermissionAnnotation(level = 3)
-    @RequestMapping(value = "/delete/problem/category", method = RequestMethod.DELETE)
-    public Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
-        return adminPageClients.deleteProblemCategory(problemCategoryVo);
-    }
-
-    /**
-     * 添加题目
-     *
-     * @param problemVo 题目信息
-     * @return 新加的题目
-     */
-    @PermissionAnnotation(level = 3)
-    @RequestMapping(value = "/add/problem", method = RequestMethod.POST)
-    public Result addProblem(@RequestBody ProblemVo problemVo) {
-        return adminPageClients.addProblem(problemVo);
-    }
-
-    /**
-     * 修改题目
-     *
-     * @param problemVo 题目信息
-     */
-    @PermissionAnnotation(level = 3)
-    @RequestMapping(value = "/update/problem", method = RequestMethod.POST)
-    public Result updateProblem(@RequestBody ProblemVo problemVo) {
-        return adminPageClients.updateProblem(problemVo);
-    }
-
-    /**
-     * 删除题目
-     *
-     * @param problemVo 题目信息
-     */
-    @PermissionAnnotation(level = 3)
-    @RequestMapping(value = "/delete/problem", method = RequestMethod.DELETE)
-    public Result deleteProblem(@RequestBody ProblemVo problemVo) {
-        return adminPageClients.deleteProblem(problemVo);
-    }
-
-    /**
-     * 删除评论
-     *
-     * @param commentVo 评论参数
-     */
-    @PermissionAnnotation(level = 2)
-    @RequestMapping(value = "/delete/comment", method = RequestMethod.DELETE)
-    public Result deleteComment(@RequestBody CommentVo commentVo) {
-        return adminPageClients.deleteComment(commentVo);
     }
 
 }

@@ -125,4 +125,14 @@ public interface Constants {
      */
     String GET_COMMENTS = "getComments";
 
+    /**
+     * 文章缓存类名
+     */
+    String ARTICLE_CONTROLLER = "ArticleController";
+
+    /**
+     * 文章缓存方法名
+     */
+    String FIND_ARTICLE_BY_ID = "findArticleById";
+
 }

@@ -7,7 +7,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.CommentVo;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.article.dao.dos.Archives;
 import com.hyperionoj.page.article.dao.mapper.ArticleBodyMapper;
@@ -25,6 +28,7 @@ import com.hyperionoj.page.article.vo.params.ArticleBodyParam;
 import com.hyperionoj.page.article.vo.params.ArticleParam;
 import com.hyperionoj.page.common.vo.TagVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +64,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private OSSClients ossClients;
+
+    @Resource
+    private RedisSever redisSever;
 
     private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTag) {
         List<ArticleVo> articleVoList = new ArrayList<>();
@@ -247,6 +254,11 @@ public class ArticleServiceImpl implements ArticleService {
             updateWrapper.eq(Article::getId, id);
             updateWrapper.set(Article::getIsDelete, 1);
             articleMapper.update(null, updateWrapper);
+            String articleVoRedisKey = "article" + ":" +
+                    "ArticleController" + ":" +
+                    "findArticleById" + ":" +
+                    DigestUtils.md5Hex(id);
+            redisSever.delKey(articleVoRedisKey);
             return true;
         }
         return false;
@@ -263,5 +275,50 @@ public class ArticleServiceImpl implements ArticleService {
         updateWrapper.eq(ArticleComment::getId, id);
         updateWrapper.set(ArticleComment::getIsDelete, 1);
         articleCommentMapper.update(null, updateWrapper);
+        String articleVoRedisKey = "article" + ":" +
+                "ArticleController" + ":" +
+                "findArticleById" + ":" +
+                DigestUtils.md5Hex(id);
+        ArticleVo articleVo = JSONObject.parseObject((String) JSONObject.parseObject(redisSever.getRedisKV(articleVoRedisKey), Result.class).getData(), ArticleVo.class);
+        articleVo.setCommentCounts(articleVo.getCommentCounts() - 1);
+        redisSever.setRedisKV(articleVoRedisKey, JSONObject.toJSONString(Result.success(articleVo)));
     }
+
+    /**
+     * 给文章点赞
+     *
+     * @param id 文章id
+     * @return 文章点赞数
+     */
+    @Override
+    public Integer support(String id) {
+        return articleMapper.selectById(id).getSupport();
+    }
+
+    private ArticleComment voToComment(CommentVo commentVo) {
+        ArticleComment articleComment = new ArticleComment();
+        articleComment.setArticleId(Long.parseLong(commentVo.getArticleId()));
+        articleComment.setContent(commentVo.getContent());
+        articleComment.setAuthorId(Long.parseLong(commentVo.getAuthorVo().getId()));
+        articleComment.setIsDelete(0);
+        articleComment.setLevel(commentVo.getLevel());
+        articleComment.setCreateTime(System.currentTimeMillis());
+        articleComment.setParentId(Long.getLong(commentVo.getParentId()));
+        articleComment.setToUid(Long.getLong(commentVo.getToUser().getId()));
+        if (commentVo.getSupportNumber() == null) {
+            commentVo.setSupportNumber(0);
+        }
+        articleComment.setSupport(commentVo.getSupportNumber());
+        if (articleComment.getLevel() == null) {
+            articleComment.setLevel(0);
+        }
+        if (articleComment.getToUid() == null) {
+            articleComment.setToUid(0L);
+        }
+        if (articleComment.getParentId() == null) {
+            articleComment.setParentId(0L);
+        }
+        return articleComment;
+    }
+
 }

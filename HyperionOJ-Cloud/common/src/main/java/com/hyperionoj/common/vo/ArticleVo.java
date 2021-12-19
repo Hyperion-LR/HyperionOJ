@@ -1,8 +1,5 @@
-package com.hyperionoj.page.article.vo;
+package com.hyperionoj.common.vo;
 
-import com.hyperionoj.common.vo.SysUserVo;
-import com.hyperionoj.page.common.vo.CategoryVo;
-import com.hyperionoj.page.common.vo.TagVo;
 import lombok.Data;
 
 import java.util.List;
