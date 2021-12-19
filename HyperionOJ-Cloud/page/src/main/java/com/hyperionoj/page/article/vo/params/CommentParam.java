@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class CommentParam {
 
+    private String id;
+
     private String articleId;
 
     private String content;

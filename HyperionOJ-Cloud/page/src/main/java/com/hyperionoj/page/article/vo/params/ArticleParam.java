@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 public class ArticleParam {
 
+    private String id;
+
     private String title;
 
     private ArticleBodyParam body;

@@ -60,4 +60,16 @@ public interface ArticleService {
      */
     ArticleVo publish(ArticleParam articleParam);
 
+    /**
+     * 删除文章
+     * @param id 文章id
+     * @return 是否删除成功
+     */
+    Boolean deleteArticle(String id);
+
+    /**
+     * 删除评论
+     * @param id 评论id
+     */
+    void deleteComment(String id);
 }

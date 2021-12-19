@@ -2,6 +2,7 @@ package com.hyperionoj.page.article.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.feign.OSSClients;
@@ -14,6 +15,7 @@ import com.hyperionoj.page.article.dao.mapper.ArticleCommentMapper;
 import com.hyperionoj.page.article.dao.mapper.ArticleMapper;
 import com.hyperionoj.page.article.dao.pojo.Article;
 import com.hyperionoj.page.article.dao.pojo.ArticleBody;
+import com.hyperionoj.page.article.dao.pojo.ArticleComment;
 import com.hyperionoj.page.article.service.ArticleCategoryService;
 import com.hyperionoj.page.article.service.ArticleService;
 import com.hyperionoj.page.article.service.ArticleTagsService;
@@ -21,8 +23,6 @@ import com.hyperionoj.page.article.vo.ArticleBodyVo;
 import com.hyperionoj.page.article.vo.ArticleVo;
 import com.hyperionoj.page.article.vo.params.ArticleBodyParam;
 import com.hyperionoj.page.article.vo.params.ArticleParam;
-import com.hyperionoj.page.common.dao.mapper.CategoryMapper;
-import com.hyperionoj.page.common.dao.mapper.TagMapper;
 import com.hyperionoj.page.common.vo.TagVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
 import org.springframework.beans.BeanUtils;
@@ -50,13 +50,7 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleBodyMapper articleBodyMapper;
 
     @Resource
-    private CategoryMapper categoryMapper;
-
-    @Resource
     private ArticleCommentMapper articleCommentMapper;
-
-    @Resource
-    private TagMapper tagMapper;
 
     @Resource
     private ArticleTagsService articleTagsService;
@@ -158,8 +152,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleVo> hotArticle(Integer limit) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Article::getViewCount);
         queryWrapper.select(Article::getId, Article::getTitle);
+        queryWrapper.orderByDesc(Article::getViewCount);
         queryWrapper.last("limit " + limit);
         List<Article> articles = articleMapper.selectList(queryWrapper);
         return copyList(articles, false, false);
@@ -234,5 +228,40 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleBodyVo articleBodyVo = new ArticleBodyVo();
         articleBodyVo.setContent(articleBody.getContent());
         return articleBodyVo;
+    }
+
+    /**
+     * 删除文章
+     *
+     * @param id 文章id
+     */
+    @Override
+    public Boolean deleteArticle(String id) {
+        SysUser author = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
+        Article article = articleMapper.selectById(id);
+        if(article == null){
+            return null;
+        }
+        if(article.getAuthorId().equals(author.getId())){
+            LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(Article::getId, id);
+            updateWrapper.set(Article::getIsDelete, 1);
+            articleMapper.update(null, updateWrapper);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param id 评论id
+     */
+    @Override
+    public void deleteComment(String id) {
+        LambdaUpdateWrapper<ArticleComment> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(ArticleComment::getId, id);
+        updateWrapper.set(ArticleComment::getIsDelete, 1);
+        articleCommentMapper.update(null, updateWrapper);
     }
 }

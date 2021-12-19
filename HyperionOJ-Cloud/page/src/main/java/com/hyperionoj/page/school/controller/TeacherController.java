@@ -16,7 +16,7 @@ import java.text.ParseException;
  * @date 2021/12/17
  */
 @RestController
-@RequestMapping("/school/")
+@RequestMapping("/school/teacher")
 public class TeacherController {
 
     @Resource

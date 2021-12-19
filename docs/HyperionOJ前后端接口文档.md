@@ -197,9 +197,466 @@ file:本地文件
 }
 ```
 
+## 管理员
+
+**（该模块所有请求(除了登录)的请求头请携带"Admin-Token",同时权限等级不够会被拦截）**
+
+### 管理员登录
+
+接口url：localhost:9000/login/admin
+
+请求方式： post
+
+请求参数：
+
+```
+{
+    "account": 1,
+    "password": 123456
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzkzMDgzNDksInVzZXJJZCI6MSwiaWF0IjoxNjM5MjIxOTQ5fQ.EmQ6gJXgavQORt4jy5LqsZN6oAFqYpFgyJ1nibrYTn0",
+    "msg": null
+}
+```
 
 
-## page
+
+###   添加管理员
+
+接口url：localhost:9000/admin/add
+
+请求方式： post
+
+请求参数：
+
+```
+{
+    "id": 1234,
+    "name": "Hyperion",
+    "password": 123456,
+    "permissionLevel": 0
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": 1234,
+        "name": "Hyperion",
+        "password": "083f3977344768987d0e1d315b358f90",
+        "permissionLevel": 0,
+        "salt": "HyperionOJ"
+    },
+    "msg": null
+}
+```
+
+
+
+###   更新管理员信息
+
+接口url：localhost:9000/admin/update
+
+请求方式： post
+
+请求参数：
+
+```
+{
+    "id": 1234,
+    "name": "Hyperion",
+    "password": 123456,
+    "permissionLevel": 1
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": 1234,
+        "name": "Hyperion",
+        "password": "083f3977344768987d0e1d315b358f90",
+        "permissionLevel": 1,
+        "salt": "HyperionOJ"
+    },
+    "msg": null
+}
+```
+
+
+
+###   删除管理员账号
+
+接口url：localhost:9000/admin/delete
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "id": 1234,
+    "name": "Hyperion"
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+###   冻结普通用户账号
+
+接口url：localhost:9000/admin/freeze
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "id": 15570357290
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+###   查询管理员行为
+
+接口url：localhost:9000/admin/query/action
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "page": 1,
+    "pageSize": 3,
+    "adminId": 1,
+    "action": "/add"
+}
+```
+
+返回数据：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1469629746873593858",
+            "adminId": "1",
+            "action": "/add",
+            "time": "1639222010678",
+            "status": 0
+        },
+        {
+            "id": "1469495868724826114",
+            "adminId": "1",
+            "action": "/add",
+            "time": "1639190091679",
+            "status": 1
+        },
+        {
+            "id": "1469495858423615489",
+            "adminId": "1",
+            "action": "/add",
+            "time": "1639190089124",
+            "status": 0
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 增加题库分类
+
+接口url：localhost:9000/admin/add/problem/category
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "categoryName": "testCateGory",
+    "description": "这个是测试分类1"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1470387437352689666",
+        "categoryName": "testCateGory",
+        "description": "这个是测试分类1"
+    },
+    "msg": null
+}
+```
+
+
+
+### 删除题库分类
+
+接口url：localhost:9000/admin/delete/problem/category
+
+请求方式： delete
+
+请求参数：
+
+```json
+{
+    "id": "1470387894615711745"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 向题库添加题目（暂时，以后会更改）
+
+接口url：localhost:9000/admin/add/problem
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "title": "test",
+    "problemLevel": 1,
+    "categoryId": "1",
+    "caseNumber": 1,
+    "runMemory": 256,
+    "runTime": 1000,
+    "problemBodyVo": {
+        "problemBody": "这是测试",
+        "problemBodyHtml": "<p>这是测试</p>"
+    }
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1470389250931982337",
+        "title": "test",
+        "bodyId": "1470389250806153218",
+        "problemLevel": 1,
+        "categoryId": "1",
+        "acNumber": 0,
+        "submitNumber": 0,
+        "solutionNumber": 0,
+        "commentNumber": 0,
+        "caseNumber": 1,
+        "runMemory": 256,
+        "runTime": 1000,
+        "problemBodyVo": {
+            "id": null,
+            "problemBody": "这是测试",
+            "problemBodyHtml": "<p>这是测试</p>"
+        }
+    },
+    "msg": null
+}
+```
+
+
+
+
+
+### 更新题目
+
+接口url：localhost:9000/admin/update/problem
+
+请求方式： post
+
+请求参数：
+
+```json
+{
+    "id":"1470389250931982337",
+    "title": "test",
+    "bodyId": "1470389250806153218",
+    "problemLevel": 1,
+    "categoryId": "1",
+    "caseNumber": 1,
+    "runMemory": 256,
+    "runTime": 2000,
+    "problemBodyVo": {
+        "problemBody": "这是update测试",
+        "problemBodyHtml": "<p>这是update测试</p>"
+    }
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 删除题目
+
+接口url：localhost:9000/admin/delete/problem
+
+请求方式：delete
+
+请求参数：
+
+```json
+{
+    "id":"1470389250931982337",
+    "bodyId": "1470389250806153218",
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 删除用户评论
+
+接口url：localhost:9000/problem/admin/delete/comment
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1469944007879221250"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 删除文章
+
+接口url：localhost:9000/article/admin/delete/article
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1471319518832435201"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 删除文章评论
+
+接口url：localhost:9000/article/admin/delete/article
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1471319518832435201"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+## 题库模块
 
 ### 获取题目列表（分页查询）
 
@@ -765,562 +1222,8 @@ file:本地文件
             "supportNumber": 0,
             "createDate": "2021-12-15 16:52",
             "level": 0
-        },
-        {
-            "id": "1471040114428436481",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 0,
-            "createDate": "2021-12-15 16:51",
-            "level": 0
-        },
-        {
-            "id": "1471039140167114754",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 0,
-            "createDate": "2021-12-15 16:47",
-            "level": 0
-        },
-        {
-            "id": "1471038960017563650",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 0,
-            "createDate": "2021-12-15 16:46",
-            "level": 0
-        },
-        {
-            "id": "1471038806384402434",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 0,
-            "createDate": "2021-12-15 16:45",
-            "level": 0
-        },
-        {
-            "id": "1471036863888941058",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 0,
-            "createDate": "2021-12-15 16:38",
-            "level": 0
-        },
-        {
-            "id": "1471036857794617345",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 0,
-            "createDate": "2021-12-15 16:38",
-            "level": 0
-        },
-        {
-            "id": "1470694184046977025",
-            "content": "评论测试3",
-            "problemId": "1",
-            "authorVo": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "parentId": "0",
-            "toUser": {
-                "id": "15570357290",
-                "username": "冰箱的主人",
-                "mail": "Hyperion_LR@foxmail.com",
-                "studentNumber": null
-            },
-            "supportNumber": 4209,
-            "createDate": "2021-12-14 17:56",
-            "level": 0
         }
     ],
-    "msg": null
-}
-```
-
-
-
-## 管理员
-
-**（该模块所有请求(除了登录)的请求头请携带"Admin-Token",同时权限等级不够会被拦截）**
-
-### 管理员登录
-
-接口url：localhost:9000/login/admin
-
-请求方式： post
-
-请求参数：
-
-```
-{
-    "account": 1,
-    "password": 123456
-}
-```
-
-返回数据：
-
-```json
-{
-    "code": 200,
-    "data": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzkzMDgzNDksInVzZXJJZCI6MSwiaWF0IjoxNjM5MjIxOTQ5fQ.EmQ6gJXgavQORt4jy5LqsZN6oAFqYpFgyJ1nibrYTn0",
-    "msg": null
-}
-```
-
-
-
-###   添加管理员
-
-接口url：localhost:9000/admin/add
-
-请求方式： post
-
-请求参数：
-
-```
-{
-    "id": 1234,
-    "name": "Hyperion",
-    "password": 123456,
-    "permissionLevel": 0
-}
-```
-
-返回数据：
-
-```json
-{
-    "code": 200,
-    "data": {
-        "id": 1234,
-        "name": "Hyperion",
-        "password": "083f3977344768987d0e1d315b358f90",
-        "permissionLevel": 0,
-        "salt": "HyperionOJ"
-    },
-    "msg": null
-}
-```
-
-
-
-###   更新管理员信息
-
-接口url：localhost:9000/admin/update
-
-请求方式： post
-
-请求参数：
-
-```
-{
-    "id": 1234,
-    "name": "Hyperion",
-    "password": 123456,
-    "permissionLevel": 1
-}
-```
-
-返回数据：
-
-```json
-{
-    "code": 200,
-    "data": {
-        "id": 1234,
-        "name": "Hyperion",
-        "password": "083f3977344768987d0e1d315b358f90",
-        "permissionLevel": 1,
-        "salt": "HyperionOJ"
-    },
-    "msg": null
-}
-```
-
-
-
-###   删除管理员账号
-
-接口url：localhost:9000/admin/delete
-
-请求方式： post
-
-请求参数：
-
-```json
-{
-    "id": 1234,
-    "name": "Hyperion"
-}
-```
-
-返回数据：
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "msg": null
-}
-```
-
-
-
-###   冻结普通用户账号
-
-接口url：localhost:9000/admin/freeze
-
-请求方式： post
-
-请求参数：
-
-```json
-{
-    "id": 15570357290
-}
-```
-
-返回数据：
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "msg": null
-}
-```
-
-
-
-###   查询管理员行为
-
-接口url：localhost:9000/admin/query/action
-
-请求方式： post
-
-请求参数：
-
-```json
-{
-    "page": 1,
-    "pageSize": 3,
-    "adminId": 1,
-    "action": "/add"
-}
-```
-
-返回数据：
-
-```json
-{
-    "code": 200,
-    "data": [
-        {
-            "id": "1469629746873593858",
-            "adminId": "1",
-            "action": "/add",
-            "time": "1639222010678",
-            "status": 0
-        },
-        {
-            "id": "1469495868724826114",
-            "adminId": "1",
-            "action": "/add",
-            "time": "1639190091679",
-            "status": 1
-        },
-        {
-            "id": "1469495858423615489",
-            "adminId": "1",
-            "action": "/add",
-            "time": "1639190089124",
-            "status": 0
-        }
-    ],
-    "msg": null
-}
-```
-
-
-
-### 增加题库分类
-
-接口url：localhost:9000/admin/add/problem/category
-
-请求方式： post
-
-请求参数：
-
-```json
-{
-    "categoryName": "testCateGory",
-    "description": "这个是测试分类1"
-}
-```
-
-返回参数：
-
-```json
-{
-    "code": 200,
-    "data": {
-        "id": "1470387437352689666",
-        "categoryName": "testCateGory",
-        "description": "这个是测试分类1"
-    },
-    "msg": null
-}
-```
-
-
-
-### 删除题库分类
-
-接口url：localhost:9000/admin/delete/problem/category
-
-请求方式： delete
-
-请求参数：
-
-```json
-{
-    "id": "1470387894615711745"
-}
-```
-
-返回参数：
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "msg": null
-}
-```
-
-
-
-### 向题库添加题目（暂时，以后会更改）
-
-接口url：localhost:9000/admin/add/problem
-
-请求方式： post
-
-请求参数：
-
-```json
-{
-    "title": "test",
-    "problemLevel": 1,
-    "categoryId": "1",
-    "caseNumber": 1,
-    "runMemory": 256,
-    "runTime": 1000,
-    "problemBodyVo": {
-        "problemBody": "这是测试",
-        "problemBodyHtml": "<p>这是测试</p>"
-    }
-}
-```
-
-返回参数：
-
-```json
-{
-    "code": 200,
-    "data": {
-        "id": "1470389250931982337",
-        "title": "test",
-        "bodyId": "1470389250806153218",
-        "problemLevel": 1,
-        "categoryId": "1",
-        "acNumber": 0,
-        "submitNumber": 0,
-        "solutionNumber": 0,
-        "commentNumber": 0,
-        "caseNumber": 1,
-        "runMemory": 256,
-        "runTime": 1000,
-        "problemBodyVo": {
-            "id": null,
-            "problemBody": "这是测试",
-            "problemBodyHtml": "<p>这是测试</p>"
-        }
-    },
-    "msg": null
-}
-```
-
-
-
-
-
-### 更新题目
-
-接口url：localhost:9000/admin/update/problem
-
-请求方式： post
-
-请求参数：
-
-```json
-{
-    "id":"1470389250931982337",
-    "title": "test",
-    "bodyId": "1470389250806153218",
-    "problemLevel": 1,
-    "categoryId": "1",
-    "caseNumber": 1,
-    "runMemory": 256,
-    "runTime": 2000,
-    "problemBodyVo": {
-        "problemBody": "这是update测试",
-        "problemBodyHtml": "<p>这是update测试</p>"
-    }
-}
-```
-
-返回参数：
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "msg": null
-}
-```
-
-
-
-### 删除题目
-
-接口url：localhost:9000/admin/delete/problem
-
-请求方式：delete
-
-请求参数：
-
-```json
-{
-    "id":"1470389250931982337",
-    "bodyId": "1470389250806153218",
-}
-```
-
-返回参数：
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "msg": null
-}
-```
-
-
-
-### 删除用户评论
-
-接口url：localhost:9000/problem/admin/delete/comment
-
-请求方式：post
-
-请求参数：
-
-```json
-{
-    "id": "1469944007879221250"
-}
-```
-
-返回参数：
-
-```json
-{
-    "code": 200,
-    "data": null,
     "msg": null
 }
 ```
@@ -1878,11 +1781,67 @@ file:本地文件
 
 
 
-### 需求
+### 删除文章
 
-接口url：
+接口url：localhost:9000/article/delete/article
 
-请求方式：
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1471319518832435201"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 删除文章评论
+
+接口url：localhost:9000/article/delete/article
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1471319518832435201"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+## 班级管理
+
+此模块下的请求请携带token
+
+### 查看所有课程
+
+接口url：localhost:9000/school/user/class
+
+请求方式：get
 
 请求参数：
 
@@ -1893,16 +1852,37 @@ file:本地文件
 返回参数：
 
 ```json
-
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1472029371140030465",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "courseName": "测试课程",
+            "academy": "测试学院",
+            "students": null
+        },
+        {
+            "id": "1472059833363439617",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "courseName": "测试课程2",
+            "academy": "测试学院",
+            "students": null
+        }
+    ],
+    "msg": null
+}
 ```
 
 
 
-### 需求
+### 查看班级具体情况
 
-接口url：
+接口url：localhost:9000/school/user/class/1472029371140030465
 
-请求方式：
+请求方式：get
 
 请求参数：
 
@@ -1913,16 +1893,34 @@ file:本地文件
 返回参数：
 
 ```json
-
+{
+    "code": 200,
+    "data": {
+        "id": "1472029371140030465",
+        "teacherId": "1",
+        "teacherName": "Hyperion",
+        "courseName": "测试课程",
+        "academy": "测试学院",
+        "students": [
+            {
+                "id": "15570357290",
+                "username": "冰箱的主人",
+                "mail": "Hyperion_LR@foxmail.com",
+                "studentNumber": null
+            }
+        ]
+    },
+    "msg": null
+}
 ```
 
 
 
-### 需求
+### 查看课程所有作业
 
-接口url：
+接口url：localhost:9000/school/user/homeworks/1
 
-请求方式：
+请求方式：get
 
 请求参数：
 
