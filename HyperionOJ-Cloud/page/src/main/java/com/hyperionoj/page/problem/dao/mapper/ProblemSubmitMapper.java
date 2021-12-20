@@ -3,9 +3,12 @@ package com.hyperionoj.page.problem.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hyperionoj.page.problem.dao.dos.ProblemArchives;
 import com.hyperionoj.page.problem.dao.pojo.ProblemSubmit;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Hyperion
@@ -28,4 +31,13 @@ public interface ProblemSubmitMapper extends BaseMapper<ProblemSubmit> {
                                        @Param("codeLang") String codeLang,
                                        @Param("username") String username,
                                        @Param("verdict") String verdict);
+
+    /**
+     * 获取每日题量
+     *
+     * @param id 用户id
+     * @return 题量列表
+     */
+    List<ProblemArchives> getEveryday(@Param("id") Long id);
+
 }

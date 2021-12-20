@@ -158,4 +158,15 @@ public class ProblemController {
         return Result.success(problemService.getCommentList(pageParams));
     }
 
+    /**
+     * 获取最近的题目数量
+     *
+     * @return
+     */
+    @GetMapping("/everyday")
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 15 * 60 * 1000)
+    public Result getEveryday() {
+        return Result.success(problemService.getEveryday());
+    }
+
 }

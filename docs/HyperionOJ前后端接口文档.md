@@ -1228,6 +1228,51 @@ file:本地文件
 }
 ```
 
+### 获取每日题量
+
+接口url：localhost:9000/problem/everyday
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "year": 2021,
+            "month": 12,
+            "day": 12,
+            "count": 6
+        },
+        {
+            "year": 2021,
+            "month": 12,
+            "day": 18,
+            "count": 2
+        },
+        {
+            "year": 2021,
+            "month": 12,
+            "day": 19,
+            "count": 3
+        }
+    ],
+    "msg": null
+}
+```
+
+### 
+
 
 
 ## 文章模块

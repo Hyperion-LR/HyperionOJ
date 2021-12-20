@@ -16,4 +16,16 @@
             order by create_time desc
         </where>
     </select>
+
+    <select id="getEveryday" resultType="com.hyperionoj.page.problem.dao.dos.ProblemArchives">
+        select from_unixtime(create_time / 1000, '%Y') as year,
+               from_unixtime(create_time / 1000, '%m') as month,
+               from_unixtime(create_time / 1000, '%d') as day,
+               count(*)                                as count
+        from oj_problem_submit
+        where author_id = #{id}
+          and status = 'AC'
+        group by year, month, day
+    </select>
+
 </mapper>

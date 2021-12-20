@@ -20,6 +20,7 @@ import com.hyperionoj.page.common.dao.pojo.PageTag;
 import com.hyperionoj.page.common.vo.CategoryVo;
 import com.hyperionoj.page.common.vo.TagVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.page.problem.dao.dos.ProblemArchives;
 import com.hyperionoj.page.problem.dao.mapper.*;
 import com.hyperionoj.page.problem.dao.pojo.*;
 import com.hyperionoj.page.problem.service.ProblemService;
@@ -587,6 +588,17 @@ public class ProblemServiceImpl implements ProblemService {
                 GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(problemVo.getId());
         redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
+    }
+
+    /**
+     * 获取每天过题数量
+     *
+     * @return 数量列表
+     */
+    @Override
+    public List<ProblemArchives> getEveryday() {
+        SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
+        return problemSubmitMapper.getEveryday(sysUser.getId());
     }
 
     /**

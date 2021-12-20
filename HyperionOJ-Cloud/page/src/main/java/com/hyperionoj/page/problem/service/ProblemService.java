@@ -2,6 +2,7 @@ package com.hyperionoj.page.problem.service;
 
 import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.page.problem.dao.dos.ProblemArchives;
 import com.hyperionoj.page.problem.vo.ProblemCategoryVo;
 import com.hyperionoj.page.problem.vo.ProblemVo;
 import com.hyperionoj.page.problem.vo.SubmitVo;
@@ -138,4 +139,10 @@ public interface ProblemService {
      */
     void updateProblemCache(ProblemVo problemVo);
 
+    /**
+     * 获取每天过题数量
+     *
+     * @return 数量列表
+     */
+    List<ProblemArchives> getEveryday();
 }
