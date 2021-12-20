@@ -66,4 +66,14 @@ public class PageParams {
      */
     private String month;
 
+    /**
+     * 比赛开始时间
+     */
+    private String startTime;
+
+    /**
+     * 比赛结束时间
+     */
+    private String endTime;
+
 }

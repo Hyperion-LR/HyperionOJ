@@ -9,10 +9,15 @@ import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.page.contest.dao.mapper.ContestSubmitMapper;
 import com.hyperionoj.page.contest.dao.mapper.ContestUserMapper;
+import com.hyperionoj.page.contest.dao.pojo.ContestSubmit;
 import com.hyperionoj.page.contest.dao.pojo.ContestUser;
 import com.hyperionoj.page.contest.service.ContestUserService;
 import com.hyperionoj.page.contest.vo.ContestVo;
+import com.hyperionoj.page.problem.service.ProblemService;
+import com.hyperionoj.page.problem.vo.RunResult;
+import com.hyperionoj.page.problem.vo.SubmitVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +36,12 @@ public class ContestUserServiceImpl implements ContestUserService {
 
     @Resource
     private OSSClients ossClients;
+
+    @Resource
+    private ProblemService problemService;
+
+    @Resource
+    private ContestSubmitMapper contestSubmitMapper;
 
     /**
      * 王比赛添加用户
@@ -79,5 +90,31 @@ public class ContestUserServiceImpl implements ContestUserService {
         return sysUserVos;
     }
 
+    /**
+     * 提交代码
+     *
+     * @param id       比赛id
+     * @param submitVo 提交情况
+     * @return 结果
+     */
+    @Override
+    public Object submit(Long id, SubmitVo submitVo) {
+        SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
+        RunResult result = (RunResult) problemService.submit(submitVo);
+        ContestSubmit contestSubmit = new ContestSubmit();
+        contestSubmit.setContestsId(id);
+        contestSubmit.setProblemId(Long.valueOf(submitVo.getProblemId()));
+        contestSubmit.setRunTime(result.getRunTime());
+        contestSubmit.setRunMemory(result.getRunMemory());
+        contestSubmit.setCodeLang(submitVo.getCodeLang());
+        contestSubmit.setAuthorId(sysUser.getId());
+        if ("AC".equals(result.getVerdict())) {
+            contestSubmit.setStatus(1);
+        } else {
+            contestSubmit.setStatus(0);
+        }
+        contestSubmitMapper.insert(contestSubmit);
+        return result;
+    }
 
 }

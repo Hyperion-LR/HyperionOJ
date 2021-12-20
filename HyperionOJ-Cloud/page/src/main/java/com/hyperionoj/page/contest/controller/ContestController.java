@@ -2,9 +2,10 @@ package com.hyperionoj.page.contest.controller;
 
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.service.ContestService;
-import com.hyperionoj.page.contest.vo.ContestPageParams;
 import com.hyperionoj.page.contest.vo.ContestVo;
+import com.hyperionoj.page.problem.vo.ProblemVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -62,33 +63,69 @@ public class ContestController {
     /**
      * 获取已经结束的比赛列表
      *
-     * @param contestPageParams 比赛的分页参数
+     * @param pageParams 比赛的分页参数
      * @return 返回分页查询
      */
     @GetMapping("/endList")
-    public Result getEndContestList(@RequestBody ContestPageParams contestPageParams) {
-        return Result.success(contestService.getEndContestList(contestPageParams));
+    public Result getEndContestList(@RequestBody PageParams pageParams) {
+        return Result.success(contestService.getEndContestList(pageParams));
     }
 
     /**
      * 获取还未开始的比赛列表
      *
-     * @param contestPageParams 比赛的分页参数
+     * @param pageParams 比赛的分页参数
      * @return 返回分页查询
      */
     @GetMapping("/notStartList")
-    public Result getNotStartContestList(@RequestBody ContestPageParams contestPageParams) {
-        return Result.success(contestService.getNotStartContestList(contestPageParams));
+    public Result getNotStartContestList(@RequestBody PageParams pageParams) {
+        return Result.success(contestService.getNotStartContestList(pageParams));
     }
 
     /**
      * 获取正在进行的比赛列表
      *
-     * @param contestPageParams 比赛的分页参数
+     * @param pageParams 比赛的分页参数
      * @return 返回分页查询
      */
     @GetMapping("/proceedList")
-    public Result getProceedContestList(@RequestBody ContestPageParams contestPageParams) {
-        return Result.success(contestService.getProceedContestList(contestPageParams));
+    public Result getProceedContestList(@RequestBody PageParams pageParams) {
+        return Result.success(contestService.getProceedContestList(pageParams));
     }
+
+    /**
+     * 往比赛添加题目
+     *
+     * @param id        比赛id
+     * @param problemVo 题目数据
+     * @return 题目列表
+     */
+    @PostMapping("/add/{id}")
+    public Result addProblem(@PathVariable("id") Long id, ProblemVo problemVo) {
+        return Result.success(contestService.addProblem(id, problemVo));
+    }
+
+    /**
+     * 从比赛删除题目
+     *
+     * @param id        比赛id
+     * @param problemVo 题目数据
+     * @return 题目列表
+     */
+    @PostMapping("/remove/{id}")
+    public Result removeProblem(@PathVariable("id") Long id, ProblemVo problemVo) {
+        return Result.success(contestService.removeProblem(id, problemVo));
+    }
+
+    /**
+     * 获取相应比赛的题目列表
+     *
+     * @param id 比赛id
+     * @return 题目列表
+     */
+    @PostMapping("/get/{id}")
+    public Result getProblemList(@PathVariable("id") Long id) {
+        return Result.success(contestService.getProblemList(id));
+    }
+
 }

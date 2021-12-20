@@ -1,21 +1,26 @@
 package com.hyperionoj.page.contest.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyperionoj.common.service.RedisSever;
+import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.dao.mapper.ContestMapper;
+import com.hyperionoj.page.contest.dao.mapper.ContestProblemMapper;
 import com.hyperionoj.page.contest.dao.pojo.Contest;
+import com.hyperionoj.page.contest.dao.pojo.ContestProblem;
 import com.hyperionoj.page.contest.service.ContestService;
-import com.hyperionoj.page.contest.vo.ContestPageParams;
 import com.hyperionoj.page.contest.vo.ContestVo;
+import com.hyperionoj.page.problem.service.ProblemService;
+import com.hyperionoj.page.problem.vo.ProblemVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hyperionoj.common.constants.Constants.SALT;
@@ -30,10 +35,13 @@ public class ContestServiceImpl implements ContestService {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm");
 
     @Resource
-    private RedisSever redisSever;
+    private ContestMapper contestMapper;
 
     @Resource
-    private ContestMapper contestMapper;
+    private ContestProblemMapper contestProblemMapper;
+
+    @Resource
+    private ProblemService problemService;
 
     /**
      * 创建比赛
@@ -85,7 +93,7 @@ public class ContestServiceImpl implements ContestService {
      * @return 比赛列表
      */
     @Override
-    public List<Contest> getEndContestList(ContestPageParams contestPageParams) {
+    public List<Contest> getEndContestList(PageParams contestPageParams) {
         Page<Contest> page = new Page<>(contestPageParams.getPage(), contestPageParams.getPageSize());
         QueryWrapper<Contest> queryWrapper = new QueryWrapper<>();
         queryWrapper.lt("end_time", System.currentTimeMillis() / 1000).orderByAsc("end_time");
@@ -101,7 +109,7 @@ public class ContestServiceImpl implements ContestService {
      * @return 比赛
      */
     @Override
-    public List<Contest> getNotStartContestList(ContestPageParams contestPageParams) {
+    public List<Contest> getNotStartContestList(PageParams contestPageParams) {
         Page<Contest> page = new Page<>(contestPageParams.getPage(), contestPageParams.getPageSize());
         QueryWrapper<Contest> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("start_time", System.currentTimeMillis() / 1000).orderByDesc("start_time");
@@ -116,7 +124,7 @@ public class ContestServiceImpl implements ContestService {
      * @return 比赛列表
      */
     @Override
-    public List<Contest> getProceedContestList(ContestPageParams contestPageParams) {
+    public List<Contest> getProceedContestList(PageParams contestPageParams) {
         Page<Contest> page = new Page<>(contestPageParams.getPage(), contestPageParams.getPageSize());
         QueryWrapper<Contest> queryWrapper = new QueryWrapper<>();
         queryWrapper.le("start_time", System.currentTimeMillis() / 1000)
@@ -124,6 +132,56 @@ public class ContestServiceImpl implements ContestService {
                 .orderByAsc("start_time");
         Page<Contest> contestPage = contestMapper.selectPage(page, queryWrapper);
         return contestPage.getRecords();
+    }
+
+    /**
+     * 添加题目
+     *
+     * @param id        比赛id
+     * @param problemVo 题目数据
+     * @return 该比赛下题目列表
+     */
+    @Override
+    public List<ProblemVo> addProblem(Long id, ProblemVo problemVo) {
+        ContestProblem contestProblem = new ContestProblem();
+        contestProblem.setProblemId(id);
+        contestProblem.setProblemId(Long.valueOf(problemVo.getId()));
+        contestProblemMapper.insert(contestProblem);
+        return getProblemList(id);
+    }
+
+    /**
+     * 从比赛删除题目
+     *
+     * @param id        比赛id
+     * @param problemVo 题目数据
+     * @return 题目列表
+     */
+    @Override
+    public List<ProblemVo> removeProblem(Long id, ProblemVo problemVo) {
+        LambdaQueryWrapper<ContestProblem> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ContestProblem::getContestsId, id);
+        queryWrapper.eq(ContestProblem::getProblemId, problemVo.getId());
+        contestProblemMapper.delete(queryWrapper);
+        return getProblemList(id);
+    }
+
+    /**
+     * 获取相应比赛的题目列表
+     *
+     * @param id 比赛id
+     * @return 题目列表
+     */
+    @Override
+    public List<ProblemVo> getProblemList(Long id) {
+        LambdaQueryWrapper<ContestProblem> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ContestProblem::getContestsId, id);
+        List<ContestProblem> contestProblems = contestProblemMapper.selectList(queryWrapper);
+        ArrayList<ProblemVo> problemVos = new ArrayList<>();
+        for (ContestProblem contestProblem : contestProblems) {
+            problemVos.add(problemService.getProblemById(contestProblem.getProblemId()));
+        }
+        return problemVos;
     }
 
 

@@ -3,6 +3,7 @@ package com.hyperionoj.page.contest.service;
 import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.vo.ContestVo;
+import com.hyperionoj.page.problem.vo.SubmitVo;
 
 import java.util.List;
 
@@ -35,5 +36,14 @@ public interface ContestUserService {
      * @param contestVo 比赛信息
      * @return 用户信息
      */
-    Object addUserToContest(ContestVo contestVo);
+    SysUserVo addUserToContest(ContestVo contestVo);
+
+    /**
+     * 提交代码
+     *
+     * @param submitVo 提交情况
+     * @param id       比赛id
+     * @return 结果
+     */
+    Object submit(Long id, SubmitVo submitVo);
 }

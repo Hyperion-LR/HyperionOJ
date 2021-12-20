@@ -1,9 +1,9 @@
-package com.hyperionoj.page.contest.vo;
+package com.hyperionoj.page.contest.vo.params;
 
 import lombok.Data;
 
 @Data
-public class ContestProblemPageParams {
+public class ContestUserPageParams {
     /**
      * 页数
      */
@@ -18,5 +18,4 @@ public class ContestProblemPageParams {
      * 比赛id
      */
     private String contestsId;
-
 }

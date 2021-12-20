@@ -10,7 +10,6 @@ import lombok.Data;
 @Data
 public class ContestVo {
 
-
     private String id;
 
     private String title;
