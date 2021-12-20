@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hyperionoj.common.service.RedisSever;
+import com.hyperionoj.common.vo.ArticleVo;
 import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.ProblemVo;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.page.article.dao.mapper.ArticleMapper;
+import com.hyperionoj.page.article.dao.pojo.Article;
 import com.hyperionoj.page.problem.dao.mapper.ProblemCommentMapper;
 import com.hyperionoj.page.problem.dao.mapper.ProblemMapper;
 import com.hyperionoj.page.problem.dao.pojo.Problem;
@@ -37,6 +40,9 @@ public class CacheScheduled {
 
     @Resource
     private ProblemMapper problemMapper;
+
+    @Resource
+    private ArticleMapper articleMapper;
 
     /**
      * 新建一个线程回写数据库评论信息
@@ -79,6 +85,37 @@ public class CacheScheduled {
             updateWrapper.set(Problem::getSubmitNumber, problemVo.getSubmitNumber());
             updateWrapper.set(Problem::getAcNumber, problemVo.getAcNumber());
             problemMapper.update(null, updateWrapper);
+        }
+    }
+
+    /**
+     * 新建一个线程回写文章
+     */
+    @Scheduled(fixedRate = 20 * 1000)
+    @Async("taskExecutor")
+    public void updateArticle() {
+        String redisKeyPrefix = "article" + ":" +
+                ARTICLE_CONTROLLER + ":" +
+                "findArticleById" + ":*";
+        Set<String> keys = redisSever.getKeys(redisKeyPrefix);
+        for (String key : keys) {
+            Result result = JSONObject.parseObject(redisSever.getRedisKV(key), Result.class);
+            ArticleVo articleVo = JSONObject.parseObject(JSONObject.toJSONString(result.getData()), ArticleVo.class);
+            LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(Article::getId, articleVo.getId());
+            if (articleVo.getViewCounts() != null) {
+                updateWrapper.set(Article::getViewCount, articleVo.getViewCounts());
+            }
+            if (articleVo.getCommentCounts() != null) {
+                updateWrapper.set(Article::getCommentCount, articleVo.getCommentCounts());
+            }
+            if (articleVo.getSupport() != null) {
+                updateWrapper.set(Article::getSupport, articleVo.getSupport());
+            }
+            if (articleVo.getWeight() != null) {
+                updateWrapper.set(Article::getWeight, articleVo.getWeight());
+            }
+            articleMapper.update(null, updateWrapper);
         }
     }
 

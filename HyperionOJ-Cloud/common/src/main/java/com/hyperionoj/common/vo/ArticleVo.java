@@ -24,13 +24,13 @@ public class ArticleVo {
      */
     private String createDate;
 
-    private Integer commentCounts;
+    private Integer commentCounts = 0;
 
-    private Integer viewCounts;
+    private Integer viewCounts = 0;
 
-    private Integer support;
+    private Integer support = 0;
 
-    private Integer weight;
+    private Integer weight = 0;
 
     private ArticleBodyVo body;
 

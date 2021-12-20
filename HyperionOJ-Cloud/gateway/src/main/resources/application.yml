@@ -30,7 +30,7 @@ spring:
         - id: page-service
           uri: lb://page
           predicates:
-            - Path=/problem/**, /article/**, /contests/**,/school/**
+            - Path=/problem/**, /article/**, /contests/**,/school/**,/contest/**
         - id: admin-service
           uri: lb://admin
           predicates:
@@ -39,12 +39,6 @@ spring:
           uri: lb://common
           predicates:
             - Path=/upload/**
-        - id: finduser-service
-          uri: lb://consumer
-          predicates:
-            - Path=/findUserById/*
-          filters:
-            - RewritePath=/findUserById/(?<segment>.*),/ping/userId/$\{segment}
       default-filters:
       globalcors:
         add-to-simple-url-handler-mapping: true

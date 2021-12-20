@@ -176,7 +176,7 @@ public class CacheAspect {
             result.setData((Integer) result.getData() + 1);
         }
 
-        redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result));
+        redisSever.setRedisKV(redisKey, JSONObject.toJSONString(result), time);
         return result;
     }
 }

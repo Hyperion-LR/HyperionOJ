@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @date 2021/12/13
  */
 @Component
-public class ScheduledTask {
+public class SqlScheduled {
 
     @Resource
     private ProblemCommentMapper problemCommentMapper;

@@ -161,11 +161,12 @@ public class ProblemController {
     /**
      * 获取最近的题目数量
      *
-     * @return
+     * @param id 用户id缓存用
+     * @return 数量列表
      */
     @GetMapping("/everyday/{id}")
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 15 * 60 * 1000)
-    public Result getEveryday(@PathVariable("/id") String id) {
+    public Result getEveryday(@PathVariable("id") String id) {
         return Result.success(problemService.getEveryday());
     }
 

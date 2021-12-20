@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/destroy")
                 .addPathPatterns("/problem/submit")
                 .addPathPatterns("/problem/comment")
-                .addPathPatterns("/problem/everyday")
+                .addPathPatterns("/problem/everyday/**")
                 .addPathPatterns("/article/publish")
                 .addPathPatterns("/article/comments/comment")
                 .addPathPatterns("/article/admin/**")
