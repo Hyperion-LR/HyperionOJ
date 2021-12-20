@@ -163,9 +163,9 @@ public class ProblemController {
      *
      * @return
      */
-    @GetMapping("/everyday")
+    @GetMapping("/everyday/{id}")
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 15 * 60 * 1000)
-    public Result getEveryday() {
+    public Result getEveryday(@PathVariable("/id") String id) {
         return Result.success(problemService.getEveryday());
     }
 

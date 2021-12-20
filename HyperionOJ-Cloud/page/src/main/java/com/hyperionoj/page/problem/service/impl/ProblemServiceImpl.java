@@ -1,5 +1,6 @@
 package com.hyperionoj.page.problem.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -171,6 +172,7 @@ public class ProblemServiceImpl implements ProblemService {
             problemVo.setSubmitNumber(problemVo.getSubmitNumber() + 1);
             if (result.getVerdict().equals(AC)) {
                 problemVo.setAcNumber(problemVo.getAcNumber() + 1);
+                this.updateEverydayCache(JSONObject.toJSONString(sysUser.getId()));
             }
             this.updateProblemCache(problemVo);
             result.setSubmitTime(submitVo.getCreateTime());
@@ -588,6 +590,40 @@ public class ProblemServiceImpl implements ProblemService {
                 GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(problemVo.getId());
         redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
+    }
+
+    private void updateEverydayCache(String id) {
+
+        String everydayRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
+                PROBLEM_CONTROLLER + ":" +
+                "getEveryday" + ":" +
+                DigestUtils.md5Hex(id);
+        List<ProblemArchives> problemArchives = JSONArray.parseArray(redisSever.getRedisKV(everydayRedisKey), ProblemArchives.class);
+        long now = System.currentTimeMillis();
+        if (problemArchives == null) {
+            problemArchives = new ArrayList<>();
+            ProblemArchives today = new ProblemArchives();
+            today.setCount(1);
+            today.setYear(Integer.valueOf(new SimpleDateFormat("yyyy").format(now)));
+            today.setMonth(Integer.valueOf(new SimpleDateFormat("MM").format(now)));
+            today.setDay(Integer.valueOf(new SimpleDateFormat("dd").format(now)));
+            problemArchives.add(today);
+        } else {
+            ProblemArchives last = problemArchives.get(problemArchives.size());
+            if (last.getYear().equals(Integer.valueOf(new SimpleDateFormat("yyyy").format(now))) &&
+                    last.getMonth().equals(Integer.valueOf(new SimpleDateFormat("MM").format(now))) &&
+                    last.getDay().equals(Integer.valueOf(new SimpleDateFormat("dd").format(now)))) {
+                last.setCount(last.getCount() + 1);
+            } else {
+                ProblemArchives today = new ProblemArchives();
+                today.setYear(Integer.valueOf(new SimpleDateFormat("yyyy").format(now)));
+                today.setMonth(Integer.valueOf(new SimpleDateFormat("MM").format(now)));
+                today.setDay(Integer.valueOf(new SimpleDateFormat("dd").format(now)));
+                today.setCount(1);
+                problemArchives.add(today);
+            }
+        }
+        redisSever.setRedisKV(everydayRedisKey, JSONObject.toJSONString(problemArchives));
     }
 
     /**
