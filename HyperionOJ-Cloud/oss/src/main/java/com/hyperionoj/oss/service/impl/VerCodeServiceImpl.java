@@ -55,6 +55,6 @@ public class VerCodeServiceImpl implements VerCodeService {
     @Override
     public boolean checkCode(String userMail, String code) {
         String redisCode = redisSever.getRedisKV(VER_CODE + userMail);
-        return StringUtils.compare(code, redisCode) == 0;
+        return StringUtils.compare(DigestUtils.md5Hex(code + SALT), redisCode) == 0;
     }
 }

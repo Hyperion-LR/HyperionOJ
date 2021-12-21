@@ -1,9 +1,9 @@
 package com.hyperionoj.page.contest.service;
 
-import com.hyperionoj.common.vo.SysUserVo;
-import com.hyperionoj.page.common.vo.params.PageParams;
-import com.hyperionoj.page.contest.vo.ContestVo;
-import com.hyperionoj.page.problem.vo.SubmitVo;
+import com.hyperionoj.common.vo.page.ContestVo;
+import com.hyperionoj.common.vo.page.SubmitVo;
+import com.hyperionoj.common.vo.page.SysUserVo;
+import com.hyperionoj.common.vo.params.PageParams;
 
 import java.util.List;
 

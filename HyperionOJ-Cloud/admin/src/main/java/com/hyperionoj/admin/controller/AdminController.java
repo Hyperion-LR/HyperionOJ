@@ -8,7 +8,7 @@ import com.hyperionoj.common.feign.AdminClients;
 import com.hyperionoj.common.vo.AdminVo;
 import com.hyperionoj.common.vo.RegisterParam;
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.common.vo.SysUserVo;
+import com.hyperionoj.common.vo.page.SysUserVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

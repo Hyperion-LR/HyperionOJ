@@ -5,16 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
-import com.hyperionoj.common.vo.SysUserVo;
+import com.hyperionoj.common.vo.page.*;
 import com.hyperionoj.page.problem.service.ProblemService;
-import com.hyperionoj.page.problem.vo.ProblemVo;
-import com.hyperionoj.page.problem.vo.RunResult;
-import com.hyperionoj.page.problem.vo.SubmitVo;
 import com.hyperionoj.page.school.dao.mapper.*;
 import com.hyperionoj.page.school.dao.pojo.*;
 import com.hyperionoj.page.school.service.StudentService;
-import com.hyperionoj.page.school.vo.SysClassVo;
-import com.hyperionoj.page.school.vo.SysHomeworkVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

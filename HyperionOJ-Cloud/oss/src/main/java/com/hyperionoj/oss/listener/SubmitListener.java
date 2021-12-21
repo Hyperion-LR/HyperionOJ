@@ -1,7 +1,7 @@
 package com.hyperionoj.oss.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.common.vo.UpdateSubmitVo;
+import com.hyperionoj.common.vo.page.UpdateSubmitVo;
 import com.hyperionoj.oss.dao.mapper.sys.SysUserMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;

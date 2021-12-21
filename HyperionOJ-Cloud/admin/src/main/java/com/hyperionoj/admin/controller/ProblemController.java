@@ -2,10 +2,10 @@ package com.hyperionoj.admin.controller;
 
 import com.hyperionoj.admin.aop.PermissionAnnotation;
 import com.hyperionoj.common.feign.AdminPageClients;
-import com.hyperionoj.common.vo.CommentVo;
-import com.hyperionoj.common.vo.ProblemCategoryVo;
-import com.hyperionoj.common.vo.ProblemVo;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.page.CategoryVo;
+import com.hyperionoj.common.vo.page.CommentVo;
+import com.hyperionoj.common.vo.page.ProblemVo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +33,7 @@ public class ProblemController {
      */
     @PermissionAnnotation(level = 2)
     @RequestMapping(value = "/add/problem/category", method = RequestMethod.POST)
-    public Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
+    public Result addProblemCategory(@RequestBody CategoryVo problemCategoryVo) {
         return adminPageClients.addProblemCategory(problemCategoryVo);
     }
 
@@ -44,7 +44,7 @@ public class ProblemController {
      */
     @PermissionAnnotation(level = 2)
     @RequestMapping(value = "/delete/problem/category", method = RequestMethod.DELETE)
-    public Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
+    public Result deleteProblemCategory(@RequestBody CategoryVo problemCategoryVo) {
         return adminPageClients.deleteProblemCategory(problemCategoryVo);
     }
 

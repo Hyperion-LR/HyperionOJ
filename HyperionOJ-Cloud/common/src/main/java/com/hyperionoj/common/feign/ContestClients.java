@@ -1,7 +1,7 @@
 package com.hyperionoj.common.feign;
 
-import com.hyperionoj.common.vo.ContestVo;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.page.ContestVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

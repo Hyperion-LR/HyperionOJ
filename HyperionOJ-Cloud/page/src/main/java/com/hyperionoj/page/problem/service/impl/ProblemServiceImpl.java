@@ -10,22 +10,17 @@ import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
-import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.common.vo.SysUserVo;
-import com.hyperionoj.common.vo.UpdateSubmitVo;
+import com.hyperionoj.common.vo.page.*;
+import com.hyperionoj.common.vo.params.PageParams;
 import com.hyperionoj.page.common.dao.mapper.CategoryMapper;
 import com.hyperionoj.page.common.dao.mapper.TagMapper;
 import com.hyperionoj.page.common.dao.pojo.PageCategory;
 import com.hyperionoj.page.common.dao.pojo.PageTag;
-import com.hyperionoj.page.common.vo.CategoryVo;
-import com.hyperionoj.page.common.vo.TagVo;
-import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.problem.dao.dos.ProblemArchives;
 import com.hyperionoj.page.problem.dao.mapper.*;
 import com.hyperionoj.page.problem.dao.pojo.*;
 import com.hyperionoj.page.problem.service.ProblemService;
-import com.hyperionoj.page.problem.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -252,15 +247,23 @@ public class ProblemServiceImpl implements ProblemService {
         problem.setCaseNumber(problemVo.getCaseNumber());
         if (problemVo.getAcNumber() == null) {
             problem.setAcNumber(0);
+        } else {
+            problem.setAcNumber(problemVo.getAcNumber());
         }
         if (problemVo.getSubmitNumber() == null) {
             problem.setSubmitNumber(0);
+        } else {
+            problem.setSubmitNumber(problemVo.getSubmitNumber());
         }
         if (problemVo.getSolutionNumber() == null) {
             problem.setSolutionNumber(0);
+        } else {
+            problem.setSolutionNumber(problemVo.getSolutionNumber());
         }
         if (problemVo.getCommentNumber() == null) {
             problem.setCommentNumber(0);
+        } else {
+            problem.setCommentNumber(problemVo.getCommentNumber());
         }
         return problem;
     }
@@ -283,22 +286,22 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 题目所有类别
      */
     @Override
-    public List<ProblemCategoryVo> getCategory() {
+    public List<CategoryVo> getCategory() {
         LambdaQueryWrapper<PageCategory> queryWrapper = new LambdaQueryWrapper<>();
         List<PageCategory> problemCategories = problemCategoryMapper.selectList(queryWrapper);
         return problemCategoryToVoList(problemCategories);
     }
 
-    private List<ProblemCategoryVo> problemCategoryToVoList(List<PageCategory> problemCategories) {
-        ArrayList<ProblemCategoryVo> problemCategoryVos = new ArrayList<>();
+    private List<CategoryVo> problemCategoryToVoList(List<PageCategory> problemCategories) {
+        ArrayList<CategoryVo> problemCategoryVos = new ArrayList<>();
         for (PageCategory category : problemCategories) {
             problemCategoryVos.add(problemCategoryToVo(category));
         }
         return problemCategoryVos;
     }
 
-    private ProblemCategoryVo problemCategoryToVo(PageCategory category) {
-        ProblemCategoryVo problemCategoryVo = new ProblemCategoryVo();
+    private CategoryVo problemCategoryToVo(PageCategory category) {
+        CategoryVo problemCategoryVo = new CategoryVo();
         problemCategoryVo.setId(category.getId().toString());
         problemCategoryVo.setCategoryName(category.getCategoryName());
         problemCategoryVo.setDescription(category.getDescription());
@@ -483,7 +486,7 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 分类情况
      */
     @Override
-    public ProblemCategoryVo addCategory(ProblemCategoryVo problemCategoryVo) {
+    public CategoryVo addCategory(CategoryVo problemCategoryVo) {
         PageCategory category = new PageCategory();
         BeanUtils.copyProperties(problemCategoryVo, category);
         problemCategoryMapper.insert(category);
@@ -497,7 +500,7 @@ public class ProblemServiceImpl implements ProblemService {
      * @param problemCategoryVo 分类参数
      */
     @Override
-    public void deleteCategory(ProblemCategoryVo problemCategoryVo) {
+    public void deleteCategory(CategoryVo problemCategoryVo) {
         problemCategoryMapper.deleteById(problemCategoryVo.getId());
     }
 

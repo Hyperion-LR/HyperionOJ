@@ -1,10 +1,10 @@
 package com.hyperionoj.page.contest.service;
 
 
-import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.common.vo.page.ContestVo;
+import com.hyperionoj.common.vo.page.ProblemVo;
+import com.hyperionoj.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.dao.pojo.Contest;
-import com.hyperionoj.page.contest.vo.ContestVo;
-import com.hyperionoj.page.problem.vo.ProblemVo;
 
 import java.text.ParseException;
 import java.util.List;

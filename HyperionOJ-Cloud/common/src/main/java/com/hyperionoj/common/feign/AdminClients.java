@@ -3,7 +3,7 @@ package com.hyperionoj.common.feign;
 import com.hyperionoj.common.vo.AdminVo;
 import com.hyperionoj.common.vo.RegisterParam;
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.common.vo.SysUserVo;
+import com.hyperionoj.common.vo.page.SysUserVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

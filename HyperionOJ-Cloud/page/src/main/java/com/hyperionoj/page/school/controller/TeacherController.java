@@ -2,10 +2,10 @@ package com.hyperionoj.page.school.controller;
 
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.params.SysClassParam;
+import com.hyperionoj.common.vo.params.SysHomeworkParam;
 import com.hyperionoj.page.school.service.StudentService;
 import com.hyperionoj.page.school.service.TeacherService;
-import com.hyperionoj.page.school.vo.params.SysClassParam;
-import com.hyperionoj.page.school.vo.params.SysHomeworkParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

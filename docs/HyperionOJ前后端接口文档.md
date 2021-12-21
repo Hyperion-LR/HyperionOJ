@@ -288,8 +288,8 @@ file:本地文件
     "data": {
         "id": 1234,
         "name": "Hyperion",
-        "password": "083f3977344768987d0e1d315b358f90",
-        "permissionLevel": 1,
+        "password": null,
+        "permissionLevel": 2,
         "salt": "HyperionOJ"
     },
     "msg": null
@@ -404,7 +404,7 @@ file:本地文件
 
 ### 增加题库分类
 
-接口url：localhost:9000/admin/add/problem/category
+接口url：localhost:9000/admin/problem/add/problem/category
 
 请求方式： post
 
@@ -435,7 +435,7 @@ file:本地文件
 
 ### 删除题库分类
 
-接口url：localhost:9000/admin/delete/problem/category
+接口url：localhost:9000/admin/problem/delete/problem/category
 
 请求方式： delete
 

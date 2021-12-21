@@ -1,10 +1,10 @@
 package com.hyperionoj.page.problem.controller;
 
-import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.page.CategoryVo;
+import com.hyperionoj.common.vo.page.CommentVo;
+import com.hyperionoj.common.vo.page.ProblemVo;
 import com.hyperionoj.page.problem.service.ProblemService;
-import com.hyperionoj.page.problem.vo.ProblemCategoryVo;
-import com.hyperionoj.page.problem.vo.ProblemVo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +30,7 @@ public class AdminProblemController {
      * @return 分类情况
      */
     @RequestMapping(value = "/add/problem/category", method = RequestMethod.POST)
-    public Result addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
+    public Result addProblemCategory(@RequestBody CategoryVo problemCategoryVo) {
         return Result.success(problemService.addCategory(problemCategoryVo));
     }
 
@@ -40,7 +40,7 @@ public class AdminProblemController {
      * @param problemCategoryVo 分类参数
      */
     @RequestMapping(value = "/delete/problem/category", method = RequestMethod.DELETE)
-    public Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo) {
+    public Result deleteProblemCategory(@RequestBody CategoryVo problemCategoryVo) {
         problemService.deleteCategory(problemCategoryVo);
         return Result.success(null);
     }

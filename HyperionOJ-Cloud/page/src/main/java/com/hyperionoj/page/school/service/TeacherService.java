@@ -1,10 +1,10 @@
 package com.hyperionoj.page.school.service;
 
-import com.hyperionoj.page.problem.vo.SubmitVo;
-import com.hyperionoj.page.school.vo.SysClassVo;
-import com.hyperionoj.page.school.vo.SysHomeworkVo;
-import com.hyperionoj.page.school.vo.params.SysClassParam;
-import com.hyperionoj.page.school.vo.params.SysHomeworkParam;
+import com.hyperionoj.common.vo.page.SubmitVo;
+import com.hyperionoj.common.vo.page.SysClassVo;
+import com.hyperionoj.common.vo.page.SysHomeworkVo;
+import com.hyperionoj.common.vo.params.SysClassParam;
+import com.hyperionoj.common.vo.params.SysHomeworkParam;
 
 import java.text.ParseException;
 import java.util.List;

@@ -2,9 +2,9 @@ package com.hyperionoj.page.school.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.vo.Result;
-import com.hyperionoj.page.problem.vo.SubmitVo;
+import com.hyperionoj.common.vo.page.SubmitVo;
+import com.hyperionoj.common.vo.page.SysClassVo;
 import com.hyperionoj.page.school.service.StudentService;
-import com.hyperionoj.page.school.vo.SysClassVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

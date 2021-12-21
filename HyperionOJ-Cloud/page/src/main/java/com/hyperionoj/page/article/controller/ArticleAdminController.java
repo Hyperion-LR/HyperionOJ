@@ -1,9 +1,9 @@
 package com.hyperionoj.page.article.controller;
 
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.params.ArticleParam;
+import com.hyperionoj.common.vo.params.CommentParam;
 import com.hyperionoj.page.article.service.ArticleService;
-import com.hyperionoj.page.article.vo.params.ArticleParam;
-import com.hyperionoj.page.article.vo.params.CommentParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

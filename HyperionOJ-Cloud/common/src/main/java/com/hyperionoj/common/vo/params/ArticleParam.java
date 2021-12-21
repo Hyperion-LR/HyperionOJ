@@ -1,7 +1,7 @@
 package com.hyperionoj.common.vo.params;
 
-import com.hyperionoj.common.vo.CategoryVo;
-import com.hyperionoj.common.vo.TagVo;
+import com.hyperionoj.common.vo.page.CategoryVo;
+import com.hyperionoj.common.vo.page.TagVo;
 import lombok.Data;
 
 import java.util.List;

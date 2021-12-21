@@ -1,11 +1,11 @@
 package com.hyperionoj.page.problem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hyperionoj.common.vo.page.TagVo;
 import com.hyperionoj.page.article.dao.mapper.ArticleTagMapper;
 import com.hyperionoj.page.article.dao.pojo.ArticleArticleTag;
 import com.hyperionoj.page.common.dao.mapper.TagMapper;
 import com.hyperionoj.page.common.dao.pojo.PageTag;
-import com.hyperionoj.page.common.vo.TagVo;
 import com.hyperionoj.page.problem.service.ProblemTagsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

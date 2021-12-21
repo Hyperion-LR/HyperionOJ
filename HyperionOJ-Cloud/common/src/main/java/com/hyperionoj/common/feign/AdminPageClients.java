@@ -1,10 +1,10 @@
 package com.hyperionoj.common.feign;
 
 import com.hyperionoj.common.pojo.SysUser;
-import com.hyperionoj.common.vo.CommentVo;
-import com.hyperionoj.common.vo.ProblemCategoryVo;
-import com.hyperionoj.common.vo.ProblemVo;
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.page.CategoryVo;
+import com.hyperionoj.common.vo.page.CommentVo;
+import com.hyperionoj.common.vo.page.ProblemVo;
 import com.hyperionoj.common.vo.params.ArticleParam;
 import com.hyperionoj.common.vo.params.CommentParam;
 import com.hyperionoj.common.vo.params.SysClassParam;
@@ -26,7 +26,7 @@ public interface AdminPageClients {
      * @return 分类情况
      */
     @RequestMapping(value = "/problem/admin/add/problem/category", method = RequestMethod.POST, consumes = "application/json")
-    Result<Object> addProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo);
+    Result<Object> addProblemCategory(@RequestBody CategoryVo problemCategoryVo);
 
     /**
      * 删除题目分类
@@ -35,7 +35,7 @@ public interface AdminPageClients {
      * @return null
      */
     @RequestMapping(value = "/problem/admin/delete/problem/category", method = RequestMethod.DELETE, consumes = "application/json")
-    Result deleteProblemCategory(@RequestBody ProblemCategoryVo problemCategoryVo);
+    Result deleteProblemCategory(@RequestBody CategoryVo problemCategoryVo);
 
     /**
      * 添加题目

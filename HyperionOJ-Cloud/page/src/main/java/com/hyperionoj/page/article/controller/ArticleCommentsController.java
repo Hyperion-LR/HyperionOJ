@@ -1,8 +1,8 @@
 package com.hyperionoj.page.article.controller;
 
 import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.common.vo.params.CommentParam;
 import com.hyperionoj.page.article.service.ArticleCommentService;
-import com.hyperionoj.page.article.vo.params.CommentParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

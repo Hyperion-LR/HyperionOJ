@@ -5,15 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.common.vo.page.ContestVo;
+import com.hyperionoj.common.vo.page.ProblemVo;
+import com.hyperionoj.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.dao.mapper.ContestMapper;
 import com.hyperionoj.page.contest.dao.mapper.ContestProblemMapper;
 import com.hyperionoj.page.contest.dao.pojo.Contest;
 import com.hyperionoj.page.contest.dao.pojo.ContestProblem;
 import com.hyperionoj.page.contest.service.ContestService;
-import com.hyperionoj.page.contest.vo.ContestVo;
 import com.hyperionoj.page.problem.service.ProblemService;
-import com.hyperionoj.page.problem.vo.ProblemVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 

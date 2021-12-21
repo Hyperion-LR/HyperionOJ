@@ -1,7 +1,7 @@
 package com.hyperionoj.page.problem.service;
 
+import com.hyperionoj.common.vo.page.CategoryVo;
 import com.hyperionoj.page.common.dao.pojo.PageCategory;
-import com.hyperionoj.page.common.vo.CategoryVo;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.hyperionoj.common.vo.params;
 
-import com.hyperionoj.common.vo.ProblemVo;
+import com.hyperionoj.common.vo.page.ProblemVo;
 import lombok.Data;
 
 import java.util.List;

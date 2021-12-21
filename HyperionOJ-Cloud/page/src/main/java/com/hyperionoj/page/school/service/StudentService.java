@@ -1,9 +1,9 @@
 package com.hyperionoj.page.school.service;
 
-import com.hyperionoj.page.problem.vo.SubmitVo;
+import com.hyperionoj.common.vo.page.SubmitVo;
+import com.hyperionoj.common.vo.page.SysClassVo;
+import com.hyperionoj.common.vo.page.SysHomeworkVo;
 import com.hyperionoj.page.school.dao.pojo.SysHomework;
-import com.hyperionoj.page.school.vo.SysClassVo;
-import com.hyperionoj.page.school.vo.SysHomeworkVo;
 
 import java.util.List;
 

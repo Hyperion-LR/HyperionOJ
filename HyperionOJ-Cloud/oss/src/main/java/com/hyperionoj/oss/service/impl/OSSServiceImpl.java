@@ -2,7 +2,6 @@ package com.hyperionoj.oss.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.common.constants.Constants;
 import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.JWTUtils;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
@@ -21,9 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import static com.hyperionoj.common.constants.Constants.TOKEN;
-import static com.hyperionoj.common.constants.Constants.VER_CODE;
-import static com.sun.javafx.font.FontResource.SALT;
+import static com.hyperionoj.common.constants.Constants.*;
 
 /**
  * @author Hyperion
@@ -81,7 +78,7 @@ public class OSSServiceImpl implements OSSService {
             return null;
         }
         Admin admin = adminService.findAdmin(account);
-        password = DigestUtils.md5Hex(password + Constants.SALT);
+        password = DigestUtils.md5Hex(password + SALT);
         if (admin != null && StringUtils.compare(admin.getPassword(), password) == 0) {
             String token = JWTUtils.createToken(admin.getId(), 24 * 60 * 60);
             redisSever.setRedisKV(TOKEN + token, JSON.toJSONString(admin), 3600);
@@ -159,6 +156,7 @@ public class OSSServiceImpl implements OSSService {
         }
         Admin admin = copyRegisterParamToAdmin(registerParam);
         adminService.addAdmin(admin);
+        admin.setPassword(null);
         return admin;
     }
 
@@ -175,9 +173,10 @@ public class OSSServiceImpl implements OSSService {
             return null;
         }
         admin.setName(registerParam.getName());
-        admin.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + Constants.SALT));
+        admin.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + SALT));
         admin.setPermissionLevel(registerParam.getPermissionLevel());
         adminService.updateAdmin(admin);
+        admin.setPassword(null);
         return admin;
     }
 
@@ -215,7 +214,7 @@ public class OSSServiceImpl implements OSSService {
         sysUser.setProblemAcNumber(0);
         sysUser.setProblemSubmitAcNumber(0);
         sysUser.setProblemSubmitNumber(0);
-        sysUser.setSalt(Constants.SALT);
+        sysUser.setSalt(SALT);
         sysUser.setStatus(0);
         return sysUser;
     }
@@ -223,10 +222,10 @@ public class OSSServiceImpl implements OSSService {
     private Admin copyRegisterParamToAdmin(RegisterAdminParam registerParam) {
         Admin admin = new Admin();
         admin.setId(Long.parseLong(registerParam.getId()));
-        admin.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + Constants.SALT));
+        admin.setPassword(DigestUtils.md5Hex(registerParam.getPassword() + SALT));
         admin.setName(registerParam.getName());
         admin.setPermissionLevel(registerParam.getPermissionLevel());
-        admin.setSalt(Constants.SALT);
+        admin.setSalt(SALT);
         return admin;
     }
 }

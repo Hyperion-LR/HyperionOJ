@@ -1,7 +1,7 @@
 package com.hyperionoj.page.article.service;
 
-import com.hyperionoj.common.vo.CommentVo;
-import com.hyperionoj.page.article.vo.params.CommentParam;
+import com.hyperionoj.common.vo.page.CommentVo;
+import com.hyperionoj.common.vo.params.CommentParam;
 
 import java.util.List;
 
