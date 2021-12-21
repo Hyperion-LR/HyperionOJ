@@ -28,10 +28,6 @@ public class Contest {
 
     private Integer realNumber;
 
-    private Integer submitNumber;
-
-    private Integer acNumber;
-
     private String password;
 
 }

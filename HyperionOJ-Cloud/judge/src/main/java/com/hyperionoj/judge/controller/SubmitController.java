@@ -1,11 +1,12 @@
 package com.hyperionoj.judge.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.judge.service.SubmitService;
 import com.hyperionoj.judge.vo.SubmitVo;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -22,8 +23,8 @@ public class SubmitController {
     private SubmitService submitService;
 
     @PostMapping
-    public Result submit(@RequestBody SubmitVo submit) {
-        return Result.success(submitService.submit(submit));
+    public Result submit(@RequestParam String submit) {
+        return Result.success(submitService.submit(JSONObject.parseObject(submit, SubmitVo.class)));
     }
 
 }

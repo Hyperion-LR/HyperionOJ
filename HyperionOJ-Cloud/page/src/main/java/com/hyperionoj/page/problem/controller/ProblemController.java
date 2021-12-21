@@ -1,5 +1,6 @@
 package com.hyperionoj.page.problem.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.CommentVo;
 import com.hyperionoj.common.vo.ErrorCode;
@@ -33,12 +34,14 @@ public class ProblemController {
     /**
      * 题目列表
      *
-     * @param pageParams 分页参数
+     * @param page 分页参数
      * @return 返回查询分页
      */
+
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/list")
-    public Result getProblemList(@RequestBody PageParams pageParams) {
+    public Result getProblemList(@RequestParam("page") String page) {
+        PageParams pageParams = JSONObject.parseObject(page, PageParams.class);
         return Result.success(problemService.getProblemList(pageParams));
     }
 
@@ -96,8 +99,8 @@ public class ProblemController {
      * @return 根据分页参数返回简要提交信息
      */
     @GetMapping("/submits")
-    public Result getSubmitList(@RequestBody PageParams pageParams) {
-        return Result.success(problemService.getSubmitList(pageParams));
+    public Result getSubmitList(@RequestParam("page") String pageParams) {
+        return Result.success(problemService.getSubmitList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
     /**
@@ -154,8 +157,8 @@ public class ProblemController {
      */
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/comments")
-    public Result getComments(@RequestBody PageParams pageParams) {
-        return Result.success(problemService.getCommentList(pageParams));
+    public Result getComments(@RequestParam("page") String pageParams) {
+        return Result.success(problemService.getCommentList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
     /**

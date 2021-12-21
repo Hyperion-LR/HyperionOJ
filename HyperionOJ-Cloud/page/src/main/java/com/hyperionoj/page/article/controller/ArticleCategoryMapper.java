@@ -22,12 +22,12 @@ public class ArticleCategoryMapper {
     private ArticleCategoryService articleCategoryService;
 
     @GetMapping
-    public Result categorys() {
+    public Result category() {
         return Result.success(articleCategoryService.findAll());
     }
 
     @GetMapping("/detail")
-    public Result categorysDetail() {
+    public Result categoryDetail() {
         return Result.success(articleCategoryService.findAllDetail());
     }
 

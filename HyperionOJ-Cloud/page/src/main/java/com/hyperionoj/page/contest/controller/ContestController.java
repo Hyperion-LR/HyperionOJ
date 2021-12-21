@@ -1,5 +1,6 @@
 package com.hyperionoj.page.contest.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.common.vo.params.PageParams;
@@ -67,8 +68,8 @@ public class ContestController {
      * @return 返回分页查询
      */
     @GetMapping("/endList")
-    public Result getEndContestList(@RequestBody PageParams pageParams) {
-        return Result.success(contestService.getEndContestList(pageParams));
+    public Result getEndContestList(@RequestParam("page") String pageParams) {
+        return Result.success(contestService.getEndContestList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
     /**
@@ -78,8 +79,8 @@ public class ContestController {
      * @return 返回分页查询
      */
     @GetMapping("/notStartList")
-    public Result getNotStartContestList(@RequestBody PageParams pageParams) {
-        return Result.success(contestService.getNotStartContestList(pageParams));
+    public Result getNotStartContestList(@RequestBody String pageParams) {
+        return Result.success(contestService.getNotStartContestList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
     /**
@@ -89,8 +90,8 @@ public class ContestController {
      * @return 返回分页查询
      */
     @GetMapping("/proceedList")
-    public Result getProceedContestList(@RequestBody PageParams pageParams) {
-        return Result.success(contestService.getProceedContestList(pageParams));
+    public Result getProceedContestList(@RequestBody String pageParams) {
+        return Result.success(contestService.getProceedContestList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
     /**
@@ -101,8 +102,8 @@ public class ContestController {
      * @return 题目列表
      */
     @PostMapping("/add/{id}")
-    public Result addProblem(@PathVariable("id") Long id, ProblemVo problemVo) {
-        return Result.success(contestService.addProblem(id, problemVo));
+    public Result addProblem(@PathVariable("id") Long id, @RequestParam("problem") String problemVo) {
+        return Result.success(contestService.addProblem(id, JSONObject.parseObject(problemVo, ProblemVo.class)));
     }
 
     /**
@@ -113,8 +114,8 @@ public class ContestController {
      * @return 题目列表
      */
     @PostMapping("/remove/{id}")
-    public Result removeProblem(@PathVariable("id") Long id, ProblemVo problemVo) {
-        return Result.success(contestService.removeProblem(id, problemVo));
+    public Result removeProblem(@PathVariable("id") Long id, @RequestParam("problem") String problemVo) {
+        return Result.success(contestService.removeProblem(id, JSONObject.parseObject(problemVo, ProblemVo.class)));
     }
 
     /**

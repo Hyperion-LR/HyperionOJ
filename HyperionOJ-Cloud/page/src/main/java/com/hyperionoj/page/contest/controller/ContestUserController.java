@@ -1,5 +1,6 @@
 package com.hyperionoj.page.contest.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.service.ContestUserService;
@@ -25,8 +26,8 @@ public class ContestUserController {
      * @param contestVo 添加用户参数
      */
     @PostMapping("/add")
-    public Result addProblemToContest(@RequestBody ContestVo contestVo) {
-        return Result.success(contestUserService.addUserToContest(contestVo));
+    public Result addProblemToContest(@RequestParam("contest") String contestVo) {
+        return Result.success(contestUserService.addUserToContest(JSONObject.parseObject(contestVo, ContestVo.class)));
     }
 
 
@@ -36,8 +37,8 @@ public class ContestUserController {
      * @param contestVo 删除用户参数
      */
     @PostMapping("/delete")
-    public Result deleteUserToContest(@RequestBody ContestVo contestVo) {
-        contestUserService.deleteUser(contestVo);
+    public Result deleteUserToContest(@RequestParam("contest") String contestVo) {
+        contestUserService.deleteUser(JSONObject.parseObject(contestVo, ContestVo.class));
         return Result.success(null);
     }
 
@@ -50,8 +51,8 @@ public class ContestUserController {
      * @return 比赛用户关系表
      */
     @PostMapping("/selectById/{contestId}")
-    public Result selectUserToContestById(@PathVariable("contestId") Long contestId, @RequestBody PageParams params) {
-        return Result.success(contestUserService.findProblemsByContestId(contestId, params));
+    public Result selectUserToContestById(@PathVariable("contestId") Long contestId, @RequestParam("page") String params) {
+        return Result.success(contestUserService.findProblemsByContestId(contestId, JSONObject.parseObject(params, PageParams.class)));
     }
 
     /**
@@ -62,8 +63,8 @@ public class ContestUserController {
      * @return 结果
      */
     @PostMapping("/submit/{id}")
-    public Result submit(@PathVariable("id") Long id, @RequestBody SubmitVo submitVo) {
-        return Result.success(contestUserService.submit(id, submitVo));
+    public Result submit(@PathVariable("id") Long id, @RequestParam("submit") String submitVo) {
+        return Result.success(contestUserService.submit(id, JSONObject.parseObject(submitVo, SubmitVo.class)));
     }
 
 }

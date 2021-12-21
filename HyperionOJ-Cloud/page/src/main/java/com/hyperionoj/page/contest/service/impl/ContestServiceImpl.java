@@ -146,6 +146,8 @@ public class ContestServiceImpl implements ContestService {
         ContestProblem contestProblem = new ContestProblem();
         contestProblem.setProblemId(id);
         contestProblem.setProblemId(Long.valueOf(problemVo.getId()));
+        contestProblem.setAcCount(0);
+        contestProblem.setSubmitCount(0);
         contestProblemMapper.insert(contestProblem);
         return getProblemList(id);
     }
@@ -197,9 +199,9 @@ public class ContestServiceImpl implements ContestService {
         contest.setCreateTime(System.currentTimeMillis());
         contest.setApplicationNumber(0);
         contest.setRealNumber(0);
-        contest.setSubmitNumber(0);
-        contest.setAcNumber(0);
-        contest.setPassword(DigestUtils.md5Hex(contestVo.getPassword() + SALT));
+        if (contestVo.getPassword() != null) {
+            contest.setPassword(DigestUtils.md5Hex(contestVo.getPassword() + SALT));
+        }
         return contest;
     }
 

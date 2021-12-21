@@ -27,7 +27,7 @@ public class TeacherController {
      * @return 课程列表
      */
     @PermissionAnnotation(level = 3)
-    @GetMapping("/class")
+    @RequestMapping(value = "/class", method = RequestMethod.GET)
     Result getClassList() {
         return adminPageClients.getClassList();
     }
@@ -39,7 +39,7 @@ public class TeacherController {
      * @return 课程详情
      */
     @PermissionAnnotation(level = 3)
-    @GetMapping("/class/{id}")
+    @RequestMapping(value = "/class/{id}", method = RequestMethod.GET)
     Result getSysClass(@PathVariable("id") Long id) {
         return adminPageClients.getSysClass(id);
     }
@@ -51,7 +51,7 @@ public class TeacherController {
      * @return 返回班级
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/create")
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     Result createClass(@RequestBody SysClassParam classParam) {
         return adminPageClients.createClass(classParam);
     }
@@ -64,7 +64,7 @@ public class TeacherController {
      * @return 是否加入成功
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/add/{id}")
+    @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
     Result addStudent(@RequestBody SysUser student, @PathVariable("id") Long classId) {
         return adminPageClients.addStudent(student, classId);
     }
@@ -77,7 +77,7 @@ public class TeacherController {
      * @return 一处结果
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/remove/{id}")
+    @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     Result removeStudent(@RequestBody SysUser student, @PathVariable("id") Long classId) {
         return adminPageClients.removeStudent(student, classId);
     }
@@ -89,7 +89,7 @@ public class TeacherController {
      * @return 作业结果
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/push")
+    @RequestMapping(value = "/push", method = RequestMethod.POST)
     Result pushHomework(@RequestBody SysHomeworkParam homeworkParam) {
         return adminPageClients.pushHomework(homeworkParam);
     }
@@ -101,7 +101,7 @@ public class TeacherController {
      * @return 作业列表
      */
     @PermissionAnnotation(level = 3)
-    @GetMapping("/homeworks/{id}")
+    @RequestMapping(value = "/homeworks/{id}", method = RequestMethod.GET)
     Result getHomeworkList(@PathVariable("id") Long classId) {
         return adminPageClients.getHomeworkList(classId);
     }
@@ -113,7 +113,7 @@ public class TeacherController {
      * @return 作业详情
      */
     @PermissionAnnotation(level = 3)
-    @GetMapping("/homework/{id}")
+    @RequestMapping(value = "/homework/{id}", method = RequestMethod.GET)
     Result getHomeworkId(@PathVariable("id") Long id) {
         return adminPageClients.getHomeworkId(id);
     }
@@ -125,7 +125,7 @@ public class TeacherController {
      * @return 作业详情
      */
     @PermissionAnnotation(level = 3)
-    @PostMapping("/update/homework")
+    @RequestMapping(value = "/update/homework", method = RequestMethod.POST)
     Result updateHomework(@RequestBody SysHomeworkParam homeworkParam) {
         return adminPageClients.updateHomework(homeworkParam);
     }
@@ -137,7 +137,7 @@ public class TeacherController {
      * @return 删除结果
      */
     @PermissionAnnotation(level = 3)
-    @DeleteMapping("/delete/homework")
+    @RequestMapping(value = "/delete/homework", method = RequestMethod.DELETE)
     Result deleteHomework(@RequestBody SysHomeworkParam homeworkParam) {
         return adminPageClients.deleteHomework(homeworkParam);
     }
@@ -149,7 +149,7 @@ public class TeacherController {
      * @return 提交列表
      */
     @PermissionAnnotation(level = 3)
-    @GetMapping("/submits/{id}")
+    @RequestMapping(value = "/submits/{id}", method = RequestMethod.GET)
     Result submitList(@PathVariable("id") Long homeworkId) {
         return adminPageClients.submitList(homeworkId);
     }

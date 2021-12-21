@@ -1,5 +1,6 @@
 package com.hyperionoj.page.article.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
@@ -30,18 +31,18 @@ public class ArticleController {
      * @return 返回查询分页
      */
     @GetMapping("/articles")
-    public Result listArticle(@RequestBody PageParams pageParams) {
-        return Result.success(articleService.listArticle(pageParams));
+    public Result listArticle(@RequestParam("page") String pageParams) {
+        return Result.success(articleService.listArticle(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
     @GetMapping("/new")
-    public Result newArticle(@RequestBody PageParams pageParams) {
-        return Result.success(articleService.newArticle(pageParams.getPageSize()));
+    public Result newArticle(@RequestBody String pageParams) {
+        return Result.success(articleService.newArticle(JSONObject.parseObject(pageParams, PageParams.class).getPageSize()));
     }
 
     @GetMapping("/hot")
-    public Result hotArticle(@RequestBody PageParams pageParams) {
-        return Result.success(articleService.hotArticle(pageParams.getPageSize()));
+    public Result hotArticle(@RequestBody String pageParams) {
+        return Result.success(articleService.hotArticle(JSONObject.parseObject(pageParams, PageParams.class).getPageSize()));
     }
 
     @GetMapping("/listArchives")

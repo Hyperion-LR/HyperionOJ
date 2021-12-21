@@ -1,5 +1,6 @@
 package com.hyperionoj.admin.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.admin.aop.PermissionAnnotation;
 import com.hyperionoj.admin.service.AdminService;
 import com.hyperionoj.admin.vo.ActionPageParams;
@@ -8,10 +9,7 @@ import com.hyperionoj.common.vo.AdminVo;
 import com.hyperionoj.common.vo.RegisterParam;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.SysUserVo;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -90,8 +88,8 @@ public class AdminController {
      */
     @PermissionAnnotation(level = 3)
     @RequestMapping(value = "/query/action", method = RequestMethod.GET)
-    public Result queryAdminActionList(@RequestBody ActionPageParams pageParams) {
-        return Result.success(adminService.queryActionList(pageParams));
+    public Result queryAdminActionList(@RequestParam("page") String pageParams) {
+        return Result.success(adminService.queryActionList(JSONObject.parseObject(pageParams, ActionPageParams.class)));
     }
 
 }

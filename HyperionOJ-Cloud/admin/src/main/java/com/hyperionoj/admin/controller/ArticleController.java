@@ -5,9 +5,9 @@ import com.hyperionoj.common.feign.AdminPageClients;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.params.ArticleParam;
 import com.hyperionoj.common.vo.params.CommentParam;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -30,7 +30,7 @@ public class ArticleController {
      * @return 结果
      */
     @PermissionAnnotation(level = 2)
-    @PostMapping("/delete/article")
+    @RequestMapping(value = "/delete/article", method = RequestMethod.POST)
     public Result deleteArticle(@RequestBody ArticleParam articleParam) {
         return adminPageClients.deleteArticle(articleParam);
     }
@@ -42,7 +42,7 @@ public class ArticleController {
      * @return 结果
      */
     @PermissionAnnotation(level = 2)
-    @PostMapping("/delete/comment")
+    @RequestMapping(value = "/delete/comment", method = RequestMethod.POST)
     public Result deleteComment(@RequestBody CommentParam commentParam) {
         return adminPageClients.deleteComment(commentParam);
     }

@@ -18,4 +18,8 @@ public class ContestProblem {
     private Long contestsId;
 
     private Long problemId;
+
+    private Integer submitCount;
+
+    private Integer acCount;
 }

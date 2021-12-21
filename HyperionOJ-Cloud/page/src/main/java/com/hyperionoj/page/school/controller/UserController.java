@@ -1,5 +1,6 @@
 package com.hyperionoj.page.school.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.page.problem.vo.SubmitVo;
 import com.hyperionoj.page.school.service.StudentService;
@@ -50,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping("/submit/{id}")
-    public Result submitHomework(@RequestBody SubmitVo submitVo, @PathVariable("id") Long homeworkId) {
-        return Result.success(studentService.submit(submitVo, homeworkId));
+    public Result submitHomework(@PathVariable("id") Long homeworkId, @RequestBody String submitVo) {
+        return Result.success(studentService.submit(JSONObject.parseObject(submitVo, SubmitVo.class), homeworkId));
     }
 
 }

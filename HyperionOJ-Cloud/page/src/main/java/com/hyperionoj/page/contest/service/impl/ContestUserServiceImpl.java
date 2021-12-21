@@ -3,14 +3,17 @@ package com.hyperionoj.page.contest.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
 import com.hyperionoj.common.vo.SysUserVo;
 import com.hyperionoj.page.common.vo.params.PageParams;
+import com.hyperionoj.page.contest.dao.mapper.ContestProblemMapper;
 import com.hyperionoj.page.contest.dao.mapper.ContestSubmitMapper;
 import com.hyperionoj.page.contest.dao.mapper.ContestUserMapper;
+import com.hyperionoj.page.contest.dao.pojo.ContestProblem;
 import com.hyperionoj.page.contest.dao.pojo.ContestSubmit;
 import com.hyperionoj.page.contest.dao.pojo.ContestUser;
 import com.hyperionoj.page.contest.service.ContestUserService;
@@ -39,6 +42,9 @@ public class ContestUserServiceImpl implements ContestUserService {
 
     @Resource
     private ProblemService problemService;
+
+    @Resource
+    private ContestProblemMapper contestProblemMapper;
 
     @Resource
     private ContestSubmitMapper contestSubmitMapper;
@@ -114,6 +120,19 @@ public class ContestUserServiceImpl implements ContestUserService {
             contestSubmit.setStatus(0);
         }
         contestSubmitMapper.insert(contestSubmit);
+        LambdaQueryWrapper<ContestProblem> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ContestProblem::getContestsId, id);
+        queryWrapper.eq(ContestProblem::getProblemId, submitVo.getProblemId());
+        queryWrapper.last(" limit 1");
+        ContestProblem contestProblem = contestProblemMapper.selectOne(queryWrapper);
+        LambdaUpdateWrapper<ContestProblem> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(ContestProblem::getContestsId, id);
+        updateWrapper.eq(ContestProblem::getProblemId, submitVo.getProblemId());
+        updateWrapper.set(ContestProblem::getSubmitCount, contestProblem.getSubmitCount() + 1);
+        if ("AC".equals(result.getVerdict())) {
+            updateWrapper.set(ContestProblem::getAcCount, contestProblem.getAcCount() + 1);
+        }
+        contestProblemMapper.update(null, updateWrapper);
         return result;
     }
 
