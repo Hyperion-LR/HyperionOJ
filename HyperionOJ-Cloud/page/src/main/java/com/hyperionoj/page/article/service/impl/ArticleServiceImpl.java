@@ -122,7 +122,7 @@ public class ArticleServiceImpl implements ArticleService {
         IPage<Article> articleIPage = articleMapper.listArticle(
                 page,
                 pageParams.getProblemId(),
-                pageParams.getUsername(),
+                pageParams.getAuthorId(),
                 pageParams.getCategoryId(),
                 pageParams.getTagId(),
                 pageParams.getYear(),
@@ -211,6 +211,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setProblemId(Long.parseLong(articleParam.getProblemId()));
         article.setCategoryId(Long.parseLong(articleParam.getCategory().getId()));
         article.setCreateTime(System.currentTimeMillis());
+        article.setSupport(0);
         articleMapper.insert(article);
         Long articleId = article.getId();
         List<TagVo> tagList = articleParam.getTags();
@@ -245,7 +246,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (article == null) {
             return null;
         }
-        if (article.getAuthorId().equals(author.getId())) {
+        if (article.getAuthorId().equals(author.getId()) || author.getPermissionLevel() != null) {
             LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
             updateWrapper.eq(Article::getId, id);
             updateWrapper.set(Article::getIsDelete, 1);
@@ -275,9 +276,12 @@ public class ArticleServiceImpl implements ArticleService {
                 "ArticleController" + ":" +
                 "findArticleById" + ":" +
                 DigestUtils.md5Hex(id);
-        ArticleVo articleVo = JSONObject.parseObject((String) JSONObject.parseObject(redisSever.getRedisKV(articleVoRedisKey), Result.class).getData(), ArticleVo.class);
-        articleVo.setCommentCounts(articleVo.getCommentCounts() - 1);
-        redisSever.setRedisKV(articleVoRedisKey, JSONObject.toJSONString(Result.success(articleVo)));
+        String redisKV = redisSever.getRedisKV(articleVoRedisKey);
+        if (redisKV != null) {
+            ArticleVo articleVo = JSONObject.parseObject((String) JSONObject.parseObject(redisKV, Result.class).getData(), ArticleVo.class);
+            articleVo.setCommentCounts(articleVo.getCommentCounts() - 1);
+            redisSever.setRedisKV(articleVoRedisKey, JSONObject.toJSONString(Result.success(articleVo)));
+        }
     }
 
     /**

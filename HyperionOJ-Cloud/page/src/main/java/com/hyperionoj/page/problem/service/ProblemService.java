@@ -145,4 +145,12 @@ public interface ProblemService {
      * @return 数量列表
      */
     List<ProblemArchives> getEveryday();
+
+    /**
+     * 获取题目数量
+     *
+     * @return 题库题目数量
+     */
+    Long getProblemCount();
+
 }

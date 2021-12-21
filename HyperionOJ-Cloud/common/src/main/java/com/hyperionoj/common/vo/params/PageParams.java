@@ -47,6 +47,11 @@ public class PageParams {
     private String username;
 
     /**
+     * 用户id
+     */
+    private String authorId;
+
+    /**
      * 提交结果
      */
     private String verdict;

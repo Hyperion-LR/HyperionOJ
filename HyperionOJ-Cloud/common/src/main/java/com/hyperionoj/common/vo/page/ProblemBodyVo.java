@@ -14,4 +14,6 @@ public class ProblemBodyVo {
     private String problemBody;
 
     private String problemBodyHtml;
+
+    private String problemId;
 }

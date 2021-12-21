@@ -144,7 +144,7 @@ public class ContestServiceImpl implements ContestService {
     @Override
     public List<ProblemVo> addProblem(Long id, ProblemVo problemVo) {
         ContestProblem contestProblem = new ContestProblem();
-        contestProblem.setProblemId(id);
+        contestProblem.setContestsId(id);
         contestProblem.setProblemId(Long.valueOf(problemVo.getId()));
         contestProblem.setAcCount(0);
         contestProblem.setSubmitCount(0);

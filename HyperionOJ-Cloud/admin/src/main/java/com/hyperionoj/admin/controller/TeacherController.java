@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @author Hyperion
  * @date 2021/12/19
  */
-@RequestMapping("/teacher")
+@RequestMapping("/admin/teacher")
 @RestController
 public class TeacherController {
 

@@ -561,8 +561,7 @@ file:本地文件
 
 ```json
 {
-    "id":"1470389250931982337",
-    "bodyId": "1470389250806153218",
+    "id":"1470389250931982337"
 }
 ```
 
@@ -657,6 +656,26 @@ file:本地文件
 
 
 ## 题库模块
+
+### 获取题库题目数量
+
+接口url：localhost:9000/problem/count
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+
+```
+
+
 
 ### 获取题目列表（分页查询）
 
@@ -882,7 +901,7 @@ file:本地文件
 请求参数：
 
 ```
-{
+page={
     "page": 1,
     "pageSize": 3,
     "problemId": null,
@@ -933,90 +952,6 @@ file:本地文件
             "caseNumber": null,
             "verdict": "AC",
             "createTime": "2021-12-12 15:37"
-        },
-        {
-            "id": "1469934165613506561",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 0,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "CE",
-            "createTime": "2021-12-12 15:36"
-        },
-        {
-            "id": "1469934088903880705",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 0,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "CE",
-            "createTime": "2021-12-12 15:36"
-        },
-        {
-            "id": "1469933996805353473",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 126,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "AC",
-            "createTime": "2021-12-12 15:35"
-        },
-        {
-            "id": "1469933926999552002",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 120,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "AC",
-            "createTime": "2021-12-12 15:35"
-        },
-        {
-            "id": "1469932994488332290",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 116,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "WA",
-            "createTime": "2021-12-12 15:31"
-        },
-        {
-            "id": "1469932890868051970",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 134,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "WA",
-            "createTime": "2021-12-12 15:31"
-        },
-        {
-            "id": "1469932688937480194",
-            "authorId": "15570357290",
-            "problemId": "1",
-            "codeLang": "java",
-            "codeBody": null,
-            "runTime": 126,
-            "runMemory": 0,
-            "caseNumber": null,
-            "verdict": "AC",
-            "createTime": "2021-12-12 15:30"
         }
     ],
     "msg": null
@@ -1145,14 +1080,14 @@ file:本地文件
 
 ### 获取评论列表(分页查询)
 
-接口urllocalhost:9000/problem/comments
+接口url:localhost:9000/problem/comments
 
 请求方式： get
 
 请求参数：
 
 ```json
-{
+page={
     "page": 1,
     "pageSize": 3,
     "problemId": "1"
@@ -1230,7 +1165,7 @@ file:本地文件
 
 ### 获取每日题量
 
-接口url：localhost:9000/problem/everyday
+接口url：localhost:9000/problem/everyday/{id}
 
 请求方式：get
 
@@ -1271,8 +1206,6 @@ file:本地文件
 }
 ```
 
-### 
-
 
 
 ## 文章模块
@@ -1286,7 +1219,7 @@ file:本地文件
 请求参数：
 
 ```json
-{
+page={
     "page": 1,
     "pageSize": 2,
     "categoryId": 1,			//分类id	备注的只是示例
@@ -1878,14 +1811,6 @@ file:本地文件
 
 
 
-### 获取题目数量
-
-
-
-### 获取每日题量
-
-
-
 ## 班级管理
 
 此模块下的请求请携带token
@@ -2283,7 +2208,7 @@ file:本地文件
 
 ### 查看班级
 
-接口url：localhost:9000/school/class/1
+接口url：localhost:9000/school/teacher/class/1472029371140030465
 
 请求方式：get
 
@@ -2321,7 +2246,7 @@ file:本地文件
 
 ### 创建班级
 
-接口url：localhost:9000/school/create
+接口url：localhost:9000/school/teacher/create
 
 请求方式：post
 
@@ -2357,7 +2282,7 @@ file:本地文件
 
 ### 添加学生
 
-接口url：localhost:9000/school/add/{课程id}
+接口url：localhost:9000/school/teacher/add/{课程id}
 
 请求方式：post
 
@@ -2374,7 +2299,20 @@ file:本地文件
 ```json
 {
     "code": 200,
-    "data": null,
+    "data": {
+        "code": 200,
+        "data": {
+            "id": "1473233461248819202",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "courseName": "测试课程2",
+            "academy": "测试学院",
+            "students": [
+                null
+            ]
+        },
+        "msg": null
+    },
     "msg": null
 }
 ```
@@ -2400,7 +2338,18 @@ file:本地文件
 ```json
 {
     "code": 200,
-    "data": null,
+    "data": {
+        "code": 200,
+        "data": {
+            "id": "1473233461248819202",
+            "teacherId": "1",
+            "teacherName": "Hyperion",
+            "courseName": "测试课程2",
+            "academy": "测试学院",
+            "students": []
+        },
+        "msg": null
+    },
     "msg": null
 }
 ```

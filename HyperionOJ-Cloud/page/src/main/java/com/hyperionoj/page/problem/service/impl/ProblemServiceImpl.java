@@ -117,6 +117,10 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Object submit(SubmitVo submitVo) {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
+        Problem problem = problemMapper.selectById(submitVo.getProblemId());
+        submitVo.setRunTime(problem.getRunTime());
+        submitVo.setRunMemory(problem.getRunMemory());
+        submitVo.setCaseNumber(problem.getCaseNumber());
         ProblemVo problemVo = problemToVo(problemMapper.selectById(submitVo.getProblemId()), false, false);
         submitVo.setCreateTime(dateFormat.format(System.currentTimeMillis()));
         submitVo.setCaseNumber(problemVo.getCaseNumber());
@@ -228,6 +232,11 @@ public class ProblemServiceImpl implements ProblemService {
         if (null != problemBodyVo.getId()) {
             problemBody.setId(Long.valueOf(problemBodyVo.getId()));
         }
+        if (null != problemBodyVo.getProblemId()) {
+            problemBody.setId(Long.valueOf(problemBodyVo.getProblemId()));
+        } else {
+            problemBody.setProblemId(0L);
+        }
         problemBody.setProblemBody(problemBodyVo.getProblemBody());
         problemBody.setProblemBodyHtml(problemBodyVo.getProblemBodyHtml());
         return problemBody;
@@ -239,7 +248,11 @@ public class ProblemServiceImpl implements ProblemService {
             problem.setId(Long.valueOf(problemVo.getId()));
         }
         problem.setTitle(problemVo.getTitle());
-        problem.setBodyId(Long.valueOf(problemVo.getBodyId()));
+        LambdaUpdateWrapper<ProblemBody> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(ProblemBody::getProblemId, problemVo.getId());
+        updateWrapper.set(ProblemBody::getProblemBody, problemVo.getProblemBodyVo().getProblemBody());
+        updateWrapper.set(ProblemBody::getProblemBodyHtml, problemVo.getProblemBodyVo().getProblemBodyHtml());
+        problemBodyMapper.update(null, updateWrapper);
         problem.setCategoryId(Long.valueOf(problemVo.getCategory().getId()));
         problem.setProblemLevel(problemVo.getProblemLevel());
         problem.setRunMemory(problemVo.getRunMemory());
@@ -275,7 +288,10 @@ public class ProblemServiceImpl implements ProblemService {
      */
     @Override
     public void deleteProblem(ProblemVo problemVo) {
-        problemBodyMapper.deleteById(problemVo.getBodyId());
+        LambdaQueryWrapper<ProblemBody> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProblemBody::getProblemId, problemVo.getId());
+        queryWrapper.last("limit 1");
+        problemBodyMapper.delete(queryWrapper);
         problemMapper.deleteById(problemVo.getId());
         this.deleteProblemCache(problemVo);
     }
@@ -344,13 +360,25 @@ public class ProblemServiceImpl implements ProblemService {
         updateWrapper.eq(ProblemComment::getId, commentVo.getId());
         updateWrapper.set(ProblemComment::getIsDelete, 1);
         problemCommentMapper.update(null, updateWrapper);
+        LambdaQueryWrapper<ProblemComment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProblemComment::getId, commentVo.getId());
+        queryWrapper.select(ProblemComment::getProblemId);
+        ProblemComment problemComment = problemCommentMapper.selectOne(queryWrapper);
+        if (problemComment == null) {
+            return;
+        }
+        queryWrapper.last("limit 1");
         String problemVoRedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
                 PROBLEM_CONTROLLER + ":" +
                 GET_PROBLEM_ID + ":" +
-                DigestUtils.md5Hex(commentVo.getProblemId());
-        ProblemVo problemVo = JSONObject.parseObject((String) JSONObject.parseObject(redisSever.getRedisKV(problemVoRedisKey), Result.class).getData(), ProblemVo.class);
-        problemVo.setCommentNumber(problemVo.getCommentNumber() - 1);
-        redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
+                DigestUtils.md5Hex(problemComment.getProblemId().toString());
+        String redisKV = redisSever.getRedisKV(problemVoRedisKey);
+        if (!StringUtils.isBlank(redisKV)) {
+            ProblemVo problemVo = JSONObject.parseObject((String) JSONObject.parseObject(redisKV, Result.class).getData(), ProblemVo.class);
+            problemVo.setCommentNumber(problemVo.getCommentNumber() - 1);
+            redisSever.setRedisKV(problemVoRedisKey, JSONObject.toJSONString(Result.success(problemVo)));
+        }
+
     }
 
     /**
@@ -638,6 +666,17 @@ public class ProblemServiceImpl implements ProblemService {
     public List<ProblemArchives> getEveryday() {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
         return problemSubmitMapper.getEveryday(sysUser.getId());
+    }
+
+    /**
+     * 获取题目数量
+     *
+     * @return 题库题目数量
+     */
+    @Override
+    public Long getProblemCount() {
+        LambdaQueryWrapper<Problem> queryWrapper = new LambdaQueryWrapper<>();
+        return problemMapper.selectCount(queryWrapper);
     }
 
     /**

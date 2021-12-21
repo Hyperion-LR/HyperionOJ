@@ -26,18 +26,18 @@
             <if test="problemId != null">
                 and problem_id = #{problemId}
             </if>
-            <if test="username != null">
-                and username = #{username}
+            <if test="authorId != null">
+                and author_id = #{authorId}
             </if>
             <if test="categoryId != null">
                 and category_id = #{categoryId}
             </if>
             <if test="year != null and year.length>0 and month != null and month.length>0">
-                and ( FROM_UNIXTIME(create_date/1000,'%Y') = #{year} and FROM_UNIXTIME(create_date/1000,'%m') =
+                and ( FROM_UNIXTIME(create_time/1000,'%Y') = #{year} and FROM_UNIXTIME(create_time/1000,'%m') =
                 #{month})
             </if>
             <if test="tagId != null">
-                and id in (select article_id from hy_article_tag where tag_id=#{tagId})
+                and id in (select article_id from oj_article_article_tag where tag_id=#{tagId})
             </if>
             and is_delete = 0
         </where>

@@ -96,7 +96,7 @@ public interface AdminPageClients {
      *
      * @return 课程列表
      */
-    @GetMapping("/article/admin/class")
+    @GetMapping("/school/teacher/class")
     Result getClassList();
 
     /**
@@ -105,7 +105,7 @@ public interface AdminPageClients {
      * @param id 课程id
      * @return 课程详情
      */
-    @GetMapping("/article/admin/class/{id}")
+    @GetMapping("/school/teacher/class/{id}")
     Result getSysClass(@PathVariable("id") Long id);
 
     /**
@@ -114,7 +114,7 @@ public interface AdminPageClients {
      * @param classParam 班级参数
      * @return 返回班级
      */
-    @PostMapping("/article/admin/create")
+    @PostMapping("/school/teacher/create")
     Result createClass(@RequestBody SysClassParam classParam);
 
     /**
@@ -124,7 +124,7 @@ public interface AdminPageClients {
      * @param classId 课程id
      * @return 是否加入成功
      */
-    @PostMapping("/article/admin/add/{id}")
+    @PostMapping("/school/teacher/add/{id}")
     Result addStudent(@RequestBody SysUser student, @PathVariable("id") Long classId);
 
     /**
@@ -134,7 +134,7 @@ public interface AdminPageClients {
      * @param classId 课程id
      * @return 一处结果
      */
-    @PostMapping("/article/admin/remove/{id}")
+    @PostMapping("/school/teacher/remove/{id}")
     Result removeStudent(@RequestBody SysUser student, @PathVariable("id") Long classId);
 
     /**
@@ -143,7 +143,7 @@ public interface AdminPageClients {
      * @param homeworkParam 作业参数
      * @return 作业结果
      */
-    @PostMapping("/article/admin/push")
+    @PostMapping("/school/teacher/push")
     Result pushHomework(@RequestBody SysHomeworkParam homeworkParam);
 
     /**
@@ -152,7 +152,7 @@ public interface AdminPageClients {
      * @param classId 课程id
      * @return 作业列表
      */
-    @GetMapping("/article/admin/homeworks/{id}")
+    @GetMapping("/school/teacher/homeworks/{id}")
     Result getHomeworkList(@PathVariable("id") Long classId);
 
     /**
@@ -161,7 +161,7 @@ public interface AdminPageClients {
      * @param id 作业id
      * @return 作业详情
      */
-    @GetMapping("/article/admin/homework/{id}")
+    @GetMapping("/school/teacher/homework/{id}")
     Result getHomeworkId(@PathVariable("id") Long id);
 
     /**
@@ -170,7 +170,7 @@ public interface AdminPageClients {
      * @param homeworkParam 作业参数
      * @return 作业详情
      */
-    @PostMapping("/article/adminupdate/homework")
+    @PostMapping("/school/teacher/update/homework")
     Result updateHomework(@RequestBody SysHomeworkParam homeworkParam);
 
     /**
@@ -179,7 +179,7 @@ public interface AdminPageClients {
      * @param homeworkParam 作业参数
      * @return 删除结果
      */
-    @DeleteMapping("/article/admindelete/homework")
+    @DeleteMapping("/school/teacher/delete/homework")
     Result deleteHomework(@RequestBody SysHomeworkParam homeworkParam);
 
     /**
@@ -188,7 +188,7 @@ public interface AdminPageClients {
      * @param homeworkId 作业id
      * @return 提交列表
      */
-    @GetMapping("/article/admin/submits/{id}")
+    @GetMapping("/school/teacher/submits/{id}")
     Result submitList(@PathVariable("id") Long homeworkId);
 
 

@@ -8,8 +8,6 @@ import com.hyperionoj.common.vo.page.CommentVo;
 import com.hyperionoj.common.vo.page.ProblemVo;
 import com.hyperionoj.common.vo.page.SubmitVo;
 import com.hyperionoj.common.vo.params.PageParams;
-import com.hyperionoj.page.problem.dao.mapper.ProblemMapper;
-import com.hyperionoj.page.problem.dao.pojo.Problem;
 import com.hyperionoj.page.problem.service.ProblemService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +26,16 @@ public class ProblemController {
     @Resource
     private ProblemService problemService;
 
-    @Resource
-    private ProblemMapper problemMapper;
+    /**
+     * 获取题目数量
+     *
+     * @return 题库题目数量
+     */
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
+    @GetMapping("/count")
+    public Result getProblemCount() {
+        return Result.success(problemService.getProblemCount());
+    }
 
     /**
      * 题目列表
@@ -37,7 +43,6 @@ public class ProblemController {
      * @param page 分页参数
      * @return 返回查询分页
      */
-
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/list")
     public Result getProblemList(@RequestParam("page") String page) {
@@ -80,10 +85,6 @@ public class ProblemController {
      */
     @PostMapping("/submit")
     public Result submit(@RequestBody SubmitVo submitVo) {
-        Problem problem = problemMapper.selectById(submitVo.getProblemId());
-        submitVo.setRunTime(problem.getRunTime());
-        submitVo.setRunMemory(problem.getRunMemory());
-        submitVo.setCaseNumber(problem.getCaseNumber());
         Object result = problemService.submit(submitVo);
         if (result == null) {
             return Result.fail(ErrorCode.SYSTEM_ERROR);

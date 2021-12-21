@@ -34,4 +34,6 @@ public class SysUser {
     private String salt;
 
     private Integer status;
+
+    private Integer permissionLevel;
 }

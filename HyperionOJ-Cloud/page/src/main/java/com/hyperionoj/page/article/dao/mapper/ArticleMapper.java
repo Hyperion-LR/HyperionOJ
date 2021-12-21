@@ -28,7 +28,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      *
      * @param page       分页
      * @param problemId  题目id
-     * @param username   用户名字
+     * @param authorId   用户id
      * @param categoryId 分类id
      * @param tagId      标签 id
      * @param year       创建时间(年)
@@ -37,7 +37,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      */
     IPage<Article> listArticle(Page<Article> page,
                                @Param("problemId") String problemId,
-                               @Param("username") String username,
+                               @Param("authorId") String authorId,
                                @Param("categoryId") String categoryId,
                                @Param("tagId") String tagId,
                                @Param("year") String year,

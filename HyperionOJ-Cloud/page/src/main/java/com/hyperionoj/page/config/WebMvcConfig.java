@@ -26,9 +26,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/problem/comment")
                 .addPathPatterns("/problem/everyday/**")
                 .addPathPatterns("/article/publish")
+                .addPathPatterns("/article/delete/**")
                 .addPathPatterns("/article/comments/comment")
                 .addPathPatterns("/article/admin/**")
                 .addPathPatterns("/school/**")
+                .addPathPatterns("/contest/**")
+                .excludePathPatterns("/contest/endList")
+                .excludePathPatterns("/contest/notStartList")
+                .excludePathPatterns("/contest/proceedList")
         ;
     }
 }

@@ -108,8 +108,9 @@ public class CacheAspect {
         // 对评论点赞
         if (StringUtils.compare(className, PROBLEM_CONTROLLER) == 0 &&
                 StringUtils.compare(methodName, PROBLEM_SUPPORT_COMMENT) == 0) {
-
-            result.setData((Integer) result.getData() + 1);
+            if (result.getData() != null) {
+                result.setData((Integer) result.getData() + 1);
+            }
         }
 
         // 查看题目评论列表(有些评论的点赞数已经修改了)

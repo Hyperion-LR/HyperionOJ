@@ -79,7 +79,7 @@ public class ContestController {
      * @return 返回分页查询
      */
     @GetMapping("/notStartList")
-    public Result getNotStartContestList(@RequestBody String pageParams) {
+    public Result getNotStartContestList(@RequestParam("page") String pageParams) {
         return Result.success(contestService.getNotStartContestList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
@@ -90,7 +90,7 @@ public class ContestController {
      * @return 返回分页查询
      */
     @GetMapping("/proceedList")
-    public Result getProceedContestList(@RequestBody String pageParams) {
+    public Result getProceedContestList(@RequestParam("page") String pageParams) {
         return Result.success(contestService.getProceedContestList(JSONObject.parseObject(pageParams, PageParams.class)));
     }
 
@@ -124,7 +124,7 @@ public class ContestController {
      * @param id 比赛id
      * @return 题目列表
      */
-    @PostMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     public Result getProblemList(@PathVariable("id") Long id) {
         return Result.success(contestService.getProblemList(id));
     }

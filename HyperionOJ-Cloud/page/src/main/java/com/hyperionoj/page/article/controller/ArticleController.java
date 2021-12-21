@@ -36,12 +36,12 @@ public class ArticleController {
     }
 
     @GetMapping("/new")
-    public Result newArticle(@RequestBody String pageParams) {
+    public Result newArticle(@RequestParam("page") String pageParams) {
         return Result.success(articleService.newArticle(JSONObject.parseObject(pageParams, PageParams.class).getPageSize()));
     }
 
     @GetMapping("/hot")
-    public Result hotArticle(@RequestBody String pageParams) {
+    public Result hotArticle(@RequestParam("page") String pageParams) {
         return Result.success(articleService.hotArticle(JSONObject.parseObject(pageParams, PageParams.class).getPageSize()));
     }
 
@@ -82,5 +82,4 @@ public class ArticleController {
         articleService.deleteComment(commentParam.getId());
         return Result.success(null);
     }
-
 }

@@ -17,7 +17,7 @@ public class ArticleCommentsController {
     @Resource
     private ArticleCommentService commentService;
 
-    @GetMapping("/article/{id}")
+    @PostMapping("/article/{id}")
     public Result commentsByArticle(@PathVariable("id") Long articleId) {
         return Result.success(commentService.commentByArticleId(articleId));
     }
@@ -26,5 +26,6 @@ public class ArticleCommentsController {
     public Result createComment(@RequestBody CommentParam commentParam) {
         return Result.success(commentService.createComment(commentParam));
     }
+
 
 }
