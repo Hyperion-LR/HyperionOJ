@@ -1,7 +1,6 @@
 package com.hyperionoj.page.article.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.page.ArticleVo;
@@ -51,7 +50,6 @@ public class ArticleController {
     }
 
     @GetMapping("/view/{id}")
-    @Cache(name = "article", time = 30 * 60 * 60)
     public Result findArticleById(@PathVariable("id") String articleId) {
         ArticleVo articleVo = articleService.findArticleById(articleId);
         if (articleVo == null) {
@@ -67,7 +65,6 @@ public class ArticleController {
     }
 
     @PostMapping("/support/article")
-    @Cache(name = "article", time = 30 * 60 * 60)
     public Result support(@RequestBody ArticleParam articleParam) {
         return Result.success(articleService.support(articleParam.getId()));
     }

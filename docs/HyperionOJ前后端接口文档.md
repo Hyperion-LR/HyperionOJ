@@ -2321,7 +2321,7 @@ page={
 
 ### 移除学生
 
-接口url：localhost:9000/school/remove/{课程id}
+接口url：localhost:9000/school/teacher/remove/{课程id}
 
 请求方式：post
 
@@ -2469,7 +2469,7 @@ page={
 
 ### 更新作业
 
-接口url：localhost:9000/school/update/homework
+接口url：localhost:9000/school/teacher/update/homework
 
 请求方式：post
 
@@ -2581,7 +2581,7 @@ page={
 
 ### 删除作业
 
-接口url：localhost:9000/school/delete/homework
+接口url：localhost:9000/school/teacher/delete/homework
 
 请求方式：delete
 
@@ -2721,7 +2721,7 @@ page={
 
 ### 获取作业情况
 
-接口url：localhost:9000/school/homework/1472039743838437378
+接口url：localhost:9000/school/teacher/homework/1472039743838437378
 
 请求方式：get
 
@@ -2818,7 +2818,7 @@ page={
 
 ### 获取提交情况
 
-接口url：localhost:9000/school/submits/{作业id}
+接口url：localhost:9000/school/teacher/submits/{作业id}
 
 请求方式：get
 

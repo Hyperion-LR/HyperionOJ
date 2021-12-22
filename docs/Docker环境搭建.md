@@ -52,11 +52,9 @@ docker pull bitnami/kafka
 
 // 创建并运行kafka容器
 docker run --name kafka -p 9092:9092  -e KAFKA_ZOOKEEPER_CONNECT=192.168.1.101:2181 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -d  bitnami/kafka
-
-docker run -d --name kafka --publish 9092:9092 --link zookeeper --env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 --env KAFKA_ADVERTISED_HOST_NAME=192.168.43.124 --env KAFKA_ADVERTISED_PORT=9092 --volume /etc/localtime:/etc/localtime wurstmeister/kafka:latest
 ```
 
-上面的`172.23.192.1`要改成自己的本地地址
+上面要改成自己的本地地址
 
 
 

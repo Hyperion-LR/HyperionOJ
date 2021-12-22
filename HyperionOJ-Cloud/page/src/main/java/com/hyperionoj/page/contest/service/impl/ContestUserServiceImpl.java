@@ -8,7 +8,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
+import com.hyperionoj.common.service.RedisSever;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
+import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.page.*;
 import com.hyperionoj.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.dao.mapper.ContestProblemMapper;
@@ -19,6 +21,7 @@ import com.hyperionoj.page.contest.dao.pojo.ContestSubmit;
 import com.hyperionoj.page.contest.dao.pojo.ContestUser;
 import com.hyperionoj.page.contest.service.ContestUserService;
 import com.hyperionoj.page.problem.service.ProblemService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +34,9 @@ import java.util.List;
  */
 @Service
 public class ContestUserServiceImpl implements ContestUserService {
+
+    @Resource
+    private RedisSever redisSever;
 
     @Resource
     private ContestUserMapper contestUserMapper;
@@ -112,8 +118,12 @@ public class ContestUserServiceImpl implements ContestUserService {
         contestSubmit.setRunMemory(result.getRunMemory());
         contestSubmit.setCodeLang(submitVo.getCodeLang());
         contestSubmit.setAuthorId(sysUser.getId());
+        contestSubmit.setSubmitId(result.getSubmitId());
         if ("AC".equals(result.getVerdict())) {
             contestSubmit.setStatus(1);
+            String rankJson = JSONObject.toJSONString(Result.success(rank(id)));
+            String redisKey = "contest:ContestUserController:rankList:" + DigestUtils.md5Hex(JSONObject.toJSONString(id));
+            redisSever.setRedisKV(redisKey, rankJson, 24 * 60 * 60 * 1000);
         } else {
             contestSubmit.setStatus(0);
         }
@@ -123,14 +133,16 @@ public class ContestUserServiceImpl implements ContestUserService {
         queryWrapper.eq(ContestProblem::getProblemId, submitVo.getProblemId());
         queryWrapper.last(" limit 1");
         ContestProblem contestProblem = contestProblemMapper.selectOne(queryWrapper);
-        LambdaUpdateWrapper<ContestProblem> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(ContestProblem::getContestsId, id);
-        updateWrapper.eq(ContestProblem::getProblemId, submitVo.getProblemId());
-        updateWrapper.set(ContestProblem::getSubmitCount, contestProblem.getSubmitCount() + 1);
-        if ("AC".equals(result.getVerdict())) {
-            updateWrapper.set(ContestProblem::getAcCount, contestProblem.getAcCount() + 1);
+        if (contestProblem != null) {
+            LambdaUpdateWrapper<ContestProblem> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(ContestProblem::getContestsId, id);
+            updateWrapper.eq(ContestProblem::getProblemId, submitVo.getProblemId());
+            updateWrapper.set(ContestProblem::getSubmitCount, contestProblem.getSubmitCount() + 1);
+            if ("AC".equals(result.getVerdict())) {
+                updateWrapper.set(ContestProblem::getAcCount, contestProblem.getAcCount() + 1);
+            }
+            contestProblemMapper.update(null, updateWrapper);
         }
-        contestProblemMapper.update(null, updateWrapper);
         return result;
     }
 
@@ -141,7 +153,7 @@ public class ContestUserServiceImpl implements ContestUserService {
      * @return 排行榜单
      */
     @Override
-    @Cache()
+    @Cache(name = "contest", time = 10 * 60 * 60 * 1000)
     public List<RankVo> rank(Long contestId) {
         List<RankVo> rank = contestSubmitMapper.rank(contestId);
         for (int i = 1; i <= rank.size(); ++i) {

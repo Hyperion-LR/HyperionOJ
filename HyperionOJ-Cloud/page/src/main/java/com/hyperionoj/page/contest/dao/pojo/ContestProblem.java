@@ -19,7 +19,7 @@ public class ContestProblem {
 
     private Long problemId;
 
-    private Integer submitCount;
+    private Integer submitCount = 0;
 
     private Integer acCount;
 }

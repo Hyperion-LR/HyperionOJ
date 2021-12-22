@@ -1,7 +1,6 @@
 package com.hyperionoj.page.problem.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.ErrorCode;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.page.CommentVo;
@@ -12,8 +11,6 @@ import com.hyperionoj.page.problem.service.ProblemService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
-import static com.hyperionoj.common.constants.Constants.REDIS_KAY_PROBLEM_CACHE;
 
 /**
  * @author Hyperion
@@ -31,7 +28,6 @@ public class ProblemController {
      *
      * @return 题库题目数量
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/count")
     public Result getProblemCount() {
         return Result.success(problemService.getProblemCount());
@@ -43,7 +39,6 @@ public class ProblemController {
      * @param page 分页参数
      * @return 返回查询分页
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/list")
     public Result getProblemList(@RequestParam("page") String page) {
         PageParams pageParams = JSONObject.parseObject(page, PageParams.class);
@@ -67,7 +62,6 @@ public class ProblemController {
      * @param id 题目id
      * @return 题目具体情况
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/{id}")
     public Result getProblemById(@PathVariable Long id) {
         ProblemVo problem = problemService.getProblemById(id);
@@ -110,7 +104,6 @@ public class ProblemController {
      * @param id 提交id
      * @return 提交结果
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/submit/{id}")
     public Result getSubmit(@PathVariable("id") Long id) {
         return Result.success(problemService.getSubmitById(id));
@@ -133,7 +126,6 @@ public class ProblemController {
      * @param commentVo 评论参数
      * @return 目前得赞数
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @PostMapping("/support/comment")
     public Result supportComment(@RequestBody CommentVo commentVo) {
         return Result.success(problemService.support(commentVo));
@@ -156,7 +148,6 @@ public class ProblemController {
      * @param pageParams 分页参数
      * @return 评论列表
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @GetMapping("/comments")
     public Result getComments(@RequestParam("page") String pageParams) {
         return Result.success(problemService.getCommentList(JSONObject.parseObject(pageParams, PageParams.class)));
@@ -169,7 +160,6 @@ public class ProblemController {
      * @return 数量列表
      */
     @GetMapping("/everyday/{id}")
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 15 * 60 * 1000)
     public Result getEveryday(@PathVariable("id") String id) {
         return Result.success(problemService.getEveryday());
     }

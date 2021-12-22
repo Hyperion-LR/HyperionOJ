@@ -23,7 +23,7 @@ public class ContestSubmit {
 
     private String codeLang;
 
-    private String codeText;
+    private Long submitId;
 
     private Integer status;
 

@@ -1,6 +1,7 @@
 package com.hyperionoj.page.contest.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.Result;
 import com.hyperionoj.common.vo.page.ContestVo;
 import com.hyperionoj.common.vo.page.SubmitVo;
@@ -73,6 +74,7 @@ public class ContestUserController {
      * @param contestId 比赛id
      * @return 排行榜
      */
+    @Cache(name = "contest", time = 24 * 60 * 60 * 1000)
     @GetMapping("/rank/{id}")
     public Result rankList(@PathVariable("id") Long contestId) {
         return Result.success(contestUserService.rank(contestId));

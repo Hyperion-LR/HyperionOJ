@@ -93,7 +93,7 @@ public class CacheAspect {
             }
             Object proceed = pjp.proceed();
             redisSever.setRedisKV(redisKey, JSON.toJSONString(proceed), time);
-            log.info("更新缓存: {},{}", className, methodName);
+            log.info("添加缓存: {},{}", className, methodName);
             return proceed;
         } catch (Throwable throwable) {
             log.warn(throwable.getMessage());

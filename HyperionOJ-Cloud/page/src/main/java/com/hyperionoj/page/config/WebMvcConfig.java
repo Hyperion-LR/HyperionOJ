@@ -34,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/contest/endList")
                 .excludePathPatterns("/contest/notStartList")
                 .excludePathPatterns("/contest/proceedList")
-                .excludePathPatterns("/contest/rank/**")
+                .excludePathPatterns("/contest/user/rank/**")
         ;
     }
 }

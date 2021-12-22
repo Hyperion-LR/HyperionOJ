@@ -1,5 +1,6 @@
 package com.hyperionoj.page.problem.service;
 
+import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.vo.page.CategoryVo;
 import com.hyperionoj.common.vo.page.CommentVo;
 import com.hyperionoj.common.vo.page.ProblemVo;
@@ -8,6 +9,8 @@ import com.hyperionoj.common.vo.params.PageParams;
 import com.hyperionoj.page.problem.dao.dos.ProblemArchives;
 
 import java.util.List;
+
+import static com.hyperionoj.common.constants.Constants.REDIS_KAY_PROBLEM_CACHE;
 
 /**
  * @author Hyperion
@@ -151,6 +154,7 @@ public interface ProblemService {
      *
      * @return 题库题目数量
      */
+    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     Long getProblemCount();
 
 }
