@@ -17,7 +17,7 @@ public class ArticleCommentsController {
     @Resource
     private ArticleCommentService commentService;
 
-    @PostMapping("/article/{id}")
+    @GetMapping("/article/{id}")
     public Result commentsByArticle(@PathVariable("id") Long articleId) {
         return Result.success(commentService.commentByArticleId(articleId));
     }
