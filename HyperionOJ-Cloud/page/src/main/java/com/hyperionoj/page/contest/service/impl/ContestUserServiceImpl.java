@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.utils.ThreadLocalUtils;
-import com.hyperionoj.common.vo.page.ContestVo;
-import com.hyperionoj.common.vo.page.RunResult;
-import com.hyperionoj.common.vo.page.SubmitVo;
-import com.hyperionoj.common.vo.page.SysUserVo;
+import com.hyperionoj.common.vo.page.*;
 import com.hyperionoj.common.vo.params.PageParams;
 import com.hyperionoj.page.contest.dao.mapper.ContestProblemMapper;
 import com.hyperionoj.page.contest.dao.mapper.ContestSubmitMapper;
@@ -134,6 +132,25 @@ public class ContestUserServiceImpl implements ContestUserService {
         }
         contestProblemMapper.update(null, updateWrapper);
         return result;
+    }
+
+    /**
+     * 排行榜
+     *
+     * @param contestId 比赛id
+     * @return 排行榜单
+     */
+    @Override
+    @Cache()
+    public List<RankVo> rank(Long contestId) {
+        List<RankVo> rank = contestSubmitMapper.rank(contestId);
+        for (int i = 1; i <= rank.size(); ++i) {
+            RankVo rankVo = rank.get(i - 1);
+            rankVo.setRank(i);
+            rankVo.setUsername(ossClients.findUserById(rankVo.getAuthorId().toString()).getData().getUsername());
+            rank.set(i - 1, rankVo);
+        }
+        return rank;
     }
 
 }

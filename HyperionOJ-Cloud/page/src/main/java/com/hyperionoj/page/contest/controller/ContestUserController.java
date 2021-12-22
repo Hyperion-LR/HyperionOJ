@@ -67,4 +67,15 @@ public class ContestUserController {
         return Result.success(contestUserService.submit(id, submitVo));
     }
 
+    /**
+     * 排行榜
+     *
+     * @param contestId 比赛id
+     * @return 排行榜
+     */
+    @GetMapping("/rank/{id}")
+    public Result rankList(@PathVariable("id") Long contestId) {
+        return Result.success(contestUserService.rank(contestId));
+    }
+
 }

@@ -640,7 +640,7 @@ public class ProblemServiceImpl implements ProblemService {
             today.setDay(Integer.valueOf(new SimpleDateFormat("dd").format(now)));
             problemArchives.add(today);
         } else {
-            ProblemArchives last = problemArchives.get(problemArchives.size());
+            ProblemArchives last = problemArchives.get(problemArchives.size() - 1);
             if (last.getYear().equals(Integer.valueOf(new SimpleDateFormat("yyyy").format(now))) &&
                     last.getMonth().equals(Integer.valueOf(new SimpleDateFormat("MM").format(now))) &&
                     last.getDay().equals(Integer.valueOf(new SimpleDateFormat("dd").format(now)))) {

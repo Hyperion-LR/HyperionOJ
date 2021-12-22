@@ -1,6 +1,7 @@
 package com.hyperionoj.page.contest.service;
 
 import com.hyperionoj.common.vo.page.ContestVo;
+import com.hyperionoj.common.vo.page.RankVo;
 import com.hyperionoj.common.vo.page.SubmitVo;
 import com.hyperionoj.common.vo.page.SysUserVo;
 import com.hyperionoj.common.vo.params.PageParams;
@@ -46,4 +47,12 @@ public interface ContestUserService {
      * @return 结果
      */
     Object submit(Long id, SubmitVo submitVo);
+
+    /**
+     * 排行榜
+     *
+     * @param contestId 比赛id
+     * @return 排行榜单
+     */
+    List<RankVo> rank(Long contestId);
 }

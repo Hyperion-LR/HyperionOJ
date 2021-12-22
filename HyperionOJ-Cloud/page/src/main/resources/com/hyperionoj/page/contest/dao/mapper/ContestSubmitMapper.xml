@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyperionoj.page.contest.dao.mapper.ContestSubmitMapper">
+
+
+    <select id="rank" parameterType="long" resultType="com.hyperionoj.common.vo.page.RankVo">
+        SELECT author_id,
+               count(distinct author_id, problem_id) as ac_number
+        FROM oj_contest_submit
+        WHERE STATUS = 1
+          AND contests_id = #{contestId}
+        GROUP BY author_id
+        ORDER BY ac_number DESC
+    </select>
+</mapper>
