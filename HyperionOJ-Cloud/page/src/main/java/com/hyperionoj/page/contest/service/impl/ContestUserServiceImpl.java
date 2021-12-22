@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.service.RedisSever;
@@ -153,7 +152,6 @@ public class ContestUserServiceImpl implements ContestUserService {
      * @return 排行榜单
      */
     @Override
-    @Cache(name = "contest", time = 10 * 60 * 60 * 1000)
     public List<RankVo> rank(Long contestId) {
         List<RankVo> rank = contestSubmitMapper.rank(contestId);
         for (int i = 1; i <= rank.size(); ++i) {

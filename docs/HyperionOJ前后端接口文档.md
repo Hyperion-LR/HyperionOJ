@@ -2853,7 +2853,549 @@ page={
 
 
 
-### 需求
+## 比赛功能
+
+### 创建比赛
+
+接口url：localhost:9000/contest/create
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "title": "测试比赛",
+    "startTime": "2021-12-21 23:00",
+    "endTime": "2021-12-21 24:00",
+    "runTime": "10000",
+    "password": null
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1473673269443522561",
+        "title": "测试比赛",
+        "startTime": "2021-12-21 23:00",
+        "endTime": "2021-12-21 24:00",
+        "runTime": "10000",
+        "password": null
+    },
+    "msg": null
+}
+```
+
+
+
+### 删除比赛
+
+接口url：localhost:9000/contest/delete
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": 1473294058460143618
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 创建比赛
+
+接口url：localhost:9000/contest/update
+
+请求方式：
+
+请求参数：
+
+```json
+{
+    "id": "1473294058460143618",
+    "title": "测试比赛",
+    "startTime": "2021-12-21 23:00",
+    "endTime": "2021-12-21 24:00",
+    "runTime": "10000",
+    "password": null
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "1473294058460143618",
+        "title": "测试比赛",
+        "startTime": "2021-12-21 23:00",
+        "endTime": "2021-12-21 24:00",
+        "runTime": "10000",
+        "password": null
+    },
+    "msg": null
+}
+```
+
+
+
+### 获取结束的比赛
+
+接口url：localhost:9000/contest/endList
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [],
+    "msg": null
+}
+```
+
+
+
+### 获取没开始的比赛
+
+接口url：localhost:9000/contest/notStartList
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": 1473673269443522561,
+            "title": "测试比赛",
+            "createTime": 1640186061612,
+            "startTime": 1640098800000,
+            "endTime": 1640102400000,
+            "runTime": 10000,
+            "applicationNumber": 0,
+            "realNumber": 0,
+            "password": null
+        },
+        {
+            "id": 1472865950837174273,
+            "title": "test",
+            "createTime": 1639993581852,
+            "startTime": 1639993500000,
+            "endTime": 1640079900000,
+            "runTime": 9999,
+            "applicationNumber": 0,
+            "realNumber": 0,
+            "password": "c713358d6905631980124375e123161b"
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取已经结束比赛
+
+接口url：localhost:9000/contest/proceedList
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [],
+    "msg": null
+}
+```
+
+
+
+### 往比赛添加题目比赛
+
+接口url：localhost:9000/contest/add/1
+
+请求方式：post
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1",
+            "title": "test1",
+            "bodyId": "1",
+            "problemLevel": 1,
+            "acNumber": 25,
+            "submitNumber": 25,
+            "solutionNumber": 0,
+            "commentNumber": 0,
+            "caseNumber": 1,
+            "runMemory": 256,
+            "runTime": 1000,
+            "problemBodyVo": {
+                "id": null,
+                "problemBody": null,
+                "problemBodyHtml": "<p>这是测试</p>",
+                "problemId": null
+            },
+            "category": {
+                "id": "1",
+                "categoryName": "test",
+                "description": "测试分类"
+            },
+            "tags": [
+                {
+                    "id": "1",
+                    "tagName": "测试标签"
+                },
+                {
+                    "id": "2",
+                    "tagName": "test2"
+                }
+            ]
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 删除题目
+
+接口url：localhost:9000/contest/remove/{比赛id}
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id":
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "2",
+            "title": "test2",
+            "bodyId": "2",
+            "problemLevel": 1,
+            "acNumber": 0,
+            "submitNumber": 0,
+            "solutionNumber": 0,
+            "commentNumber": 0,
+            "caseNumber": 1,
+            "runMemory": 256,
+            "runTime": 1000,
+            "problemBodyVo": {
+                "id": null,
+                "problemBody": null,
+                "problemBodyHtml": "<p>这是测试</p>",
+                "problemId": null
+            },
+            "category": {
+                "id": "1",
+                "categoryName": "test",
+                "description": "测试分类"
+            },
+            "tags": [
+                {
+                    "id": "2",
+                    "tagName": "test2"
+                }
+            ]
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 获取比赛题目列表
+
+接口url：localhost:9000/contest/get/1472865950837174273
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1",
+            "title": "test1",
+            "bodyId": "1",
+            "problemLevel": 1,
+            "acNumber": 25,
+            "submitNumber": 25,
+            "solutionNumber": 0,
+            "commentNumber": 0,
+            "caseNumber": 1,
+            "runMemory": 256,
+            "runTime": 1000,
+            "problemBodyVo": {
+                "id": null,
+                "problemBody": null,
+                "problemBodyHtml": "<p>这是测试</p>",
+                "problemId": null
+            },
+            "category": {
+                "id": "1",
+                "categoryName": "test",
+                "description": "测试分类"
+            },
+            "tags": [
+                {
+                    "id": "1",
+                    "tagName": "测试标签"
+                },
+                {
+                    "id": "2",
+                    "tagName": "test2"
+                }
+            ]
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 用户参加比赛
+
+接口url：localhost:9000/contest/user/add
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1472865950837174273"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "15570357290",
+        "username": "冰箱的主人",
+        "mail": "Hyperion_LR@foxmail.com",
+        "studentNumber": null
+    },
+    "msg": null
+}
+```
+
+
+
+### 用户退出比赛
+
+接口url：localhost:9000/contest/user/delete
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "id": "1472865950837174273"
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": null
+}
+```
+
+
+
+### 通过比赛ID查询用户列表
+
+接口url：localhost:9000/contest/user/selectById/1472865950837174273
+
+请求方式：
+
+请求参数：
+
+```json
+page={
+    "page": 1,
+    "pageSize": 3
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "15570357290",
+            "username": "冰箱的主人",
+            "mail": "Hyperion_LR@foxmail.com",
+            "studentNumber": null
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 提交代码
+
+接口url：localhost:9000/contest/user/submit/{比赛id}
+
+请求方式：post
+
+请求参数：
+
+```json
+{
+    "authorId": 15570357290,
+    "problemId": 1,
+    "codeLang": "java",
+    "codeBody": "import java.util.Scanner;\n/**\n * @author Hyperion\n * @date 2021/11/28\n */\npublic class Main {\npublic static void main(String[] args) {\nString name = \"Hyperion\";\nScanner in = new Scanner(System.in);\n int[] abc = new int[10000000];\nint t = 0, a = 0, b = 0;\nSystem.out.println(name);\nt = in.nextInt();\nwhile(t-- > 0){\na = in.nextInt();\nb = in.nextInt();\nSystem.out.println(a + b);\n}\nSystem.out.println(name);\n}\n}",
+    "runTime": 1000,
+    "runMemory": 256,
+    "caseNumber": 1
+}
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": {
+        "authorId": "15570357290",
+        "submitId": 1473684832867000322,
+        "problemId": 1,
+        "verdict": "AC",
+        "msg": "Hyperion\n3\n5\n5\nHyperion\n",
+        "runTime": 131,
+        "runMemory": 0,
+        "submitTime": "2021-12-23 00:00"
+    },
+    "msg": null
+}
+```
+
+
+
+### 排行榜
+
+接口url：localhost:9000/contest/user/rank/1472865950837174273
+
+请求方式：get
+
+请求参数：
+
+```json
+
+```
+
+返回参数：
+
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "acNumber": 3,
+            "rank": 1,
+            "authorId": 15570357290,
+            "username": "冰箱的主人"
+        },
+        {
+            "acNumber": 1,
+            "rank": 2,
+            "authorId": 18470533341,
+            "username": "xiaolang"
+        }
+    ],
+    "msg": null
+}
+```
+
+
+
+### 创建比赛
 
 接口url：
 
@@ -2870,5 +3412,4 @@ page={
 ```json
 
 ```
-
 

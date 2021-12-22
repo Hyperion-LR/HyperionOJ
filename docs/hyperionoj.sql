@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 22/12/2021 14:10:49
+ Date: 22/12/2021 23:00:13
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `oj_admin`  (
   `permission_level` int NOT NULL COMMENT '权限等级(1:根管理员 2:管理员 3:老师)',
   `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '加密盐(加密密码)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1235 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1234 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_admin_action
@@ -41,7 +41,7 @@ CREATE TABLE `oj_admin_action`  (
   `action_time` bigint NOT NULL COMMENT '什么时候',
   `action_status` int NOT NULL COMMENT '状态(0:成功 1:撤销)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473179928750669825 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473312685569658882 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_article
@@ -63,7 +63,7 @@ CREATE TABLE `oj_article`  (
   `problem_id` bigint NOT NULL COMMENT '题目id',
   `is_delete` int NOT NULL COMMENT '是否删除(0:正常 1:删除)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473220499100438530 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473220499100438529 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_article_article_tag
@@ -74,7 +74,7 @@ CREATE TABLE `oj_article_article_tag`  (
   `article_id` bigint NOT NULL COMMENT '文章id',
   `tag_id` bigint NOT NULL COMMENT '标签id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473220499100438531 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473220499100438530 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_article_body
@@ -86,7 +86,7 @@ CREATE TABLE `oj_article_body`  (
   `content_html` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容(html)',
   `article_id` bigint NOT NULL COMMENT '文章id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473220499163353091 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473220499163353090 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_article_comment
@@ -104,7 +104,7 @@ CREATE TABLE `oj_article_comment`  (
   `level` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '楼层(0:普通楼 1:楼中楼)',
   `is_delete` int NOT NULL COMMENT '是否删除(0:正常 1:删除)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473221807161327618 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473221807161327617 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_contest
@@ -121,7 +121,7 @@ CREATE TABLE `oj_contest`  (
   `real_number` int NOT NULL COMMENT '有效人数',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '参加比赛密码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473294058460143619 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473294058460143618 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_contest_problem
@@ -134,7 +134,7 @@ CREATE TABLE `oj_contest_problem`  (
   `submit_count` int NOT NULL COMMENT '提交数量',
   `ac_count` int NOT NULL COMMENT '通过数量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473297877860384771 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473299906561331202 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_contest_submit
@@ -150,8 +150,9 @@ CREATE TABLE `oj_contest_submit`  (
   `status` int NOT NULL COMMENT '代码状态(0:未通过 1:通过)',
   `run_time` int NOT NULL COMMENT '运行多少毫秒(ms)',
   `run_memory` int NOT NULL COMMENT '运行使用多少内存(mb)',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `acNumber`(`author_id`, `problem_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1473533048735965186 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_contest_user
@@ -162,7 +163,7 @@ CREATE TABLE `oj_contest_user`  (
   `contests_id` bigint NOT NULL COMMENT '比赛id',
   `user_id` bigint NOT NULL COMMENT '参与者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473302170915065857 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_page_category
@@ -173,7 +174,7 @@ CREATE TABLE `oj_page_category`  (
   `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类名称',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分类描述',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473135899254124546 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473135899254124545 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_page_tag
@@ -181,9 +182,10 @@ CREATE TABLE `oj_page_category`  (
 DROP TABLE IF EXISTS `oj_page_tag`;
 CREATE TABLE `oj_page_tag`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '标签id',
-  `tag_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标签名',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  `tag_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '标签名',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `selectTag`(`id`, `tag_name`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_problem
@@ -203,7 +205,7 @@ CREATE TABLE `oj_problem`  (
   `run_memory` int NOT NULL COMMENT '限制运行内存(mb)',
   `case_number` int NOT NULL COMMENT '测试点数量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473173371447140354 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473173371447140353 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_problem_body
@@ -215,7 +217,7 @@ CREATE TABLE `oj_problem_body`  (
   `problem_body_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '题目描述(html)',
   `problem_id` bigint NOT NULL COMMENT '题目id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473173371321311235 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473173371321311234 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_problem_comment
@@ -232,8 +234,9 @@ CREATE TABLE `oj_problem_comment`  (
   `level` int NOT NULL COMMENT '楼层(0:普通楼 1:楼中楼)',
   `support_number` int NOT NULL COMMENT '点赞数',
   `is_delete` int NOT NULL COMMENT '是否删除(0:正常 1:删除)',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473209202153680899 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `点赞数量`(`id`, `support_number`, `is_delete`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1473209202153680898 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_problem_problem_tag
@@ -244,7 +247,7 @@ CREATE TABLE `oj_problem_problem_tag`  (
   `problem_id` bigint NOT NULL COMMENT '文章id',
   `tag_id` bigint NOT NULL COMMENT '标签id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_problem_submit
@@ -261,8 +264,9 @@ CREATE TABLE `oj_problem_submit`  (
   `run_memory` int NOT NULL COMMENT '运行使用多少内存(mb)',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '代码运行结果',
   `create_time` bigint NOT NULL COMMENT '提交时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473232633033162755 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `getEveryday`(`author_id`, `status`, `create_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1473532876450734081 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_sys_class
@@ -275,7 +279,7 @@ CREATE TABLE `oj_sys_class`  (
   `course_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '课程名称',
   `academy` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '学院',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1472394890775015425 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473310733054029826 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_sys_class_student
@@ -286,7 +290,7 @@ CREATE TABLE `oj_sys_class_student`  (
   `class_id` bigint NOT NULL COMMENT '班级id',
   `student_number` bigint NOT NULL COMMENT '学生学号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1472395236385665026 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473311007403454466 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_sys_homework
@@ -300,7 +304,7 @@ CREATE TABLE `oj_sys_homework`  (
   `end_time` bigint NOT NULL COMMENT '结束时间',
   `teacher_id` bigint NOT NULL COMMENT '布置作业的老师id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1472395994707439617 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473312602170109954 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_sys_homework_problem
@@ -311,7 +315,7 @@ CREATE TABLE `oj_sys_homework_problem`  (
   `homework_id` bigint NOT NULL COMMENT '作业id',
   `problem_id` bigint NOT NULL COMMENT '题目id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1473234627542155267 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473312685502541826 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_sys_homework_submit
@@ -324,7 +328,7 @@ CREATE TABLE `oj_sys_homework_submit`  (
   `student_id` bigint NOT NULL COMMENT '学生id',
   `submit_id` bigint NOT NULL COMMENT '提交id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1472394076039852034 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1473232633142214657 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oj_sys_user
@@ -345,6 +349,6 @@ CREATE TABLE `oj_sys_user`  (
   `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '加密盐(加密密码用)',
   `status` int NOT NULL COMMENT '账号状态(0:正常 1:停用)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1465874540008509443 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1465874540008509442 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

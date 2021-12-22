@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyperionoj.common.cache.Cache;
 import com.hyperionoj.common.feign.OSSClients;
 import com.hyperionoj.common.pojo.SysUser;
 import com.hyperionoj.common.service.RedisSever;
@@ -89,7 +88,6 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 题目
      */
     @Override
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     public List<ProblemVo> getProblemList(PageParams pageParams) {
         Page<Problem> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<Problem> problemPage = problemMapper.problemList(page, pageParams.getLevel(), Long.getLong(pageParams.getCategoryId()));
@@ -102,7 +100,6 @@ public class ProblemServiceImpl implements ProblemService {
      * @param id 题目id
      * @return 题目
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @Override
     public ProblemVo getProblemById(Long id) {
         if (ObjectUtils.isEmpty(id)) {
@@ -390,7 +387,6 @@ public class ProblemServiceImpl implements ProblemService {
      * @param pageParams 分页参数
      * @return 评论列表
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @Override
     public List<CommentVo> getCommentList(PageParams pageParams) {
         Page<ProblemComment> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
@@ -469,7 +465,6 @@ public class ProblemServiceImpl implements ProblemService {
      * @param id 提交id
      * @return 提交结果
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @Override
     public SubmitVo getSubmitById(Long id) {
         LambdaQueryWrapper<ProblemSubmit> queryWrapper = new LambdaQueryWrapper<>();
@@ -483,7 +478,6 @@ public class ProblemServiceImpl implements ProblemService {
      * @param commentVo 评论参数
      * @return 目前得赞数
      */
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
     @Override
     public Integer support(CommentVo commentVo) {
         return problemCommentMapper.support(Long.valueOf(commentVo.getId()));
@@ -669,7 +663,6 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 数量列表
      */
     @Override
-    @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 15 * 60 * 1000)
     public List<ProblemArchives> getEveryday() {
         SysUser sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), SysUser.class);
         return problemSubmitMapper.getEveryday(sysUser.getId());

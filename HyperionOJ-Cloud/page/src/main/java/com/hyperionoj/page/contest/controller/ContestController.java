@@ -102,8 +102,8 @@ public class ContestController {
      * @return 题目列表
      */
     @PostMapping("/add/{id}")
-    public Result addProblem(@PathVariable("id") Long id, @RequestParam("problem") String problemVo) {
-        return Result.success(contestService.addProblem(id, JSONObject.parseObject(problemVo, ProblemVo.class)));
+    public Result addProblem(@PathVariable("id") Long id, @RequestBody ProblemVo problemVo) {
+        return Result.success(contestService.addProblem(id, problemVo));
     }
 
     /**
@@ -114,8 +114,8 @@ public class ContestController {
      * @return 题目列表
      */
     @PostMapping("/remove/{id}")
-    public Result removeProblem(@PathVariable("id") Long id, @RequestParam("problem") String problemVo) {
-        return Result.success(contestService.removeProblem(id, JSONObject.parseObject(problemVo, ProblemVo.class)));
+    public Result removeProblem(@PathVariable("id") Long id, @RequestBody ProblemVo problemVo) {
+        return Result.success(contestService.removeProblem(id, problemVo));
     }
 
     /**

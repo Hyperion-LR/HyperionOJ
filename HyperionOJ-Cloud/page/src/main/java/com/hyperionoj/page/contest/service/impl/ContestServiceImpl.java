@@ -181,6 +181,7 @@ public class ContestServiceImpl implements ContestService {
         List<ContestProblem> contestProblems = contestProblemMapper.selectList(queryWrapper);
         ArrayList<ProblemVo> problemVos = new ArrayList<>();
         for (ContestProblem contestProblem : contestProblems) {
+            ProblemVo problemById = problemService.getProblemById(contestProblem.getProblemId());
             problemVos.add(problemService.getProblemById(contestProblem.getProblemId()));
         }
         return problemVos;
