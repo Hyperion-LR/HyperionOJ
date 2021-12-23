@@ -28,7 +28,7 @@ import java.util.List;
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 
     @Resource
     private StudentService studentService;

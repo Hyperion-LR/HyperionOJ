@@ -32,7 +32,7 @@ import static com.hyperionoj.common.constants.Constants.SALT;
 @Service
 public class ContestServiceImpl implements ContestService {
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 
     @Resource
     private ContestMapper contestMapper;

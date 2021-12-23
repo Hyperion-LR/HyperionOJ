@@ -41,7 +41,7 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 
     @Resource
     private ArticleMapper articleMapper;

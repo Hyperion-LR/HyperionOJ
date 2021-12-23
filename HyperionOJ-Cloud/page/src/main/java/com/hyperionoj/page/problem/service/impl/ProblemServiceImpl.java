@@ -50,7 +50,7 @@ import static com.hyperionoj.common.constants.Constants.*;
 public class ProblemServiceImpl implements ProblemService {
 
     private static final ConcurrentHashMap<String, RunResult> SUBMIT_RESULT = new ConcurrentHashMap<>();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
     @Resource
     private ProblemMapper problemMapper;
 
