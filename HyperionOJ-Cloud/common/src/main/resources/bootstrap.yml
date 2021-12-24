@@ -22,5 +22,5 @@ spring:
   mail:
     host: smtp.qq.com
     username: Hyperion_LR@foxmail.com
-    password: sggplcgucwxxdhfi
+    password: xxxxxx
     default-encoding: UTF-8
