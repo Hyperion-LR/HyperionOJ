@@ -429,7 +429,9 @@ public class ProblemServiceImpl implements ProblemService {
         problemComment.setCreateTime(System.currentTimeMillis());
         problemComment.setLevel(commentVo.getLevel());
         problemComment.setParentId(Long.getLong(commentVo.getParentId()));
-        problemComment.setToUid(Long.getLong(commentVo.getToUser().getId()));
+        if (commentVo.getToUser() != null) {
+            problemComment.setToUid(Long.getLong(commentVo.getToUser().getId()));
+        }
         if (problemComment.getLevel() == null) {
             problemComment.setLevel(0);
         }

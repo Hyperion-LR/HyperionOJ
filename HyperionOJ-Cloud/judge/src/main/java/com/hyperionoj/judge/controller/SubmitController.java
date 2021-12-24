@@ -23,7 +23,7 @@ public class SubmitController {
     private SubmitService submitService;
 
     @PostMapping
-    public Result submit(@RequestParam String submit) {
+    public Result submit(@RequestParam String submit) throws Exception {
         return Result.success(submitService.submit(JSONObject.parseObject(submit, SubmitVo.class)));
     }
 

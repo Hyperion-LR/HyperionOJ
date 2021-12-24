@@ -69,7 +69,7 @@ public class SysUserServiceImpl implements SysUserService {
                 }
             } else {
                 String redisCode = redisSever.getRedisKV(VER_CODE + sysUser.getMail());
-                if (StringUtils.compare(password, DigestUtils.md5Hex(redisCode + SALT)) == 0) {
+                if (StringUtils.compare(redisCode, DigestUtils.md5Hex(password + SALT)) == 0) {
                     return sysUser;
                 }
             }

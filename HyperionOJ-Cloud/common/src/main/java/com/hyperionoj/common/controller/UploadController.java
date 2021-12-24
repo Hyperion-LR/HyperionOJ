@@ -24,8 +24,8 @@ public class UploadController {
     @Resource
     private QiniuUtils qiniuUtils;
 
-    @PostMapping("/file")
-    public Result uploadImg(@RequestParam("file") MultipartFile multipartFile) {
+    @PostMapping("/avatar")
+    public Result uploadImg(@RequestParam("image") MultipartFile multipartFile) {
         String fileName = UUID.randomUUID() + "." + StringUtils.substringAfterLast(multipartFile.getOriginalFilename(), ".");
         boolean upload = qiniuUtils.upload(multipartFile, fileName);
         if (upload) {

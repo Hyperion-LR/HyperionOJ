@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 
 import static com.hyperionoj.judge.constants.Constants.UNDERLINE;
 
@@ -38,7 +39,7 @@ public class SubmitServiceImpl implements SubmitService {
      * @return 代码判题结果
      */
     @Override
-    public RunResult submit(SubmitVo submit) {
+    public RunResult submit(SubmitVo submit) throws Exception {
 
         // 准备工作
         RunResult runResult = new RunResult();
@@ -77,6 +78,7 @@ public class SubmitServiceImpl implements SubmitService {
         }
         runResult.setAuthorId(submit.getAuthorId());
         runResult.setProblemId(Integer.valueOf(submit.getProblemId()));
+        fileService.deleteFolder(new File(saveDir));
         return runResult;
     }
 

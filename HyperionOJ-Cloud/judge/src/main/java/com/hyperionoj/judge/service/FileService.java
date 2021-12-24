@@ -1,5 +1,7 @@
 package com.hyperionoj.judge.service;
 
+import java.io.File;
+
 /**
  * @author Hyperion
  * @date 2021/12/7
@@ -23,4 +25,12 @@ public interface FileService {
      * @return 文件名
      */
     String codeFileName(String codeLang);
+
+    /**
+     * 删除文件
+     *
+     * @param folder 要删除的文件
+     * @throws Exception
+     */
+    void deleteFolder(File folder) throws Exception;
 }

@@ -45,7 +45,7 @@ public class RunServiceImpl implements RunService {
         // 获取题目输入文件，并做好进程运行准备
         String inData = filePath.getProblem() + File.separator + problemId + File.separator + IN + File.separator + IN + index + TXT;
         RunResult result = new RunResult();
-        ArrayList<String> args = getArgs(codeLang, runMemory);
+        ArrayList<String> args = getArgs(codeLang, runMemory, compiledFile);
         if (args == null) {
             result.setVerdict(Verdict.CE.getVerdict());
             result.setMsg(Verdict.CE.getMsg());
@@ -96,11 +96,11 @@ public class RunServiceImpl implements RunService {
      * @param codeLang 代码语言
      * @return shell运行参数
      */
-    private ArrayList<String> getArgs(String codeLang, Integer runMemory) {
+    private ArrayList<String> getArgs(String codeLang, Integer runMemory, String compileFile) {
         ArrayList<String> args = null;
         if ((CPP_LANG).equals(codeLang)) {
             args = new ArrayList<>();
-            args.add(CPP_COMPILE);
+            args.add(compileFile + File.separator + CPP_COMPILE);
         } else if ((JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();
             args.add(JAVA_RUN);

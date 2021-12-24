@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String codeFileName(String codeLang) {
         String codeFileName = "";
-        if ((CPP_LANG).equals(codeLang)) {
+        if (("c++").equals(codeLang)) {
             codeFileName = CPP_FILENAME;
         } else if ((JAVA_LANG).equals(codeLang)) {
             codeFileName = JAVA_FILENAME;
@@ -66,4 +66,33 @@ public class FileServiceImpl implements FileService {
         }
         return codeFileName;
     }
+
+    /**
+     * 删除文件
+     *
+     * @param folder 要删除的文件
+     * @throws Exception
+     */
+    @Override
+    public void deleteFolder(File folder) throws Exception {
+        if (!folder.exists()) {
+            throw new Exception("文件不存在");
+        }
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    //递归直到目录下没有文件
+                    deleteFolder(file);
+                } else {
+                    //删除
+                    file.delete();
+                }
+            }
+        }
+        //删除
+        folder.delete();
+
+    }
+
 }

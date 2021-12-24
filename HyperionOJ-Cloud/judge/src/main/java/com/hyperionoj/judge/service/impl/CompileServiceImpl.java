@@ -42,6 +42,7 @@ public class CompileServiceImpl implements CompileService {
             return result;
         }
         ProcessBuilder processBuilder = new ProcessBuilder(args);
+        processBuilder.directory(new File(codeFileDir));
         try {
             Process process = processBuilder.start();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), ENCODING_GBK));
@@ -96,7 +97,7 @@ public class CompileServiceImpl implements CompileService {
             args = new ArrayList<>();
             args.add(CPP_COMPILE_CMD);
             args.add("-o");
-            args.add("main");
+            args.add("Main");
             args.add(codeFile);
         } else if ((JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();

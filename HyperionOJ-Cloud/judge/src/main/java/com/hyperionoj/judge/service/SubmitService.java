@@ -17,5 +17,5 @@ public interface SubmitService {
      * @param submit 代码参数
      * @return 代码判题结果
      */
-    RunResult submit(SubmitVo submit);
+    RunResult submit(SubmitVo submit) throws Exception;
 }

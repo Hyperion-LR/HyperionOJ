@@ -29,7 +29,7 @@ public class SubmitListener {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @KafkaListener(topics = {KAFKA_TOPIC_SUBMIT}, groupId = "judgeTest")
-    public void submit(ConsumerRecord<?, ?> record) {
+    public void submit(ConsumerRecord<?, ?> record) throws Exception {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
             RunResult runResult = submitService.submit(JSONObject.parseObject((String) kafkaMessage.get(), SubmitVo.class));
