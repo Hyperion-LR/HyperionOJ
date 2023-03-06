@@ -2,11 +2,11 @@ package com.hyperionoj.judge.interceptor;
 
 import com.alibaba.druid.support.spring.mvc.StatHandlerInterceptor;
 import com.alibaba.fastjson.JSON;
-import com.hyperionoj.common.service.RedisSever;
-import com.hyperionoj.common.utils.JWTUtils;
-import com.hyperionoj.common.utils.ThreadLocalUtils;
-import com.hyperionoj.common.vo.ErrorCode;
-import com.hyperionoj.common.vo.Result;
+import com.hyperionoj.judge.utils.JWTUtils;
+import com.hyperionoj.judge.utils.RedisUtils;
+import com.hyperionoj.judge.utils.ThreadLocalUtils;
+import com.hyperionoj.judge.vo.ErrorCode;
+import com.hyperionoj.judge.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.hyperionoj.common.constants.Constants.TOKEN;
-import static com.hyperionoj.common.constants.Constants.UNDEFINED;
+import static com.hyperionoj.judge.constants.Constants.TOKEN;
+import static com.hyperionoj.judge.constants.Constants.UNDEFINED;
+
 
 /**
  * @author Hyperion
@@ -29,7 +30,7 @@ import static com.hyperionoj.common.constants.Constants.UNDEFINED;
 public class LoginInterceptor extends StatHandlerInterceptor {
 
     @Resource
-    private RedisSever redisSever;
+    private RedisUtils redisSever;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

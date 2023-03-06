@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyperionoj.web.infrastructure.mapper.ProblemSubmitMapper">
+
+    <select id="getSubmitList" resultType="com.hyperionoj.web.infrastructure.po.ProblemSubmitPO">
+        select id, problem_id, author_id, username, code_lang, run_time, run_memory, status, create_time from
+        oj_problem_submit
+        <where>
+            1 = 1
+            <if test="problemId != null">and problem_id = #{problemId}</if>
+            <if test="codeLang != null">and code_lang = #{codeLang}</if>
+            <if test="username != null">and username = #{username}</if>
+            <if test="verdict != null">and `status` = #{verdict}</if>
+            order by create_time desc
+        </where>
+    </select>
+
+    <!--
+    <select id="getEveryday" resultType="com.hyperionoj.page.problem.dao.dos.ProblemArchives">
+        select from_unixtime(create_time / 1000, '%Y') as year,
+               from_unixtime(create_time / 1000, '%m') as month,
+               from_unixtime(create_time / 1000, '%d') as day,
+               count(*)                                as count
+        from oj_problem_submit
+        where author_id = #{id}
+          and status = 'AC'
+        group by year, month, day
+    </select>
+    -->
+
+</mapper>

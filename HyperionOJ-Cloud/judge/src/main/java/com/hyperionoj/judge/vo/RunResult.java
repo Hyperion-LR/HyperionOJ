@@ -11,9 +11,11 @@ public class RunResult {
 
     private String authorId;
 
-    private Integer submitId;
+    private Long submitId;
 
-    private Integer problemId;
+    private String submitTime;
+
+    private Long problemId;
 
     private String verdict;
 

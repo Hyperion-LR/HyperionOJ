@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Optional;
 
-import static com.hyperionoj.common.constants.Constants.KAFKA_TOPIC_SUBMIT;
-import static com.hyperionoj.common.constants.Constants.KAFKA_TOPIC_SUBMIT_RESULT;
+import static com.hyperionoj.judge.constants.Constants.KAFKA_TOPIC_SUBMIT;
+import static com.hyperionoj.judge.constants.Constants.KAFKA_TOPIC_SUBMIT_RESULT;
 
 /**
  * @author Hyperion

@@ -1,0 +1,74 @@
+server:
+  port: 9010
+spring:
+  application:
+    name: hyperionoj-web
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.27.57.152:8848
+        cluster-name: HyperionOJ
+        ephemeral: true
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+      config:
+        server-addr: 172.27.57.152:8848
+        file-extension: yaml
+        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+
+  redis:
+    host: localhost
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hyperionoj?serverTimezone=UTC&allowMultiQueries=true
+    username: root
+    password: 123212321
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-request-size: 5GB
+      max-file-size: 1GB
+  mail:
+    host: smtp.qq.com
+    username: Hyperion_LR@foxmail.com
+    password: xxxxxxxx
+    default-encoding: UTF-8
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      # 发生错误后，消息重发的次数。
+      retries: 1
+      # 键的序列化方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 值的序列化方式
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+    consumer:
+      auto-offset-reset: earliest # 设置消费者分组最初的消费进度为 earliest
+      group-id: pageTest
+      # 键的反序列化方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 值的反序列化方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.artisan.springkafka.domain
+    listener:
+      # 但消费者监听的topic不存在时，保证能够是项目启动
+      missing-topics-fatal: false
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: oj_

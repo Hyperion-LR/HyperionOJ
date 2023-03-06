@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyperionoj.web.infrastructure.mapper.UserMapper">
+
+    <update id="freezeUser" parameterType="java.lang.Long">
+        update oj_sys_user
+        set status = 1
+        where id = #{id}
+    </update>
+    <update id="updateSubmitNoAc" parameterType="java.lang.Long">
+        update oj_sys_user
+        set problem_submit_number = oj_sys_user.problem_submit_number + 1
+        where id = #{authorId}
+    </update>
+    <update id="updateSubmitAc">
+        update oj_sys_user
+        set problem_submit_number    = oj_sys_user.problem_submit_number + 1,
+            problem_submit_ac_number = oj_sys_user.problem_submit_ac_number + 1
+        where id = #{authorId};
+        update oj_sys_user
+        set problem_ac_number =
+                (select count(distinct problem_id, `status`)
+                 from oj_problem_submit
+                 where author_id = #{authorId}
+                   and `status` = 'AC')
+        where id = #{authorId};
+    </update>
+</mapper>
