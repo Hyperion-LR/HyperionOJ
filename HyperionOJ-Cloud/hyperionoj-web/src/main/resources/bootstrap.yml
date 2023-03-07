@@ -8,17 +8,17 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.27.57.152:8848
+        server-addr: 123.60.151.232:8848
         cluster-name: HyperionOJ
         ephemeral: true
         namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
       config:
-        server-addr: 172.27.57.152:8848
+        server-addr: 123.60.151.232:8848
         file-extension: yaml
         namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
 
   redis:
-    host: localhost
+    host: 123.60.151.232
     port: 6379
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -39,7 +39,7 @@ spring:
     password: xxxxxxxx
     default-encoding: UTF-8
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 123.60.151.232:9092
     producer:
       # 发生错误后，消息重发的次数。
       retries: 1
