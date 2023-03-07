@@ -1,10 +1,10 @@
 package com.hyperionoj.web.application.api;
 
 import com.hyperionoj.web.infrastructure.po.AdminPO;
-import com.hyperionoj.web.domain.dto.LoginParam;
-import com.hyperionoj.web.domain.dto.RegisterAdminParam;
-import com.hyperionoj.web.domain.dto.RegisterParam;
-import com.hyperionoj.web.domain.dto.UpdatePasswordParam;
+import com.hyperionoj.web.presentation.dto.LoginParam;
+import com.hyperionoj.web.presentation.dto.RegisterAdminParam;
+import com.hyperionoj.web.presentation.dto.RegisterParam;
+import com.hyperionoj.web.presentation.dto.UpdatePasswordParam;
 import com.hyperionoj.web.presentation.vo.UserVO;
 import org.apache.ibatis.annotations.Param;
 

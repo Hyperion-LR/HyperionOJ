@@ -1,4 +1,4 @@
-package com.hyperionoj.web.domain.listener;
+package com.hyperionoj.web.presentation.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.judge.dto.UpdateSubmitDO;

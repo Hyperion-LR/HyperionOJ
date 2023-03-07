@@ -22,31 +22,23 @@ com.hyperion
 ├── hyperion-gateway         							// 网关模块 [8181]
 |
 ├── hyperion-web          								// 对外接口 [9010]
-│       	  └── hyperion-web-article                  // 文章服务
-│       	  └── hyperion-web-problem               	// 题库服务
-│       	  └── hyperion-web-contest               	// 竞赛服务
-│       	  └── hyperion-web-admin               		// 管理员服务
-|
-├── hyperion-api          								// 业务
-│       	  └── hyperion-api-api         				// 具体业务实现
-|
-├── hyperion-biz          								// 业务实现
-│       	  └── hyperion-biz-service         			// 具体业务实现
-│       	  └── hyperion-biz-interceptor         		// 拦截器
-│       	  └── hyperion-biz-schedule         		// 定时任务
+│       	  └── presentation                  		// 表示层
+│       	  │			└── controller
+│       	  │			└── listener
+│       	  │			└── vo
+│       	  │			└── dto
+|			  │
+│       	  └── application                  			// 应用层
+│       	  │			└── api
+|			  │
+│       	  └── domain                  				// 领域层
+│       	  │		└── service
+|			  |
+│       	  └── infrastructure                  		// 基础层
+│      					└── dal
+│      					└── utils
 |
 ├── hyperion-judge         							    // 判题服务 [9000]
-|
-├── hyperion-dal          								// 持久化模块
-│       	  └── hyperion-dal-do                  		// 数据对象
-│       	  └── hyperion-dal-po                  		// 实体对象
-│       	  └── hyperion-dal-mapper              		// mapper
-|
-├── hyperion-commom             						// 通用模块
-│       		└── hyperion-commom-config              // 配置相关
-│       		└── hyperion-commom-constant            // 常量包
-│       		└── hyperion-commom-utils               // 系统工具类
-│       		└── hyperion-commom-vo                  // 前端交互对象
 |
 ├──pom.xml                								// 公共依赖
 ~~~

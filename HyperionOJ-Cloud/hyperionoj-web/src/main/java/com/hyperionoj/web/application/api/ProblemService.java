@@ -1,6 +1,6 @@
 package com.hyperionoj.web.application.api;
 
-import com.hyperionoj.web.domain.dto.PageParams;
+import com.hyperionoj.web.presentation.dto.PageParams;
 import com.hyperionoj.web.presentation.vo.CategoryVO;
 import com.hyperionoj.web.presentation.vo.CommentVO;
 import com.hyperionoj.web.presentation.vo.ProblemVO;

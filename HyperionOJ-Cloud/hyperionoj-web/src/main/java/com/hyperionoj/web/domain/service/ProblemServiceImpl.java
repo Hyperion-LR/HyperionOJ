@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.web.application.api.ProblemService;
-import com.hyperionoj.web.domain.dto.PageParams;
+import com.hyperionoj.web.presentation.dto.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
 import com.hyperionoj.web.infrastructure.mapper.*;
 import com.hyperionoj.web.infrastructure.po.*;
