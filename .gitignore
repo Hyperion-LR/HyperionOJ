@@ -129,6 +129,6 @@ local.properties
 
 /judge/*
 
-HyperionOJ-Cloud/hyperionoj-web/src/main/resources/
+HyperionOJ-Cloud/hyperionoj-web/src/main/resources/bootstrap-dev.yml
 
-HyperionOJ-Cloud/judge/src/main/resources/
+HyperionOJ-Cloud/judge/src/main/resources/bootstrap-dev.yml
