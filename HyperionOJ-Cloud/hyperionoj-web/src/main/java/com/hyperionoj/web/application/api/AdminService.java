@@ -2,6 +2,10 @@ package com.hyperionoj.web.application.api;
 
 
 import com.hyperionoj.web.infrastructure.po.AdminPO;
+import com.hyperionoj.web.presentation.dto.param.ActionPageParams;
+import com.hyperionoj.web.presentation.dto.param.LoginAdminParam;
+import com.hyperionoj.web.presentation.dto.param.RegisterAdminParam;
+import com.hyperionoj.web.presentation.vo.AdminVO;
 
 /**
  * @author Hyperion
@@ -18,24 +22,49 @@ public interface AdminService {
     AdminPO findAdmin(Long account);
 
     /**
-     * 增加管理员
+     * 管理员登陆
      *
-     * @param admin 管理员
+     * @param loginAdminParam 登陆参数
+     * @return token
      */
-    void addAdmin(AdminPO admin);
+    String login(LoginAdminParam loginAdminParam);
+
+
+    /**
+     * 注册管理员
+     *
+     * @param registerParam 注册参数
+     * @return 返回管理员信息
+     */
+    AdminVO register(RegisterAdminParam registerParam);
 
     /**
      * 更新管理员
      *
-     * @param admin 管理员
+     * @param registerParam 注册参数
      */
-    void updateAdmin(AdminPO admin);
+    AdminVO updateAdmin(RegisterAdminParam registerParam);
 
     /**
      * 删除管理员
      *
-     * @param id 要删除的管理员id
+     * @param id 管理员id
+     * @return 是否成功删除
      */
-    void deleteAdmin(Long id);
+    boolean deleteAdmin(Long id);
 
+    /**
+     * 冻结普通用户
+     *
+     * @param id 要冻结的用户id
+     */
+    boolean freezeUser(Long id);
+
+    /**
+     * 查询行为记录列表
+     *
+     * @param actionPageParams 分页参数
+     * @return 列表
+     */
+    Object queryActionList(ActionPageParams actionPageParams);
 }

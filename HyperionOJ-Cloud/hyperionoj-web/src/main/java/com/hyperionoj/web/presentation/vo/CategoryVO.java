@@ -1,6 +1,7 @@
 package com.hyperionoj.web.presentation.vo;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  * @date 2021/12/15
  */
 @Data
+@Builder
 public class CategoryVO {
 
     private String id;
@@ -15,4 +17,5 @@ public class CategoryVO {
     private String categoryName;
 
     private String description;
+
 }

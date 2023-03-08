@@ -2,7 +2,10 @@ package com.hyperionoj.web.infrastructure.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 题目提交PO类
@@ -11,6 +14,9 @@ import lombok.Data;
  * @date 2021/11/30
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("problem_submit")
 public class ProblemSubmitPO {
 
     /**

@@ -13,7 +13,7 @@
     </resultMap>
 
     <select id="listAction" resultType="com.hyperionoj.web.infrastructure.po.AdminActionPO">
-        select id, admin_id, admin_action, action_time, action_status from oj_admin_action
+        select id, admin_id, admin_action, action_time, action_status from admin_action
         <where>
             1 = 1
             <if test="adminId != null">and admin_id = #{adminId}</if>

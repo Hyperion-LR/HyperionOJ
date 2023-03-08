@@ -1,5 +1,6 @@
 package com.hyperionoj.web.presentation.vo;
 
+import com.hyperionoj.web.infrastructure.constants.ErrorCode;
 import lombok.Data;
 
 /**

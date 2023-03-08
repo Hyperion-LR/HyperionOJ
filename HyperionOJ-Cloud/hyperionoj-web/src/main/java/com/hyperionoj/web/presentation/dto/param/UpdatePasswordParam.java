@@ -1,4 +1,4 @@
-package com.hyperionoj.web.presentation.dto;
+package com.hyperionoj.web.presentation.dto.param;
 
 import lombok.Data;
 

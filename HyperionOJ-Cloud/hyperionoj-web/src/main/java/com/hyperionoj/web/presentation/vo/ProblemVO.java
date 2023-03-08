@@ -1,5 +1,6 @@
 package com.hyperionoj.web.presentation.vo;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -9,23 +10,20 @@ import java.util.List;
  * @date 2021/12/9
  */
 @Data
+@Builder
 public class ProblemVO {
 
     private String id;
 
     private String title;
 
-    private String bodyId;
-
     private Integer problemLevel;
 
-    private Integer acNumber = 0;
+    private Integer acNumber;
 
-    private Integer submitNumber = 0;
+    private Integer submitNumber;
 
-    private Integer solutionNumber = 0;
-
-    private Integer commentNumber = 0;
+    private Integer commentNumber;
 
     private Integer caseNumber;
 
@@ -33,7 +31,9 @@ public class ProblemVO {
 
     private Integer runTime;
 
-    private ProblemBodyVO problemBodyVo;
+    private String problemBody;
+
+    private String problemBodyHtml;
 
     private CategoryVO category;
 

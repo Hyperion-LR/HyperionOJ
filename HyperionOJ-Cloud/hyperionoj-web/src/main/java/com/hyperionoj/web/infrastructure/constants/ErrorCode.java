@@ -1,4 +1,4 @@
-package com.hyperionoj.web.presentation.vo;
+package com.hyperionoj.web.infrastructure.constants;
 
 
 /**

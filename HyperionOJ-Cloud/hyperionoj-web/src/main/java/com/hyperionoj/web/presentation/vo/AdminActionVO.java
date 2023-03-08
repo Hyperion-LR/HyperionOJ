@@ -1,5 +1,6 @@
 package com.hyperionoj.web.presentation.vo;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Data;
  * @date 2021/12/10
  */
 @Data
+@Builder
 public class AdminActionVO {
 
     private String id;

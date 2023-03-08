@@ -1,13 +1,12 @@
 package com.hyperionoj.web.presentation.dto;
 
+
+import lombok.Builder;
 import lombok.Data;
 
-/**
- * @author Hyperion
- * @date 2021/12/10
- */
 @Data
-public class RegisterParam {
+@Builder
+public class AdminDTO {
 
     private String id;
 

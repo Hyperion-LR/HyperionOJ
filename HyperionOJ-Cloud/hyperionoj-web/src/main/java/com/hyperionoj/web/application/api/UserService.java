@@ -2,6 +2,11 @@ package com.hyperionoj.web.application.api;
 
 
 import com.hyperionoj.web.infrastructure.po.UserPO;
+import com.hyperionoj.web.presentation.dto.param.LoginParam;
+import com.hyperionoj.web.presentation.dto.param.RegisterParam;
+import com.hyperionoj.web.presentation.dto.param.UpdatePasswordParam;
+import com.hyperionoj.web.presentation.dto.UserDTO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author Hyperion
@@ -10,11 +15,44 @@ import com.hyperionoj.web.infrastructure.po.UserPO;
 public interface UserService {
 
     /**
-     * 冻结普通用户
+     * 用户登录
      *
-     * @param id 要冻结的用户id
+     * @param loginParam 登录参数
+     * @return token
      */
-    void freezeUser(String id);
+    String login(LoginParam loginParam);
+
+    /**
+     * 注册普通用户
+     *
+     * @param registerParam 注册参数
+     * @return token
+     */
+    String registerUser(RegisterParam registerParam);
+
+    /**
+     * 更新用户不敏感信息
+     *
+     * @param userDTO 用户信息
+     */
+    boolean updateUser(@Param("userVo") UserDTO userDTO);
+
+    /**
+     * 更新用户账号密码
+     *
+     * @param updateParam 登录信息
+     * @return 是否更新成功
+     */
+    boolean updatePassword(UpdatePasswordParam updateParam);
+
+    /**
+     * 销毁账户
+     * 将账户状态修改为注销
+     *
+     * @param destroyParam 申请注销账号的参数
+     * @return 是否销毁成功
+     */
+    boolean destroy(LoginParam destroyParam);
 
     /**
      * 通过账号密码查找用户
@@ -32,36 +70,5 @@ public interface UserService {
      * @return SysUser
      */
     UserPO findUserById(String id);
-
-    /**
-     * 往数据库添加用户
-     *
-     * @param sysUser 用户信息
-     */
-    void insert(UserPO sysUser);
-
-    /**
-     * 往数据库更新用户基本信息
-     *
-     * @param sysUser 用户信息
-     */
-    void update(UserPO sysUser);
-
-    /**
-     * 更新用户账号密码
-     *
-     * @param userMail 账号
-     * @param password 新密码
-     */
-    void updatePassword(String userMail, String password);
-
-    /**
-     * 注销账号(更新用户状态)
-     *
-     * @param account  账号id
-     * @param password 密码目前没用到
-     * @return 是否注销成功
-     */
-    boolean destroy(Long account, String password);
 
 }

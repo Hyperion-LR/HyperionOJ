@@ -1,7 +1,7 @@
 package com.hyperionoj.web.infrastructure.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hyperionoj.web.infrastructure.po.PageCategoryPO;
+import com.hyperionoj.web.infrastructure.po.CategoryPO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * @date 2021/12/16
  */
 @Repository
-public interface CategoryMapper extends BaseMapper<PageCategoryPO> {
+public interface CategoryMapper extends BaseMapper<CategoryPO> {
 }

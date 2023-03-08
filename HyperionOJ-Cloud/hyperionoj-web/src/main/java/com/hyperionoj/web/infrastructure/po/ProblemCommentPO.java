@@ -2,7 +2,9 @@ package com.hyperionoj.web.infrastructure.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * 题目评论
@@ -11,6 +13,12 @@ import lombok.Data;
  * @date 2021/11/30
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("problem_comment")
 public class ProblemCommentPO {
 
     /**
@@ -53,11 +61,6 @@ public class ProblemCommentPO {
      * 给谁的回复评论
      */
     private Long toUid;
-
-    /**
-     * 点赞数量
-     */
-    private Integer support;
 
     /**
      * 评论楼

@@ -3,7 +3,7 @@ package com.hyperionoj.web.domain.interceptor;
 import com.alibaba.druid.support.spring.mvc.StatHandlerInterceptor;
 import com.alibaba.fastjson.JSON;
 import com.hyperionoj.web.infrastructure.constants.Constants;
-import com.hyperionoj.web.presentation.vo.ErrorCode;
+import com.hyperionoj.web.infrastructure.constants.ErrorCode;
 import com.hyperionoj.web.presentation.vo.Result;
 import com.hyperionoj.web.infrastructure.utils.JWTUtils;
 import com.hyperionoj.web.infrastructure.utils.RedisUtils;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 @Slf4j
-public class LoginInterceptor extends StatHandlerInterceptor {
+public class AdminLoginInterceptor extends StatHandlerInterceptor {
 
     @Resource
     private RedisUtils redisSever;

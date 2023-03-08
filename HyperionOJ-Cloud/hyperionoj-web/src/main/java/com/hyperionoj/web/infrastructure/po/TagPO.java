@@ -2,7 +2,9 @@ package com.hyperionoj.web.infrastructure.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * 标签PO类
@@ -11,7 +13,13 @@ import lombok.Data;
  * @date 2021/12/15
  */
 @Data
-public class PageTagPO {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("tag")
+public class TagPO {
 
     /**
      * 标签ID

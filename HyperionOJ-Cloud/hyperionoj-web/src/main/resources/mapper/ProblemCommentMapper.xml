@@ -6,7 +6,7 @@
 
     <select id="getCommentList" resultType="com.hyperionoj.web.infrastructure.po.ProblemCommentPO">
         select id, content, problem_id, create_time, author_id, parent_id, to_uid, support_number, level from
-        oj_problem_comment
+        problem_comment
         <where>
             `is_delete` = 0
             <if test="problemId != null">
@@ -17,7 +17,7 @@
     </select>
     <select id="support" resultType="java.lang.Integer">
         select support_number + 1
-        from oj_problem_comment
+        from problem_comment
         where (id = #{commentId} and is_delete = 0)
     </select>
 

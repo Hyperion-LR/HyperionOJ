@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.web.application.api.ProblemService;
 import com.hyperionoj.web.application.annotation.Cache;
 
-import com.hyperionoj.web.presentation.vo.ErrorCode;
-import com.hyperionoj.web.presentation.dto.PageParams;
+import com.hyperionoj.web.infrastructure.constants.ErrorCode;
+import com.hyperionoj.web.presentation.dto.CommentDTO;
+import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
 import com.hyperionoj.web.presentation.vo.CommentVO;
 import com.hyperionoj.web.presentation.vo.ProblemVO;
@@ -41,12 +42,11 @@ public class ProblemController {
     /**
      * 题目列表
      *
-     * @param page 分页参数
+     * @param pageParams 分页参数
      * @return 返回查询分页
      */
     @GetMapping("/list")
-    public Result getProblemList(@RequestParam("page") String page) {
-        PageParams pageParams = JSONObject.parseObject(page, PageParams.class);
+    public Result getProblemList(@RequestBody PageParams pageParams) {
         return Result.success(problemService.getProblemList(pageParams));
     }
 
@@ -57,7 +57,17 @@ public class ProblemController {
      */
     @GetMapping("/category")
     public Result getCategory() {
-        return Result.success(problemService.getCategory());
+        return Result.success(problemService.getCategoryList());
+    }
+
+    /**
+     * 获取题目分类列表
+     *
+     * @return 题目所有类别
+     */
+    @GetMapping("/tag")
+    public Result getTag() {
+        return Result.success(problemService.getTagList());
     }
 
 
@@ -100,8 +110,8 @@ public class ProblemController {
      * @return 根据分页参数返回简要提交信息
      */
     @GetMapping("/submits")
-    public Result getSubmitList(@RequestParam("page") String pageParams) {
-        return Result.success(problemService.getSubmitList(JSONObject.parseObject(pageParams, PageParams.class)));
+    public Result getSubmitList(@RequestBody PageParams pageParams) {
+        return Result.success(problemService.getSubmitList(pageParams));
     }
 
     /**
@@ -119,34 +129,34 @@ public class ProblemController {
     /**
      * 对题目进行评论
      *
-     * @param commentVo 用户提交评论
+     * @param commentDTO 用户提交评论
      * @return 本次提交情况
      */
     @PostMapping("/comment")
-    public Result comment(@RequestBody CommentVO commentVo) {
-        return Result.success(problemService.comment(commentVo));
+    public Result comment(@RequestBody CommentDTO commentDTO) {
+        return Result.success(problemService.comment(commentDTO));
     }
 
     /**
-     * 题目下该评论的点赞数
+     * 对题目下该评论的点赞
      *
-     * @param commentVo 评论参数
+     * @param commentVO 评论参数
      * @return 目前得赞数
      */
-    @PostMapping("/support/comment")
+    @PostMapping("/comment/support")
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
-    public Result supportComment(@RequestBody CommentVO commentVo) {
-        return Result.success(problemService.support(commentVo));
+    public Result supportComment(@RequestBody CommentVO commentVO) {
+        return Result.success(problemService.support(Long.parseLong(commentVO.getId())));
     }
 
     /**
      * 删除评论
      *
-     * @param commentVo 评论参数
+     * @param commentDTO 评论参数
      */
-    @PostMapping("/delete/comment")
-    public Result deleteComment(@RequestBody CommentVO commentVo) {
-        problemService.deleteComment(commentVo);
+    @DeleteMapping("/comment/delete")
+    public Result deleteComment(@RequestBody CommentDTO commentDTO) {
+        problemService.deleteComment(Long.parseLong(commentDTO.getId()));
         return Result.success(null);
     }
 
@@ -158,8 +168,8 @@ public class ProblemController {
      */
     @GetMapping("/comments")
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
-    public Result getComments(@RequestParam("page") String pageParams) {
-        return Result.success(problemService.getCommentList(JSONObject.parseObject(pageParams, PageParams.class)));
+    public Result getComments(@RequestBody PageParams pageParams) {
+        return Result.success(problemService.getCommentList(pageParams));
     }
 
     /**

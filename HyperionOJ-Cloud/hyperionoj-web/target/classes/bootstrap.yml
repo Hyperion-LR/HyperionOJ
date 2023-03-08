@@ -16,13 +16,13 @@ spring:
         server-addr: 123.60.151.232:8848
         file-extension: yaml
         namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
-
   redis:
     host: 123.60.151.232
     port: 6379
+    password: 123212321
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hyperionoj?serverTimezone=UTC&allowMultiQueries=true
+    url: jdbc:mysql://123.60.151.232:3306/HyperionOJ?serverTimezone=UTC&allowMultiQueries=true
     username: root
     password: 123212321
     type: com.alibaba.druid.pool.DruidDataSource
@@ -35,8 +35,8 @@ spring:
       max-file-size: 1GB
   mail:
     host: smtp.qq.com
-    username: Hyperion_LR@foxmail.com
-    password: xxxxxxxx
+    username: "Hyperion_LR@foxmail.com"
+    password: laobzfffstfpdjba
     default-encoding: UTF-8
   kafka:
     bootstrap-servers: 123.60.151.232:9092
@@ -69,6 +69,10 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  global-config:
-    db-config:
-      table-prefix: oj_
+qiniu:
+  accessKey: P2wWnbggS2GLKDWSn-ededUA9sONcxqjhebhUdd9
+  accessSecretKey: lrqbgSX8Fqi2LgEkJNdeL-aEGHR8r81b8dmF3x_I
+  bucketName: hyperion-oj
+  url:
+  zone: huadong
+problem-case-dir:

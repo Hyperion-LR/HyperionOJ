@@ -11,16 +11,15 @@
         <result column="category_id" property="categoryId"/>
         <result column="ac_number" property="acNumber"/>
         <result column="submit_number" property="submitNumber"/>
-        <result column="solution_number" property="solutionNumber"/>
         <result column="comment_number" property="commentNumber"/>
         <result column="run_time" property="runTime"/>
         <result column="run_memory" property="runMemory"/>
     </resultMap>
 
     <select id="problemList" resultType="com.hyperionoj.web.infrastructure.po.ProblemPO">
-        select id, title, body_id, problem_level, category_id, ac_number, submit_number, solution_number,
+        select id, title, problem_level, category_id, ac_number, submit_number,
         comment_number,
-        run_time, run_memory from oj_problem
+        run_time, run_memory from problem
         <where>
             1 = 1
             <if test="level != null">

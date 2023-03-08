@@ -1,5 +1,6 @@
 package com.hyperionoj.web.presentation.controller;
 
+import com.hyperionoj.web.infrastructure.utils.RedisUtils;
 import com.hyperionoj.web.presentation.vo.Result;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ public class TestController {
 
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Resource
+    private RedisUtils redisUtils;
 
     @Value("${health.value}")
     private int testConfValue;
@@ -50,5 +54,19 @@ public class TestController {
     public Result getKafka(){
         return Result.success(kafkaResult);
     }
+
+    @PostMapping("/redis/{key}/{value}")
+    public Result sendRedis(@PathVariable String key, @PathVariable String value){
+        redisUtils.setRedisKV(key, value);
+        return Result.success("ok");
+    }
+
+    @GetMapping("/redis/{key}")
+    public Result getRedis(@PathVariable String key){
+        String value = redisUtils.getRedisKV(key);
+        return Result.success(value);
+    }
+
+
 
 }

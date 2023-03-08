@@ -6,9 +6,14 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.web.application.api.ProblemService;
-import com.hyperionoj.web.presentation.dto.PageParams;
+import com.hyperionoj.web.domain.convert.MapStruct;
+import com.hyperionoj.web.domain.repo.*;
+import com.hyperionoj.web.presentation.dto.CategoryDTO;
+import com.hyperionoj.web.presentation.dto.CommentDTO;
+import com.hyperionoj.web.presentation.dto.ProblemDTO;
+import com.hyperionoj.web.presentation.dto.TagDTO;
+import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
-import com.hyperionoj.web.infrastructure.mapper.*;
 import com.hyperionoj.web.infrastructure.po.*;
 import com.hyperionoj.web.infrastructure.utils.RedisUtils;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
@@ -23,6 +28,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
@@ -31,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.hyperionoj.web.infrastructure.constants.Constants.*;
 
@@ -45,31 +52,31 @@ public class ProblemServiceImpl implements ProblemService {
     private static final ConcurrentHashMap<String, RunResult> SUBMIT_RESULT = new ConcurrentHashMap<>();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
     @Resource
-    private ProblemMapper problemMapper;
+    private ProblemRepo problemRepo;
 
     @Resource
-    private CategoryMapper problemCategoryMapper;
+    private CategoryRepo categoryRepo;
 
     @Resource
-    private ProblemCommentMapper problemCommentMapper;
+    private ProblemCommentRepo problemCommentRepo;
 
     @Resource
-    private TagMapper tagMapper;
+    private TagRepo tagRepo;
 
     @Resource
-    private ProblemTagMapper problemTagMapper;
+    private ProblemTagRepo problemTagRepo;
 
     @Resource
-    private ProblemSubmitMapper problemSubmitMapper;
+    private ProblemSubmitRepo problemSubmitRepo;
+
+    @Resource
+    private UserRepo userRepo;
 
     @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Resource
-    private RedisUtils redisSever;
-
-    @Resource
-    private UserMapper userMapper;
+    private RedisUtils redisUtils;
 
     /**
      * 返回题目列表
@@ -80,8 +87,8 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<ProblemVO> getProblemList(PageParams pageParams) {
         Page<ProblemPO> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        IPage<ProblemPO> problemPage = problemMapper.problemList(page, pageParams.getLevel(), Long.getLong(pageParams.getCategoryId()));
-        return copyProblemList(problemPage.getRecords(), false, true);
+        IPage<ProblemPO> problemPage = problemRepo.problemList(page, pageParams.getLevel(), Long.getLong(pageParams.getCategoryId()));
+        return copyProblemList(problemPage.getRecords());
     }
 
     /**
@@ -95,7 +102,7 @@ public class ProblemServiceImpl implements ProblemService {
         if (ObjectUtils.isEmpty(id)) {
             return null;
         }
-        return problemToVO(problemMapper.selectById(id), true, true);
+        return MapStruct.toVO(problemRepo.getById(id));
     }
 
     /**
@@ -107,11 +114,11 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Object submit(SubmitVO submitVO) {
         UserPO sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
-        ProblemPO problem = problemMapper.selectById(submitVO.getProblemId());
+        ProblemPO problem = problemRepo.getById(submitVO.getProblemId());
         submitVO.setRunTime(problem.getRunTime());
         submitVO.setRunMemory(problem.getRunMemory());
         submitVO.setCaseNumber(problem.getCaseNumber());
-        ProblemVO problemVO = problemToVO(problemMapper.selectById(submitVO.getProblemId()), false, false);
+        ProblemVO problemVO = MapStruct.toVO(problemRepo.getById(submitVO.getProblemId()));
         submitVO.setCreateTime(dateFormat.format(System.currentTimeMillis()));
         submitVO.setCaseNumber(problemVO.getCaseNumber());
         submitVO.setRunTime(problemVO.getRunTime());
@@ -152,10 +159,10 @@ public class ProblemServiceImpl implements ProblemService {
                 log.info(e.toString());
                 problemSubmit.setCreateTime(System.currentTimeMillis());
             }
-            problemSubmitMapper.insert(problemSubmit);
-            UpdateSubmitVO updateSubmitVO = new UpdateSubmitVO();
-            updateSubmitVO.setProblemId(problemSubmit.getProblemId());
-            updateSubmitVO.setAuthorId(problemSubmit.getAuthorId());
+            problemSubmitRepo.save(problemSubmit);
+            UpdateSubmitVO updateSubmitVO = UpdateSubmitVO.builder().build();
+            updateSubmitVO.setProblemId(problemSubmit.getProblemId().toString());
+            updateSubmitVO.setAuthorId(problemSubmit.getAuthorId().toString());
             updateSubmitVO.setStatus(problemSubmit.getStatus());
             kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_PAGE, JSONObject.toJSONString(updateSubmitVO));
             problemVO.setSubmitNumber(problemVO.getSubmitNumber() + 1);
@@ -188,73 +195,51 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 添加题目
      *
-     * @param problemVO 题目对象
+     * @param problemDTO 题目对象
      * @return 新加的题目
      */
     @Override
-    public ProblemVO addProblem(ProblemVO problemVO) {
-        ProblemPO problem = voToProblem(problemVO);
-        problemMapper.insert(problem);
-        problemVO.setId(problem.getId().toString());
-        return problemVO;
+    public ProblemVO addProblem(ProblemDTO problemDTO) {
+        problemDTO.setId(null);
+        ProblemPO problem = MapStruct.toPO(problemDTO);
+        problemRepo.save(problem);
+        problemDTO.setId(String.valueOf(problem.getId()));
+        problemDTO.getTags().forEach(tagDTO -> {
+            ProblemTagPO problemTagPO = ProblemTagPO.builder()
+                    .problemId(problem.getId())
+                    .tagId(Long.parseLong(tagDTO.getId()))
+                    .build();
+            problemTagRepo.save(problemTagPO);
+        });
+        return MapStruct.toVO(problemDTO);
     }
 
     /**
      * 修改题目
      *
-     * @param problemVO 题目信息
+     * @param problemDTO 题目信息
      */
     @Override
-    public void updateProblem(ProblemVO problemVO) {
-        problemMapper.updateById(voToProblem(problemVO));
-        this.deleteProblemCache(problemVO);
-    }
-
-    private ProblemPO voToProblem(ProblemVO problemVO) {
-        ProblemPO problem = new ProblemPO();
-        if (null != problemVO.getId()) {
-            problem.setId(Long.valueOf(problemVO.getId()));
-        }
-        problem.setTitle(problemVO.getTitle());
-        problem.setCategoryId(Long.valueOf(problemVO.getCategory().getId()));
-        problem.setProblemLevel(problemVO.getProblemLevel());
-        problem.setRunMemory(problemVO.getRunMemory());
-        problem.setRunTime(problemVO.getRunTime());
-        if (problemVO.getAcNumber() == null) {
-            problem.setAcNumber(0);
-        } else {
-            problem.setAcNumber(problemVO.getAcNumber());
-        }
-        if (problemVO.getSubmitNumber() == null) {
-            problem.setSubmitNumber(0);
-        } else {
-            problem.setSubmitNumber(problemVO.getSubmitNumber());
-        }
-        if (problemVO.getSolutionNumber() == null) {
-            problem.setSolutionNumber(0);
-        } else {
-            problem.setSolutionNumber(problemVO.getSolutionNumber());
-        }
-        if (problemVO.getCommentNumber() == null) {
-            problem.setCommentNumber(0);
-        } else {
-            problem.setCommentNumber(problemVO.getCommentNumber());
-        }
-        return problem;
+    public ProblemVO updateProblem(ProblemDTO problemDTO) {
+        ProblemPO problemPO = MapStruct.toPO(problemDTO);
+        problemRepo.updateById(problemPO);
+        this.deleteProblemCache(problemDTO.getId());
+        return MapStruct.toVO(problemPO);
     }
 
     /**
      * 删除题目
      *
-     * @param problemVO 题目信息
+     * @param problemId 题目ID
      */
     @Override
-    public void deleteProblem(ProblemVO problemVO) {
+    public Boolean deleteProblem(String problemId) {
         LambdaQueryWrapper<ProblemPO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ProblemPO::getId, problemVO.getId());
+        queryWrapper.eq(ProblemPO::getId, problemId);
         queryWrapper.last("limit 1");
-        problemMapper.deleteById(problemVO.getId());
-        this.deleteProblemCache(problemVO);
+        problemRepo.removeById(problemId);
+        this.deleteProblemCache(problemId);
+        return true;
     }
 
     /**
@@ -263,83 +248,90 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 题目所有类别
      */
     @Override
-    public List<CategoryVO> getCategory() {
-        LambdaQueryWrapper<PageCategoryPO> queryWrapper = new LambdaQueryWrapper<>();
-        List<PageCategoryPO> problemCategories = problemCategoryMapper.selectList(queryWrapper);
+    public List<CategoryVO> getCategoryList() {
+        LambdaQueryWrapper<CategoryPO> queryWrapper = new LambdaQueryWrapper<>();
+        List<CategoryPO> problemCategories = categoryRepo.list(queryWrapper);
         return problemCategoryToVOList(problemCategories);
     }
 
-    private List<CategoryVO> problemCategoryToVOList(List<PageCategoryPO> problemCategories) {
+    /**
+     * 获取题目标签列表
+     *
+     * @return 题目所有标签
+     */
+    @Override
+    public List<TagVO> getTagList(){
+        return tagRepo.list().stream().map(MapStruct::toVO).collect(Collectors.toList());
+    }
+
+    private List<CategoryVO> problemCategoryToVOList(List<CategoryPO> problemCategories) {
         ArrayList<CategoryVO> problemCategoryVOs = new ArrayList<>();
-        for (PageCategoryPO category : problemCategories) {
+        for (CategoryPO category : problemCategories) {
             problemCategoryVOs.add(problemCategoryToVO(category));
         }
         return problemCategoryVOs;
     }
 
-    private CategoryVO problemCategoryToVO(PageCategoryPO category) {
-        CategoryVO problemCategoryVO = new CategoryVO();
-        problemCategoryVO.setId(category.getId().toString());
-        problemCategoryVO.setCategoryName(category.getCategoryName());
-        problemCategoryVO.setDescription(category.getDescription());
-        return problemCategoryVO;
+    private CategoryVO problemCategoryToVO(CategoryPO category) {
+        return MapStruct.toVO(category);
     }
 
     /**
      * 对题目进行评论
      *
-     * @param commentVO 用户提交评论
+     * @param commentDTO 用户提交评论
      * @return 本次提交情况
      */
     @Override
-    public CommentVO comment(CommentVO commentVO) {
-        ProblemCommentPO comment = voToComment(commentVO);
-        problemCommentMapper.insert(comment);
-        commentVO.setId(comment.getId().toString());
-        commentVO.setCreateDate(dateFormat.format(comment.getCreateTime()));
+    public CommentVO comment(CommentDTO commentDTO) {
+        ProblemCommentPO comment = MapStruct.toPO(commentDTO);
+        comment.setIsDelete(0);
+        problemCommentRepo.save(comment);
+        commentDTO.setId(comment.getId().toString());
+        commentDTO.setCreateDate(dateFormat.format(comment.getCreateTime()));
         String problemVORedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
                 PROBLEM_CONTROLLER + ":" +
                 GET_PROBLEM_ID + ":" +
-                DigestUtils.md5Hex(commentVO.getProblemId());
-        String redisKV = redisSever.getRedisKV(problemVORedisKey);
+                DigestUtils.md5Hex(commentDTO.getProblemId());
+        String redisKV = redisUtils.getRedisKV(problemVORedisKey);
         if (redisKV != null) {
             ProblemVO problemVO = JSONObject.parseObject(JSONObject.toJSONString(JSONObject.parseObject(redisKV, Result.class).getData()), ProblemVO.class);
             problemVO.setCommentNumber(problemVO.getCommentNumber() + 1);
-            redisSever.setRedisKV(problemVORedisKey, JSONObject.toJSONString(Result.success(problemVO)));
+            redisUtils.setRedisKV(problemVORedisKey, JSONObject.toJSONString(Result.success(problemVO)));
         }
-        return commentVO;
+        return MapStruct.toVO(commentDTO);
     }
 
     /**
      * 删除评论
      *
-     * @param commentVO 评论参数
+     * @param commentId 评论ID
      */
     @Override
-    public void deleteComment(CommentVO commentVO) {
+    public Boolean deleteComment(Long commentId) {
         LambdaUpdateWrapper<ProblemCommentPO> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(ProblemCommentPO::getId, commentVO.getId());
+        updateWrapper.eq(ProblemCommentPO::getId, commentId);
         updateWrapper.set(ProblemCommentPO::getIsDelete, 1);
-        problemCommentMapper.update(null, updateWrapper);
+        problemCommentRepo.update(updateWrapper);
         LambdaQueryWrapper<ProblemCommentPO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ProblemCommentPO::getId, commentVO.getId());
+        queryWrapper.eq(ProblemCommentPO::getId, commentId);
         queryWrapper.select(ProblemCommentPO::getProblemId);
-        ProblemCommentPO problemComment = problemCommentMapper.selectOne(queryWrapper);
+        ProblemCommentPO problemComment = problemCommentRepo.getOne(queryWrapper);
         if (problemComment == null) {
-            return;
+            return false;
         }
         queryWrapper.last("limit 1");
         String problemVORedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
                 PROBLEM_CONTROLLER + ":" +
                 GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(problemComment.getProblemId().toString());
-        String redisKV = redisSever.getRedisKV(problemVORedisKey);
+        String redisKV = redisUtils.getRedisKV(problemVORedisKey);
         if (!StringUtils.isBlank(redisKV)) {
             ProblemVO problemVO = JSONObject.parseObject((String) JSONObject.parseObject(redisKV, Result.class).getData(), ProblemVO.class);
             problemVO.setCommentNumber(problemVO.getCommentNumber() - 1);
-            redisSever.setRedisKV(problemVORedisKey, JSONObject.toJSONString(Result.success(problemVO)));
+            redisUtils.setRedisKV(problemVORedisKey, JSONObject.toJSONString(Result.success(problemVO)));
         }
-
+        return true;
     }
 
     /**
@@ -351,47 +343,38 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<CommentVO> getCommentList(PageParams pageParams) {
         Page<ProblemCommentPO> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        IPage<ProblemCommentPO> commentPage = problemCommentMapper.getCommentList(page, pageParams.getProblemId());
-        return problemCommitToVOList(commentPage.getRecords());
-    }
-
-
-    private List<CommentVO> problemCommitToVOList(List<ProblemCommentPO> comments) {
-        ArrayList<CommentVO> commentVOs = new ArrayList<>();
-        for (ProblemCommentPO comment : comments) {
-            commentVOs.add(commentToVO(comment));
-        }
-        return commentVOs;
+        IPage<ProblemCommentPO> commentPage = problemCommentRepo.getCommentList(page, pageParams.getProblemId());
+        return commentPage.getRecords().stream().map(this::commentToVO).collect(Collectors.toList());
     }
 
     private CommentVO commentToVO(ProblemCommentPO comment) {
-        CommentVO commentVO = new CommentVO();
+        CommentVO commentVO = CommentVO.builder().build();
         commentVO.setProblemId(comment.getProblemId().toString());
-        commentVO.setAuthorVo(UserVO.userToVo(userMapper.selectById(comment.getAuthorId().toString())));
+        commentVO.setAuthor(MapStruct.toVO(userRepo.getById(comment.getAuthorId().toString())));
         commentVO.setContent(comment.getContent());
         commentVO.setLevel(comment.getLevel());
         commentVO.setId(comment.getId().toString());
         commentVO.setParentId(comment.getParentId().toString());
         if (comment.getToUid() != null || comment.getToUid() != 0) {
-            commentVO.setToUser(UserVO.userToVo(userMapper.selectById(comment.getToUid().toString())));
+            commentVO.setToUser(MapStruct.toVO(userRepo.getById(comment.getToUid().toString())));
         }
         commentVO.setSupportNumber(comment.getSupportNumber());
         commentVO.setCreateDate(dateFormat.format(comment.getCreateTime()));
         return commentVO;
     }
 
-    private ProblemCommentPO voToComment(CommentVO commentVO) {
+    private ProblemCommentPO voToComment(CommentDTO commentDTO) {
         ProblemCommentPO problemComment = new ProblemCommentPO();
-        problemComment.setProblemId(Long.parseLong(commentVO.getProblemId()));
-        problemComment.setContent(commentVO.getContent());
-        problemComment.setAuthorId(Long.parseLong(commentVO.getAuthorVo().getId()));
+        problemComment.setProblemId(Long.parseLong(commentDTO.getProblemId()));
+        problemComment.setContent(commentDTO.getContent());
+        problemComment.setAuthorId(Long.parseLong(commentDTO.getAuthor().getId()));
         problemComment.setIsDelete(0);
         problemComment.setSupportNumber(0);
         problemComment.setCreateTime(System.currentTimeMillis());
-        problemComment.setLevel(commentVO.getLevel());
-        problemComment.setParentId(Long.getLong(commentVO.getParentId()));
-        if (commentVO.getToUser() != null) {
-            problemComment.setToUid(Long.getLong(commentVO.getToUser().getId()));
+        problemComment.setLevel(commentDTO.getLevel());
+        problemComment.setParentId(Long.getLong(commentDTO.getParentId()));
+        if (commentDTO.getToUser() != null) {
+            problemComment.setToUid(Long.parseLong(commentDTO.getToUser().getId()));
         }
         if (problemComment.getLevel() == null) {
             problemComment.setLevel(0);
@@ -414,7 +397,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<SubmitVO> getSubmitList(PageParams pageParams) {
         Page<ProblemSubmitPO> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        IPage<ProblemSubmitPO> submitList = problemSubmitMapper.getSubmitList(page,
+        IPage<ProblemSubmitPO> submitList = problemSubmitRepo.getSubmitList(page,
                 pageParams.getProblemId(),
                 pageParams.getCodeLang(),
                 pageParams.getUsername(),
@@ -432,18 +415,18 @@ public class ProblemServiceImpl implements ProblemService {
     public SubmitVO getSubmitById(Long id) {
         LambdaQueryWrapper<ProblemSubmitPO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProblemSubmitPO::getId, id);
-        return submitToVO(problemSubmitMapper.selectOne(queryWrapper), true);
+        return submitToVO(problemSubmitRepo.getOne(queryWrapper), true);
     }
 
     /**
      * 题目下该评论的点赞数
      *
-     * @param commentVO 评论参数
+     * @param commentId 评论参数
      * @return 目前得赞数
      */
     @Override
-    public Integer support(CommentVO commentVO) {
-        return problemCommentMapper.support(Long.valueOf(commentVO.getId()));
+    public Integer support(Long commentId) {
+        return problemCommentRepo.support(Long.valueOf(commentId));
     }
 
     private List<SubmitVO> submitToVOList(List<ProblemSubmitPO> submits) {
@@ -455,7 +438,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     private SubmitVO submitToVO(ProblemSubmitPO submit, boolean isBody) {
-        SubmitVO submitVO = new SubmitVO();
+        SubmitVO submitVO = SubmitVO.builder().build();
         submitVO.setId(submit.getId().toString());
         submitVO.setProblemId(submit.getProblemId().toString());
         submitVO.setAuthorId(submit.getAuthorId().toString());
@@ -473,26 +456,52 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 添加题目分类
      *
-     * @param problemCategoryVO 分类信息
+     * @param categoryDTO 分类信息
      * @return 分类情况
      */
     @Override
-    public CategoryVO addCategory(CategoryVO problemCategoryVO) {
-        PageCategoryPO category = new PageCategoryPO();
-        BeanUtils.copyProperties(problemCategoryVO, category);
-        problemCategoryMapper.insert(category);
-        problemCategoryVO.setId(category.getId().toString());
-        return problemCategoryVO;
+    public CategoryVO addCategory(CategoryDTO categoryDTO) {
+        CategoryPO category = new CategoryPO();
+        BeanUtils.copyProperties(categoryDTO, category);
+        categoryRepo.save(category);
+        categoryDTO.setId(category.getId().toString());
+        return MapStruct.toVO(categoryDTO);
     }
 
     /**
      * 删除题目分类
      *
-     * @param problemCategoryVO 分类参数
+     * @param categoryDTO 分类参数
      */
     @Override
-    public void deleteCategory(CategoryVO problemCategoryVO) {
-        problemCategoryMapper.deleteById(problemCategoryVO.getId());
+    public Boolean deleteCategory(CategoryDTO categoryDTO) {
+        return categoryRepo.removeById(categoryDTO.getId());
+    }
+
+    /**
+     * 添加题目标签
+     *
+     * @param tagDTO 标签信息
+     * @return 分类情况
+     */
+    @Override
+    public TagVO addTag(TagDTO tagDTO) {
+        TagPO tagPO = TagPO.builder()
+                .tagName(tagDTO.getTagName())
+                .build();
+        tagRepo.save(tagPO);
+        return MapStruct.toVO(tagPO);
+    }
+
+    /**
+     * 添加题目标签
+     *
+     * @param tagDTO 标签信息
+     * @return 分类情况
+     */
+    @Override
+    public Boolean deleteTag(TagDTO tagDTO) {
+        return tagRepo.removeById(tagDTO.getId());
     }
 
     /**
@@ -509,53 +518,12 @@ public class ProblemServiceImpl implements ProblemService {
         return !StringUtils.contains(submitVO.getCodeBody(), ILLEGAL_CHAR_SYSTEM);
     }
 
-    private List<ProblemVO> copyProblemList(List<ProblemPO> problemPage, boolean isBody, boolean isTag) {
+    private List<ProblemVO> copyProblemList(List<ProblemPO> problemPage) {
         List<ProblemVO> problemVOList = new ArrayList<>();
         for (ProblemPO problem : problemPage) {
-            problemVOList.add(problemToVO(problem, isBody, isTag));
+            problemVOList.add(MapStruct.toVO(problem));
         }
         return problemVOList;
-    }
-
-    private ProblemVO problemToVO(ProblemPO problem, boolean isBody, boolean isTag) {
-        ProblemVO problemVO = new ProblemVO();
-        problemVO.setId(problem.getId().toString());
-        problemVO.setTitle(problem.getTitle());
-        problemVO.setProblemLevel(problem.getProblemLevel());
-        PageCategoryPO pageCategory = problemCategoryMapper.selectById(problem.getCategoryId());
-        problemVO.setCategory(categoryToVO(pageCategory));
-        problemVO.setAcNumber(problem.getAcNumber());
-        problemVO.setSubmitNumber(problem.getSubmitNumber());
-        problemVO.setSolutionNumber(problem.getSolutionNumber());
-        problemVO.setCommentNumber(problem.getCommentNumber());
-        problemVO.setRunTime(problem.getRunTime());
-        problemVO.setRunMemory(problem.getRunMemory());
-        if (isTag) {
-            ArrayList<TagVO> tagVOs = new ArrayList<>();
-            LambdaQueryWrapper<ProblemProblemTagPO> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(ProblemProblemTagPO::getProblemId, problem.getId());
-            List<ProblemProblemTagPO> problemProblemTags = problemTagMapper.selectList(queryWrapper);
-            for (ProblemProblemTagPO problemTag : problemProblemTags) {
-                tagVOs.add(tagToVO(tagMapper.selectById(problemTag.getTagId())));
-            }
-            problemVO.setTags(tagVOs);
-        }
-        return problemVO;
-    }
-
-    private TagVO tagToVO(PageTagPO tag) {
-        TagVO tagVO = new TagVO();
-        tagVO.setId(tag.getId().toString());
-        tagVO.setTagName(tag.getTagName());
-        return tagVO;
-    }
-
-    private CategoryVO categoryToVO(PageCategoryPO pageCategory) {
-        CategoryVO categoryVO = new CategoryVO();
-        categoryVO.setId(pageCategory.getId().toString());
-        categoryVO.setCategoryName(pageCategory.getCategoryName());
-        categoryVO.setDescription(pageCategory.getDescription());
-        return categoryVO;
     }
 
     /**
@@ -569,7 +537,7 @@ public class ProblemServiceImpl implements ProblemService {
                 PROBLEM_CONTROLLER + ":" +
                 GET_PROBLEM_ID + ":" +
                 DigestUtils.md5Hex(problemVO.getId());
-        redisSever.setRedisKV(problemVORedisKey, JSONObject.toJSONString(Result.success(problemVO)));
+        redisUtils.setRedisKV(problemVORedisKey, JSONObject.toJSONString(Result.success(problemVO)));
     }
 
     /*
@@ -629,20 +597,40 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Long getProblemCount() {
         LambdaQueryWrapper<ProblemPO> queryWrapper = new LambdaQueryWrapper<>();
-        return problemMapper.selectCount(queryWrapper);
+        return problemRepo.count(queryWrapper);
+    }
+
+    /**
+     * 获取题目测试点
+     *
+     * @param problemId 题目ID
+     */
+    @Override
+    public void getProblemCase(Long problemId) {
+
+    }
+
+    /**
+     * 上传题目测试点
+     *
+     * @param problemId 题目ID
+     */
+    @Override
+    public Boolean pushProblemCase(Long problemId, MultipartFile multipartFile) {
+        return null;
     }
 
     /**
      * 删除问题的缓存
      *
-     * @param problemVO 问题参数
+     * @param problemId 问题ID
      */
-    private void deleteProblemCache(ProblemVO problemVO) {
+    private void deleteProblemCache(String problemId) {
         String problemVORedisKey = REDIS_KAY_PROBLEM_CACHE + ":" +
                 PROBLEM_CONTROLLER + ":" +
                 GET_PROBLEM_ID + ":" +
-                DigestUtils.md5Hex(problemVO.getId());
-        redisSever.delKey(problemVORedisKey);
+                DigestUtils.md5Hex(problemId);
+        redisUtils.delKey(problemVORedisKey);
     }
 
 

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisUtils {
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -86,9 +86,9 @@ public class RedisUtils {
 
     public void flushDb() {
         Set<String> keys = stringRedisTemplate.keys("*");
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext()) {
-            stringRedisTemplate.delete(it.next());
+        assert keys != null;
+        for (String key : keys) {
+            stringRedisTemplate.delete(key);
         }
     }
 

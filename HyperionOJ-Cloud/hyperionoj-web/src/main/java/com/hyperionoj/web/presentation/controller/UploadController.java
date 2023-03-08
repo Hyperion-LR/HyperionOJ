@@ -1,7 +1,7 @@
 package com.hyperionoj.web.presentation.controller;
 
 import com.hyperionoj.web.infrastructure.utils.QiniuUtils;
-import com.hyperionoj.web.presentation.vo.ErrorCode;
+import com.hyperionoj.web.infrastructure.constants.ErrorCode;
 import com.hyperionoj.web.presentation.vo.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;

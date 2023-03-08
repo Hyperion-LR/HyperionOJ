@@ -2,8 +2,9 @@ package com.hyperionoj.web.domain.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.web.application.api.ProblemCategoryService;
+import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.infrastructure.mapper.CategoryMapper;
-import com.hyperionoj.web.infrastructure.po.PageCategoryPO;
+import com.hyperionoj.web.infrastructure.po.CategoryPO;
 import com.hyperionoj.web.presentation.vo.CategoryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,7 @@ public class ProblemCategoryServiceImpl implements ProblemCategoryService {
      */
     @Override
     public CategoryVO findCategoryById(Long categoryId) {
-        PageCategoryPO category = categoryMapper.selectById(categoryId);
-        CategoryVO categoryVo = new CategoryVO();
-        if (category != null) {
-            BeanUtils.copyProperties(category, categoryVo);
-        }
-        return categoryVo;
+        return MapStruct.toVO(categoryMapper.selectById(categoryId));
     }
 
     /**
@@ -44,9 +40,9 @@ public class ProblemCategoryServiceImpl implements ProblemCategoryService {
      * @return 返回所有分类
      */
     @Override
-    public List<PageCategoryPO> findAll() {
-        LambdaQueryWrapper<PageCategoryPO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(PageCategoryPO::getId, PageCategoryPO::getCategoryName);
+    public List<CategoryPO> findAll() {
+        LambdaQueryWrapper<CategoryPO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(CategoryPO::getId, CategoryPO::getCategoryName);
         return categoryMapper.selectList(queryWrapper);
     }
 
@@ -56,8 +52,8 @@ public class ProblemCategoryServiceImpl implements ProblemCategoryService {
      * @return 返回所有分类的详细情况
      */
     @Override
-    public List<PageCategoryPO> findAllDetail() {
-        LambdaQueryWrapper<PageCategoryPO> queryWrapper = new LambdaQueryWrapper<>();
+    public List<CategoryPO> findAllDetail() {
+        LambdaQueryWrapper<CategoryPO> queryWrapper = new LambdaQueryWrapper<>();
         return categoryMapper.selectList(queryWrapper);
     }
 
@@ -69,25 +65,9 @@ public class ProblemCategoryServiceImpl implements ProblemCategoryService {
      */
     @Override
     public CategoryVO findAllDetailById(Long categoryId) {
-        PageCategoryPO category = categoryMapper.selectById(categoryId);
-        if (category == null) {
-            return null;
-        }
-        return copy(category);
+        return MapStruct.toVO(categoryMapper.selectById(categoryId));
     }
 
-    private List<CategoryVO> copyList(List<PageCategoryPO> categories) {
-        List<CategoryVO> categoryVoList = new ArrayList<>();
-        for (PageCategoryPO category : categories) {
-            categoryVoList.add(copy(category));
-        }
-        return categoryVoList;
-    }
 
-    private CategoryVO copy(PageCategoryPO category) {
-        CategoryVO categoryVo = new CategoryVO();
-        BeanUtils.copyProperties(category, categoryVo);
-        categoryVo.setId(String.valueOf(category.getId()));
-        return categoryVo;
-    }
+
 }

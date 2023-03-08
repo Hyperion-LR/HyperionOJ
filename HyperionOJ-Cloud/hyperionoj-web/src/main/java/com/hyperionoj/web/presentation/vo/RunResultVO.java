@@ -1,5 +1,6 @@
 package com.hyperionoj.web.presentation.vo;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -7,13 +8,14 @@ import lombok.Data;
  * @date 2021/12/15
  */
 @Data
+@Builder
 public class RunResultVO {
 
     private String authorId;
 
-    private Long submitId;
+    private String submitId;
 
-    private Long problemId;
+    private String problemId;
 
     private String verdict;
 

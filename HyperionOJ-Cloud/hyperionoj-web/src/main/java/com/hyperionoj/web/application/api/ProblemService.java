@@ -1,10 +1,12 @@
 package com.hyperionoj.web.application.api;
 
-import com.hyperionoj.web.presentation.dto.PageParams;
-import com.hyperionoj.web.presentation.vo.CategoryVO;
-import com.hyperionoj.web.presentation.vo.CommentVO;
-import com.hyperionoj.web.presentation.vo.ProblemVO;
-import com.hyperionoj.web.presentation.vo.SubmitVO;
+import com.hyperionoj.web.presentation.dto.CategoryDTO;
+import com.hyperionoj.web.presentation.dto.CommentDTO;
+import com.hyperionoj.web.presentation.dto.ProblemDTO;
+import com.hyperionoj.web.presentation.dto.TagDTO;
+import com.hyperionoj.web.presentation.dto.param.PageParams;
+import com.hyperionoj.web.presentation.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,61 +43,84 @@ public interface ProblemService {
     /**
      * 添加题目
      *
-     * @param problemVo 题目对象
+     * @param problemDTO 题目对象
      * @return 新加的题目
      */
-    ProblemVO addProblem(ProblemVO problemVo);
+    ProblemVO addProblem(ProblemDTO problemDTO);
 
     /**
      * 修改题目
      *
-     * @param problemVo 题目信息
+     * @param problemDTO 题目信息
      */
-    void updateProblem(ProblemVO problemVo);
+    ProblemVO updateProblem(ProblemDTO problemDTO);
 
     /**
      * 删除题目
      *
-     * @param problemVo 题目信息
+     * @param problemId 题目信息
      */
-    void deleteProblem(ProblemVO problemVo);
+    Boolean deleteProblem(String problemId);
 
     /**
      * 获取题目分类列表
      *
      * @return 题目所有类别1
      */
-    List<CategoryVO> getCategory();
+    List<CategoryVO> getCategoryList();
+
+    /**
+     * 获取题目标签列表
+     *
+     * @return 题目所有标签
+     */
+    List<TagVO> getTagList();
 
     /**
      * 添加题目分类
      *
-     * @param problemCategoryVO 分类信息
+     * @param categoryDTO 分类信息
      * @return 分类情况
      */
-    CategoryVO addCategory(CategoryVO problemCategoryVO);
+    CategoryVO addCategory(CategoryDTO categoryDTO);
 
     /**
      * 删除题目分类
      *
-     * @param problemCategoryVO 分类参数
+     * @param categoryDTO 分类参数
      */
-    void deleteCategory(CategoryVO problemCategoryVO);
+    Boolean deleteCategory(CategoryDTO categoryDTO);
+
+    /**
+     * 添加题目标签
+     *
+     * @param tagDTO 标签信息
+     * @return 分类情况
+     */
+    TagVO addTag(TagDTO tagDTO);
+
+    /**
+     * 添加题目标签
+     *
+     * @param tagDTO 标签信息
+     * @return 分类情况
+     */
+    Boolean deleteTag(TagDTO tagDTO);
 
     /**
      * 对题目进行评论
      *
-     * @param commentVo 用户提交评论
+     * @param commentDTO 用户提交评论
      * @return 本次提交情况
      */
-    CommentVO comment(CommentVO commentVo);
+    CommentVO comment(CommentDTO commentDTO);
 
     /**
      * 删除评论
      *
-     * @param commentVo 评论参数
+     * @param commentId 评论参数
      */
-    void deleteComment(CommentVO commentVo);
+    Boolean deleteComment(Long commentId);
 
     /**
      * 获取评论列表
@@ -124,10 +149,10 @@ public interface ProblemService {
     /**
      * 题目下该评论的点赞数
      *
-     * @param commentVo 评论参数
+     * @param commentId 评论参数
      * @return 目前得赞数
      */
-    Integer support(CommentVO commentVo);
+    Integer support(Long commentId);
 
 
     /**
@@ -144,5 +169,19 @@ public interface ProblemService {
      * @return 题库题目数量
      */
     Long getProblemCount();
+
+    /**
+     * 获取题目测试点
+     *
+     * @param problemId 题目ID
+     */
+    void getProblemCase(Long problemId);
+
+    /**
+     * 上传题目测试点
+     *
+     * @param problemId 题目ID
+     */
+    Boolean pushProblemCase(Long problemId, MultipartFile multipartFile);
 
 }

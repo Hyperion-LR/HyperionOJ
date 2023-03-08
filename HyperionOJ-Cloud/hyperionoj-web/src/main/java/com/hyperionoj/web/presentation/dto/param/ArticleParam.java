@@ -1,4 +1,4 @@
-package com.hyperionoj.web.presentation.dto;
+package com.hyperionoj.web.presentation.dto.param;
 
 import com.hyperionoj.web.presentation.vo.CategoryVO;
 import com.hyperionoj.web.presentation.vo.TagVO;

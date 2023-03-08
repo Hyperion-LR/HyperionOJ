@@ -1,14 +1,13 @@
 package com.hyperionoj.web.presentation.controller.admin;
 
 import com.hyperionoj.web.application.api.ProblemService;
-import com.hyperionoj.web.presentation.vo.CategoryVO;
-import com.hyperionoj.web.presentation.vo.CommentVO;
-import com.hyperionoj.web.presentation.vo.ProblemVO;
-import com.hyperionoj.web.presentation.vo.Result;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.hyperionoj.web.presentation.dto.CategoryDTO;
+import com.hyperionoj.web.presentation.dto.CommentDTO;
+import com.hyperionoj.web.presentation.dto.ProblemDTO;
+import com.hyperionoj.web.presentation.dto.TagDTO;
+import com.hyperionoj.web.presentation.vo.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -16,7 +15,7 @@ import javax.annotation.Resource;
  * @author Hyperion
  * @date 2021/12/13
  */
-@RequestMapping("/problem/admin")
+@RequestMapping("/admin/problem")
 @RestController
 public class AdminProblemController {
 
@@ -26,67 +25,106 @@ public class AdminProblemController {
     /**
      * 添加题目分类
      *
-     * @param problemCategoryVO 分类信息
+     * @param categoryDTO 分类信息
      * @return 分类情况
      */
-    @RequestMapping(value = "/add/problem/category", method = RequestMethod.POST)
-    public Result addProblemCategory(@RequestBody CategoryVO problemCategoryVO) {
-        return Result.success(problemService.addCategory(problemCategoryVO));
+    @PostMapping("/category/add")
+    public Result addProblemCategory(@RequestBody CategoryDTO categoryDTO) {
+        return Result.success(problemService.addCategory(categoryDTO));
     }
 
     /**
      * 删除题目分类
      *
-     * @param problemCategoryVO 分类参数
+     * @param categoryDTO 分类参数
      */
-    @RequestMapping(value = "/delete/problem/category", method = RequestMethod.DELETE)
-    public Result deleteProblemCategory(@RequestBody CategoryVO problemCategoryVO) {
-        problemService.deleteCategory(problemCategoryVO);
+    @DeleteMapping("/category/delete")
+    public Result deleteProblemCategory(@RequestBody CategoryDTO categoryDTO) {
+        problemService.deleteCategory(categoryDTO);
         return Result.success(null);
+    }
+
+    /**
+     * 添加题目标签
+     *
+     * @param tagDTO 标签信息
+     * @return 分类情况
+     */
+    @PostMapping(value = "/tag/add")
+    public Result addProblemTag(@RequestBody TagDTO tagDTO) {
+        return Result.success(problemService.addTag(tagDTO));
+    }
+
+    /**
+     * 删除题目标签
+     *
+     * @param tagDTO 标签参数
+     */
+    @DeleteMapping(value = "/tag/delete")
+    public Result deleteProblemTag(@RequestBody TagDTO tagDTO) {
+        return Result.success(problemService.deleteTag(tagDTO));
     }
 
     /**
      * 添加题目
      *
-     * @param problemVo 题目对象
+     * @param problemDTO 题目对象
      * @return 新加的题目
      */
-    @RequestMapping(value = "/add/problem", method = RequestMethod.POST)
-    public Result addProblem(@RequestBody ProblemVO problemVo) {
-        return Result.success(problemService.addProblem(problemVo));
+    @PostMapping(value = "/problem/add")
+    public Result addProblem(@RequestBody ProblemDTO problemDTO) {
+        return Result.success(problemService.addProblem(problemDTO));
     }
 
     /**
      * 修改题目
      *
-     * @param problemVo 题目信息
+     * @param problemDTO 题目信息
      */
-    @RequestMapping(value = "/update/problem", method = RequestMethod.POST)
-    public Result updateProblem(@RequestBody ProblemVO problemVo) {
-        problemService.updateProblem(problemVo);
-        return Result.success(null);
+    @PostMapping(value = "/problem/update")
+    public Result updateProblem(@RequestBody ProblemDTO problemDTO) {
+        return Result.success(problemService.updateProblem(problemDTO));
     }
 
     /**
      * 删除题目
      *
-     * @param problemVo 题目信息
+     * @param problemDTO 题目信息
      */
-    @RequestMapping(value = "/delete/problem", method = RequestMethod.DELETE)
-    public Result deleteProblem(@RequestBody ProblemVO problemVo) {
-        problemService.deleteProblem(problemVo);
+    @DeleteMapping(value = "/problem/delete")
+    public Result deleteProblem(@RequestBody ProblemDTO problemDTO) {
+        return Result.success(problemService.deleteProblem(problemDTO.getId()));
+    }
+
+    /**
+     * 获取题目测试点
+     *
+     * @param problemId 题目ID
+     */
+    @GetMapping(value = "/case/{problemId}")
+    public Result getProblemCase(Long problemId){
+        problemService.getProblemCase(problemId);
         return Result.success(null);
+    }
+
+    /**
+     * 上传题目测试点
+     *
+     * @param problemId 题目ID
+     */
+    @PostMapping(value = "/case/{problemId}")
+    public Result pushProblemCase(Long problemId, @RequestParam("image") MultipartFile multipartFile){
+        return Result.success(problemService.pushProblemCase(problemId, multipartFile));
     }
 
     /**
      * 删除评论
      *
-     * @param commentVo 评论参数
+     * @param commentDTO 评论参数
      */
-    @RequestMapping(value = "/delete/comment", method = RequestMethod.POST)
-    public Result deleteComment(@RequestBody CommentVO commentVo) {
-        problemService.deleteComment(commentVo);
-        return Result.success(null);
+    @DeleteMapping(value = "/comment/delete")
+    public Result deleteComment(@RequestBody CommentDTO commentDTO) {
+        return Result.success(problemService.deleteComment(Long.parseLong(commentDTO.getId())));
     }
 
 }

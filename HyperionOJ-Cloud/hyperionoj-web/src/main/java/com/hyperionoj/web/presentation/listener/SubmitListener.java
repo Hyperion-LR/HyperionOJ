@@ -2,9 +2,9 @@ package com.hyperionoj.web.presentation.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.judge.dto.UpdateSubmitDO;
+import com.hyperionoj.web.domain.repo.UserRepo;
 import com.hyperionoj.web.infrastructure.constants.Constants;
 import com.hyperionoj.web.infrastructure.mapper.UserMapper;
-import com.hyperionoj.web.presentation.vo.UpdateSubmitVO;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class SubmitListener {
 
     @Resource
-    private UserMapper userMapper;
+    private UserRepo userRepo;
 
     @KafkaListener(topics = Constants.KAFKA_TOPIC_SUBMIT_PAGE, groupId = "ossTest")
     public void updateSubmit(ConsumerRecord<?, ?> record) {
@@ -30,9 +30,9 @@ public class SubmitListener {
             Long authorId = updateSubmitVo.getAuthorId();
             String status = updateSubmitVo.getStatus();
             if (Constants.AC.equals(status)) {
-                userMapper.updateSubmitAc(authorId);
+                userRepo.updateSubmitAc(authorId);
             } else {
-                userMapper.updateSubmitNoAc(authorId);
+                userRepo.updateSubmitNoAc(authorId);
             }
 
         }

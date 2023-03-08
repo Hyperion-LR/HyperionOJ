@@ -4,33 +4,8 @@
 
 <mapper namespace="com.hyperionoj.web.infrastructure.mapper.TagMapper">
 
-    <resultMap id="tagMap" type="com.hyperionoj.web.infrastructure.po.PageTagPO">
+    <resultMap id="tagMap" type="com.hyperionoj.web.infrastructure.po.TagPO">
         <id column="id" property="id"/>
         <result column="tag_name" property="tagName"/>
     </resultMap>
-
-
-    <select id="findTagsByArticleId" parameterType="java.lang.Long" resultMap="tagMap">
-        select id, tag_name from oj_page_tag
-        <where>
-            id in
-            (select tag_id from oj_article_article_tag where article_id = #{articleId})
-        </where>
-    </select>
-
-    <select id="findHotsTagIds" parameterType="int" resultType="java.lang.Long">
-        select tag_id
-        from oj_article_article_tag
-        group by tag_id
-        order by count(*) desc
-        limit #{limit}
-    </select>
-
-    <select id="findTagsByTagIds" parameterType="list" resultMap="tagMap">
-        select id,tag_name as tagName from oj_page_tag
-        where id in
-        <foreach collection="tagIds" item="tagId" separator="," open="(" close=")">
-            #{tagId}
-        </foreach>
-    </select>
 </mapper>

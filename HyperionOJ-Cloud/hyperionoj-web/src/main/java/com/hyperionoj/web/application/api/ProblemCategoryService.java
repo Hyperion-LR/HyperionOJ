@@ -1,7 +1,7 @@
 package com.hyperionoj.web.application.api;
 
 
-import com.hyperionoj.web.infrastructure.po.PageCategoryPO;
+import com.hyperionoj.web.infrastructure.po.CategoryPO;
 import com.hyperionoj.web.presentation.vo.CategoryVO;
 
 import java.util.List;
@@ -24,14 +24,14 @@ public interface ProblemCategoryService {
      *
      * @return 返回所有分类
      */
-    List<PageCategoryPO> findAll();
+    List<CategoryPO> findAll();
 
     /**
      * 返回所有分类详细情况
      *
      * @return 返回所有分类的详细情况
      */
-    List<PageCategoryPO> findAllDetail();
+    List<CategoryPO> findAllDetail();
 
     /**
      * 返回 categoryId 类别下所有文章

@@ -21,6 +21,6 @@ public interface VerCodeService {
      * @param code 验证码
      * @return 是否正确
      */
-    boolean checkCode(String mail, String code);
+    boolean checkCode(String subject, String mail, String code);
 
 }

@@ -1,5 +1,7 @@
 package com.hyperionoj.web.presentation.vo;
 
+import com.hyperionoj.web.presentation.dto.CommentDTO;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -7,6 +9,7 @@ import lombok.Data;
  * @date 2021/12/12
  */
 @Data
+@Builder
 public class CommentVO {
 
     private String id;
@@ -15,9 +18,7 @@ public class CommentVO {
 
     private String problemId;
 
-    private String articleId;
-
-    private UserVO authorVo;
+    private UserVO author;
 
     private String parentId;
 
@@ -28,5 +29,6 @@ public class CommentVO {
     private String createDate;
 
     private Integer level;
+
 
 }

@@ -5,6 +5,11 @@ package com.hyperionoj.web.infrastructure.constants;
  * @date 2021/12/1
  */
 public interface Constants {
+
+    String MAIL_FROM = "Hyperion_LR@foxmail.com";
+
+    String DEFAULT_AVATAR = "default";
+
     /**
      * 状态码成功
      */
@@ -134,5 +139,11 @@ public interface Constants {
      * 文章缓存方法名
      */
     String FIND_ARTICLE_BY_ID = "findArticleById";
+
+    String SUBJECT_LOGIN = "login";
+
+    String SUBJECT_REGISTER = "register";
+
+    String SUBJECT_UPDATE_PASSWORD = "update_password";
 
 }

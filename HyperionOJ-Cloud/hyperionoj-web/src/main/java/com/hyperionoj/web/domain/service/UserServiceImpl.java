@@ -1,19 +1,31 @@
 package com.hyperionoj.web.domain.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hyperionoj.web.application.api.UserService;
+import com.hyperionoj.web.application.api.VerCodeService;
+import com.hyperionoj.web.domain.bo.UserToken;
+import com.hyperionoj.web.domain.repo.UserRepo;
+import com.hyperionoj.web.infrastructure.utils.JWTUtils;
 import com.hyperionoj.web.infrastructure.utils.RedisUtils;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
-import com.hyperionoj.web.infrastructure.mapper.UserMapper;
 import com.hyperionoj.web.infrastructure.po.UserPO;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.hyperionoj.web.presentation.dto.param.LoginParam;
+import com.hyperionoj.web.presentation.dto.param.RegisterParam;
+import com.hyperionoj.web.presentation.dto.param.UpdatePasswordParam;
+import com.hyperionoj.web.presentation.dto.UserDTO;
+import com.hyperionoj.web.infrastructure.constants.ErrorCode;
+
+import org.springframework.util.DigestUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
+import java.nio.charset.StandardCharsets;
 
 import static com.hyperionoj.web.infrastructure.constants.Constants.*;
 
@@ -25,21 +37,119 @@ import static com.hyperionoj.web.infrastructure.constants.Constants.*;
 public class UserServiceImpl implements UserService {
 
     @Resource
-    private UserMapper userMapper;
+    private UserRepo userRepo;
 
     @Resource
-    private RedisUtils redisSever;
+    private RedisUtils redisUtils;
+
+    @Resource
+    private VerCodeService verCodeService;
 
     /**
-     * 冻结普通用户
+     * 登录功能
      *
-     * @param id 要冻结的用户id
+     * @param loginParam 登录参数
+     * @return token
      */
     @Override
-    public void freezeUser(String id) {
-        LambdaUpdateWrapper<UserPO> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(UserPO::getId, id).set(UserPO::getStatus, 1);
-        userMapper.update(null, updateWrapper);
+    public String login(LoginParam loginParam) {
+        String account = loginParam.getAccount();
+        String password = loginParam.getPassword();
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
+            return null;
+        }
+        UserPO user = findUser(account, password);
+        if (user == null) {
+            return null;
+        }
+        String token = ErrorCode.USER_FREEZE.getMsg();
+        if (user.getStatus() == 0) {
+            UserToken userToken = UserToken.builder().build();
+            BeanUtils.copyProperties(user, userToken);
+            token = JWTUtils.createToken(userToken.getId(), 24 * 60 * 60);
+            userToken.setToken(TOKEN + token);
+            redisUtils.setRedisKV(TOKEN + token, JSON.toJSONString(userToken), 3600);
+        }
+        return token;
+    }
+
+
+    /**
+     * 注册普通用户
+     *
+     * @param registerParam 注册参数
+     * @return token
+     */
+    @Override
+    public String registerUser(RegisterParam registerParam) {
+        if (findUserById(registerParam.getId()) != null) {
+            return null;
+        }
+        UserPO newUser = copyRegisterParamToSysUser(registerParam);
+        newUser.setAvatar(DEFAULT_AVATAR);
+        userRepo.save(newUser);
+        UserToken userToken = UserToken.builder().build();
+        BeanUtils.copyProperties(newUser, userToken);
+        String token = JWTUtils.createToken(newUser.getId(), 24 * 60 * 60);
+        userToken.setToken(TOKEN + token);
+        redisUtils.setRedisKV(TOKEN + token, JSON.toJSONString(newUser), 3600);
+        return token;
+    }
+
+
+    /**
+     * 更新用户不敏感信息
+     *
+     * @param userDTO 用户基本信息
+     */
+    @Override
+    public boolean updateUser(UserDTO userDTO) {
+        UserPO userPO = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), UserPO.class);
+        userPO.setUsername(userDTO.getUsername());
+        userPO.setAvatar(userDTO.getAvatar());
+        userPO.setMail(userDTO.getMail());
+        return userRepo.updateById(userPO);
+    }
+
+    /**
+     * 更新用户账号密码
+     *
+     * @param updateParam 登录信息
+     */
+    @Override
+    public boolean updatePassword(UpdatePasswordParam updateParam) {
+        if (verCodeService.checkCode(SUBJECT_UPDATE_PASSWORD, updateParam.getUserMail(), updateParam.getCode())) {
+            UserPO userPO = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), UserPO.class);
+            if (StringUtils.compare(updateParam.getUserMail(), userPO.getMail()) == 0) {
+                userPO.setPassword(passwordEncrypt(updateParam.getPassword()));
+                if(userRepo.updateById(userPO)){
+                    UserToken userToken = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), UserToken.class);
+                    redisUtils.delKey(userToken.getToken());
+                    return true;
+                }
+                return false;
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * 销毁账户
+     * 将账户状态修改为注销
+     *
+     * @param destroyParam 申请注销的参数
+     */
+    @Override
+    public boolean destroy(LoginParam destroyParam) {
+        UserPO userPO = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), UserPO.class);
+        if (userPO != null) {
+            if (userPO.getId().equals(Long.parseLong(destroyParam.getAccount()))) {
+                userPO.setStatus(1);
+                return userRepo.updateById(userPO);
+            }
+        }
+        return false;
     }
 
     /**
@@ -60,16 +170,15 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         queryWrapper.last(" limit 1");
-        UserPO userPO = userMapper.selectOne(queryWrapper);
+        UserPO userPO = userRepo.getOne(queryWrapper);
         if (!ObjectUtils.isEmpty(userPO)) {
             if (password.length() > CODE_LENGTH) {
-                password = DigestUtils.md5Hex(password + SALT);
+                password = passwordEncrypt(password);
                 if (StringUtils.compare(userPO.getPassword(), password) == 0) {
                     return userPO;
                 }
             } else {
-                String redisCode = redisSever.getRedisKV(VER_CODE + userPO.getMail());
-                if (StringUtils.compare(redisCode, DigestUtils.md5Hex(password + SALT)) == 0) {
+                if(verCodeService.checkCode(SUBJECT_LOGIN, userPO.getMail(), password)){
                     return userPO;
                 }
             }
@@ -85,61 +194,26 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserPO findUserById(String id) {
-        return userMapper.selectById(id);
+        return userRepo.getById(id);
     }
 
-    /**
-     * 往数据库添加用户
-     *
-     * @param sysUser 用户信息
-     */
-    @Override
-    public void insert(UserPO sysUser) {
-        userMapper.insert(sysUser);
+    private UserPO copyRegisterParamToSysUser(RegisterParam registerParam) {
+        UserPO sysUser = new UserPO();
+        BeanUtils.copyProperties(registerParam, sysUser);
+        sysUser.setId(Long.parseLong(registerParam.getId()));
+        sysUser.setPassword(passwordEncrypt(registerParam.getPassword()));
+        sysUser.setLastLogin(System.currentTimeMillis());
+        sysUser.setCreateTime(System.currentTimeMillis());
+        sysUser.setProblemAcNumber(0);
+        sysUser.setProblemSubmitAcNumber(0);
+        sysUser.setProblemSubmitNumber(0);
+        sysUser.setSalt(SALT);
+        sysUser.setStatus(0);
+        return sysUser;
     }
 
-    /**
-     * 往数据库更新用户基本信息
-     *
-     * @param sysUser 用户信息
-     */
-    @Override
-    public void update(UserPO sysUser) {
-        userMapper.updateById(sysUser);
-    }
-
-    /**
-     * 更新用户账号密码
-     *
-     * @param userMail 账号
-     * @param password 新密码
-     */
-    @Override
-    public void updatePassword(String userMail, String password) {
-        UserPO sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), UserPO.class);
-        if (StringUtils.compare(userMail, sysUser.getMail()) == 0) {
-            sysUser.setPassword(DigestUtils.md5Hex(password + SALT));
-            userMapper.updateById(sysUser);
-        }
-    }
-
-    /**
-     * 注销账号(更新用户状态)
-     *
-     * @param account  账号id
-     * @param password 密码目前没用到
-     */
-    @Override
-    public boolean destroy(Long account, String password) {
-        UserPO sysUser = JSONObject.parseObject(String.valueOf(ThreadLocalUtils.get()), UserPO.class);
-        if (sysUser != null) {
-            if (sysUser.getId().equals(account)) {
-                sysUser.setStatus(1);
-                userMapper.updateById(sysUser);
-                return true;
-            }
-        }
-        return false;
+    private String passwordEncrypt(String password){
+        return DigestUtils.md5DigestAsHex((password + SALT).getBytes(StandardCharsets.UTF_8));
     }
 
 }
