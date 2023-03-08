@@ -1,9 +1,17 @@
+HELP.md
+target/
+release/
+#security/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 ### Java template
 # Compiled class file
 *.class
 
 # Log file
-*.log
+*.log*
 
 # BlueJ files
 *.ctxt
@@ -113,6 +121,14 @@ local.properties
 # Typically, this file would be tracked if it contains build/dependency configurations:
 #.project
 
+### IntelliJ IDEA ###
+.idea
+
+### VS Code ###
+.vscode/
+
 /judge/*
 
-bootstrap-dev.yml
+HyperionOJ-Cloud/hyperionoj-web/src/main/resources/
+
+HyperionOJ-Cloud/judge/src/main/resources
