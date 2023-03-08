@@ -8,23 +8,23 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 123.60.151.232:8848
+        server-addr: 127.0.0.1:8848
         cluster-name: HyperionOJ
         ephemeral: true
-        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+        namespace: xxxx-xxxx-xxxx-xxxx-xxxx
       config:
-        server-addr: 123.60.151.232:8848
+        server-addr: 127.0.0.1:8848
         file-extension: yaml
-        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+        namespace: xxxx-xxxx-xxxx-xxxx-xxxx
   redis:
-    host: 123.60.151.232
+    host: 127.0.0.1
     port: 6379
-    password: 123212321
+    password: xxxxxx
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://123.60.151.232:3306/HyperionOJ?serverTimezone=UTC&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/HyperionOJ?serverTimezone=UTC&allowMultiQueries=true
     username: root
-    password: 123212321
+    password: xxxxxx
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -35,11 +35,11 @@ spring:
       max-file-size: 1GB
   mail:
     host: smtp.qq.com
-    username: "Hyperion_LR@foxmail.com"
-    password: laobzfffstfpdjba
+    username: "xxxxxx@xx.com"
+    password: xxxxxx
     default-encoding: UTF-8
   kafka:
-    bootstrap-servers: 123.60.151.232:9092
+    bootstrap-servers: 127.0.0.1:9092
     producer:
       # 发生错误后，消息重发的次数。
       retries: 1
@@ -70,9 +70,8 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 qiniu:
-  accessKey: P2wWnbggS2GLKDWSn-ededUA9sONcxqjhebhUdd9
-  accessSecretKey: lrqbgSX8Fqi2LgEkJNdeL-aEGHR8r81b8dmF3x_I
-  bucketName: hyperion-oj
+  accessKey:
+  accessSecretKey:
+  bucketName:
   url:
-  zone: huadong
-problem-case-dir:
+  zone:
