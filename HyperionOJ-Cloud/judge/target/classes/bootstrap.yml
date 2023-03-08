@@ -8,16 +8,16 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 123.60.151.232:8848
+        server-addr: 127.0.0.1:8848
         cluster-name: HyperionOJ
         ephemeral: true
-        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+        namespace: xxxx-xxxx-xxxx-xxxx-xxxx
       config:
-        server-addr: 123.60.151.232:8848
+        server-addr: 127.0.0.1:8848
         file-extension: yaml
-        namespace: 8c23f025-5aae-49be-8505-eb6ddce4970a
+        namespace: xxxx-xxxx-xxxx-xxxx-xxxx
   kafka:
-    bootstrap-servers: 123.60.151.232:9092
+    bootstrap-servers: 127.0.0.1:9092
     producer:
       # 发生错误后，消息重发的次数。
       retries: 1
@@ -45,5 +45,5 @@ spring:
       enable-auto-commit: false
 judge:
   fileDir:
-    problem: D:\WorkSpace\Java_Works\IDEA_Works\HyperionOJ\judge\problem_data
-    submit: D:\WorkSpace\Java_Works\IDEA_Works\HyperionOJ\judge\submit_data
+    problem: D:\xxx\xxx\xxx\
+    submit: D:\xxx\xxx\xxx\
