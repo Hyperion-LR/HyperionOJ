@@ -42,7 +42,7 @@ public class SubmitServiceImpl implements SubmitService {
     public RunResult submit(SubmitDTO submit) throws Exception {
 
         // 准备工作
-        RunResult runResult = new RunResult();
+        RunResult runResult = RunResult.builder().build();
         runResult.setRunMemory(0);
         runResult.setRunTime(0);
 

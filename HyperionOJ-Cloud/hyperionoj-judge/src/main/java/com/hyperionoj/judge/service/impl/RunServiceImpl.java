@@ -44,7 +44,7 @@ public class RunServiceImpl implements RunService {
     public RunResult run(String codeLang, String compiledFile, String problemId, Integer runTime, Integer runMemory, Integer index) {
         // 获取题目输入文件，并做好进程运行准备
         String inData = filePath.getProblem() + File.separator + problemId + File.separator + IN + File.separator + IN + index + TXT;
-        RunResult result = new RunResult();
+        RunResult result = RunResult.builder().build();
         ArrayList<String> args = getArgs(codeLang, runMemory, compiledFile);
         if (args == null) {
             result.setVerdict(Verdict.CE.getVerdict());
