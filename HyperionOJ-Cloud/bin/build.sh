@@ -11,6 +11,8 @@ mvn complete
 
 mvn install
 
-mv ~/HyperionOJ/HyperionOJ-Cloud/hyperionoj-web/target/hyperionoj-web-1.0.0.jar ~/HyperionOJ-WEB/server/
+rm -rf ~/HyperionOJ-WEB/release/
+
+mv ~/HyperionOJ/HyperionOJ-Cloud/hyperionoj-web/target/hyperionoj-web-1.0.0.jar ~/HyperionOJ-WEB/release/
 
 

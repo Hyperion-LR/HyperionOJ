@@ -8,7 +8,7 @@ then
 fi
 
 nohup java -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -Xms512m -Xmx10240m \
--jar ~/HyperionOJ-WEB/server/hyperionoj-web-1.0.0.jar \
+-jar ~/HyperionOJ-WEB/release/hyperionoj-web-1.0.0.jar \
 --spring.profiles.active=test > ~/HyperionOJ-WEB/logs/console.log &
 
 echo "服务已被启动~!"
