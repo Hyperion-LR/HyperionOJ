@@ -3,7 +3,7 @@ package com.hyperionoj.judge.listener;
 import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.judge.service.SubmitService;
 import com.hyperionoj.judge.vo.RunResult;
-import com.hyperionoj.judge.vo.SubmitVo;
+import com.hyperionoj.judge.dto.SubmitDTO;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -32,7 +32,7 @@ public class SubmitListener {
     public void submit(ConsumerRecord<?, ?> record) throws Exception {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
-            RunResult runResult = submitService.submit(JSONObject.parseObject((String) kafkaMessage.get(), SubmitVo.class));
+            RunResult runResult = submitService.submit(JSONObject.parseObject((String) kafkaMessage.get(), SubmitDTO.class));
             kafkaTemplate.send(KAFKA_TOPIC_SUBMIT_RESULT, JSONObject.toJSONString(runResult));
         }
     }

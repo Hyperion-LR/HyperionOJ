@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.hyperionoj.judge.utils.JWTUtils;
 import com.hyperionoj.judge.utils.RedisUtils;
 import com.hyperionoj.judge.utils.ThreadLocalUtils;
-import com.hyperionoj.judge.vo.ErrorCode;
+import com.hyperionoj.judge.constants.ErrorCode;
 import com.hyperionoj.judge.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,13 +28,14 @@ import static com.hyperionoj.judge.constants.Constants.UNDEFINED;
 @Component
 @Slf4j
 public class LoginInterceptor extends StatHandlerInterceptor {
-
+    /*
     @Resource
     private RedisUtils redisSever;
-
+    */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!(handler instanceof HandlerMethod)) {
+        /*
+               if (!(handler instanceof HandlerMethod)) {
             return true;
         }
         String token = request.getHeader("SysUser-Token");
@@ -61,6 +62,7 @@ public class LoginInterceptor extends StatHandlerInterceptor {
             return false;
         }
         ThreadLocalUtils.set(sysUser);
+         */
         return true;
     }
 

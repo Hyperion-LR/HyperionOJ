@@ -1,13 +1,11 @@
 package com.hyperionoj.judge.utils;
 
-import com.alibaba.fastjson.JSON;
-import org.springframework.data.redis.core.StringRedisTemplate;
+
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.time.Duration;
+
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * @author Hyperion
@@ -17,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtils {
 
     private static Random random = new Random();
+
+    /*
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -117,4 +117,6 @@ public class RedisUtils {
     public Set<String> getKeys(String prefix) {
         return stringRedisTemplate.keys(prefix.concat("*"));
     }
+
+     */
 }

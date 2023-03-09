@@ -1,5 +1,6 @@
 package com.hyperionoj.judge.vo;
 
+import com.hyperionoj.judge.constants.ErrorCode;
 import lombok.Data;
 
 /**

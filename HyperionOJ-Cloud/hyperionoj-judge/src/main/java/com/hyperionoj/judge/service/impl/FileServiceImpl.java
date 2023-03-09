@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String codeFileName(String codeLang) {
         String codeFileName = "";
-        if (("c++").equals(codeLang)) {
+        if ((CPP_LANG).equals(codeLang)) {
             codeFileName = CPP_FILENAME;
         } else if ((JAVA_LANG).equals(codeLang)) {
             codeFileName = JAVA_FILENAME;

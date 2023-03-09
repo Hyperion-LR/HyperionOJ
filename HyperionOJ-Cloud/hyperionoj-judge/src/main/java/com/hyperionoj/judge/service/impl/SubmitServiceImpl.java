@@ -4,7 +4,7 @@ import com.hyperionoj.judge.constants.Verdict;
 import com.hyperionoj.judge.service.*;
 import com.hyperionoj.judge.vo.RunResult;
 import com.hyperionoj.judge.vo.ShellResult;
-import com.hyperionoj.judge.vo.SubmitVo;
+import com.hyperionoj.judge.dto.SubmitDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class SubmitServiceImpl implements SubmitService {
      * @return 代码判题结果
      */
     @Override
-    public RunResult submit(SubmitVo submit) throws Exception {
+    public RunResult submit(SubmitDTO submit) throws Exception {
 
         // 准备工作
         RunResult runResult = new RunResult();

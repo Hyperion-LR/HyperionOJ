@@ -2,7 +2,7 @@ server:
   port: 9000
 spring:
   application:
-    name: judge
+    name: hyperionoj-judge
   profiles:
     active: dev
   cloud:

@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2021/12/9
  */
 @Data
-public class RunVo {
+public class RunVO {
 
     private String codeLang;
 

@@ -1,7 +1,7 @@
 package com.hyperionoj.judge.service;
 
 import com.hyperionoj.judge.vo.RunResult;
-import com.hyperionoj.judge.vo.SubmitVo;
+import com.hyperionoj.judge.dto.SubmitDTO;
 
 /**
  * 提交代码服务
@@ -17,5 +17,5 @@ public interface SubmitService {
      * @param submit 代码参数
      * @return 代码判题结果
      */
-    RunResult submit(SubmitVo submit) throws Exception;
+    RunResult submit(SubmitDTO submit) throws Exception;
 }

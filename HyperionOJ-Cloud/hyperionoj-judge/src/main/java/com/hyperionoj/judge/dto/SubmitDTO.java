@@ -1,4 +1,4 @@
-package com.hyperionoj.judge.vo;
+package com.hyperionoj.judge.dto;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2021/12/7
  */
 @Data
-public class SubmitVo {
+public class SubmitDTO {
 
     private String authorId;
 

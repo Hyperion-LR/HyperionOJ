@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.judge.dto.UpdateSubmitDO;
 import com.hyperionoj.web.domain.repo.UserRepo;
 import com.hyperionoj.web.infrastructure.constants.Constants;
-import com.hyperionoj.web.infrastructure.mapper.UserMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
