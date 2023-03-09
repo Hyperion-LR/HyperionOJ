@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # shellcheck disable=SC2164
-cd ~/HyperionOJ/HyperionOJ-Cloud/
+cd ~/hyperion-oj/HyperionOJ-Cloud/
 
 git pull
 
