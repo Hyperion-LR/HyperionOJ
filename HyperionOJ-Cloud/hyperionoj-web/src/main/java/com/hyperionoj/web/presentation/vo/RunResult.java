@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class RunResultVO {
+public class RunResult {
 
     private String authorId;
 

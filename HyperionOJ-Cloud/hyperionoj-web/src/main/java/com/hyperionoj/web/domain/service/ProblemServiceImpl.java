@@ -14,7 +14,6 @@ import com.hyperionoj.web.presentation.vo.Result;
 import com.hyperionoj.web.infrastructure.po.*;
 import com.hyperionoj.web.infrastructure.utils.RedisUtils;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
-import com.hyperionoj.judge.vo.RunResult;
 import com.hyperionoj.web.presentation.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -120,11 +119,10 @@ public class ProblemServiceImpl implements ProblemService {
         submitDTO.setRunTime(problemVO.getRunTime());
         submitDTO.setRunMemory(problemVO.getRunMemory());
         if (!check(submitDTO)) {
-            RunResult runResult = new RunResult();
-            runResult.setAuthorId(sysUser.getId().toString());
-            runResult.setProblemId(Long.parseLong(submitDTO.getProblemId()));
-            runResult.setMsg("请不要使用系统命令或者非法字符");
-            return runResult;
+            return RunResult.builder()
+                    .authorId(sysUser.getId().toString())
+                    .problemId(submitDTO.getProblemId())
+                    .msg("请不要使用系统命令或者非法字符").build();
         }
         RunResult result = null;
         kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitDTO));
@@ -141,7 +139,7 @@ public class ProblemServiceImpl implements ProblemService {
         }
         if (result != null) {
             ProblemSubmitPO problemSubmit = new ProblemSubmitPO();
-            problemSubmit.setProblemId(result.getProblemId());
+            problemSubmit.setProblemId(Long.parseLong(result.getProblemId()));
             problemSubmit.setAuthorId(sysUser.getId());
             problemSubmit.setUsername(sysUser.getUsername());
             problemSubmit.setCodeBody(submitDTO.getCodeBody());
@@ -168,7 +166,7 @@ public class ProblemServiceImpl implements ProblemService {
             }
             this.updateProblemCache(problemVO);
             result.setSubmitTime(submitDTO.getCreateTime());
-            result.setSubmitId(problemSubmit.getId());
+            result.setSubmitId(problemSubmit.getId().toString());
         }
         return result;
     }
@@ -256,7 +254,7 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 题目所有标签
      */
     @Override
-    public List<TagVO> getTagList(){
+    public List<TagVO> getTagList() {
         return tagRepo.list().stream().map(MapStruct::toVO).collect(Collectors.toList());
     }
 

@@ -22,12 +22,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hyperionoj</groupId>
-            <artifactId>hyperionoj-judge</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
             <version>${spring-cloud.version}</version>
@@ -177,10 +171,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <classifier>execute</classifier>
-                    <mainClass>com.hyperionoj.judge.JudgeApplication</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>

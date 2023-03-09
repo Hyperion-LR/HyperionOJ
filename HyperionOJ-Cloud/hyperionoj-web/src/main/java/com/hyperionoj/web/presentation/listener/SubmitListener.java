@@ -1,9 +1,9 @@
 package com.hyperionoj.web.presentation.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hyperionoj.judge.dto.UpdateSubmitDO;
 import com.hyperionoj.web.domain.repo.UserRepo;
 import com.hyperionoj.web.infrastructure.constants.Constants;
+import com.hyperionoj.web.presentation.dto.SubmitDTO;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -25,8 +25,8 @@ public class SubmitListener {
     public void updateSubmit(ConsumerRecord<?, ?> record) {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
-            UpdateSubmitDO updateSubmitVo = JSONObject.parseObject((String) kafkaMessage.get(), UpdateSubmitDO.class);
-            Long authorId = updateSubmitVo.getAuthorId();
+            SubmitDTO updateSubmitVo = JSONObject.parseObject((String) kafkaMessage.get(), SubmitDTO.class);
+            Long authorId = Long.valueOf(updateSubmitVo.getAuthorId());
             String status = updateSubmitVo.getStatus();
             if (Constants.AC.equals(status)) {
                 userRepo.updateSubmitAc(authorId);
