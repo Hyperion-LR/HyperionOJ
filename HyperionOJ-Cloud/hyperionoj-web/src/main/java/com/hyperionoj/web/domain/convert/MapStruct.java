@@ -13,7 +13,7 @@ public class MapStruct {
 
     public static CategoryVO toVO(CategoryDTO categoryDTO) {
         if(categoryDTO == null){
-            return CategoryVO.builder().build();
+            return null;
         }
         return CategoryVO.builder()
                 .categoryName(categoryDTO.getCategoryName())
@@ -23,7 +23,7 @@ public class MapStruct {
 
     public static CategoryVO toVO(CategoryPO category) {
         if(category == null){
-            return CategoryVO.builder().build();
+            return null;
         }
         return CategoryVO.builder()
                 .categoryName(category.getCategoryName())
@@ -32,6 +32,9 @@ public class MapStruct {
     }
 
     public static CommentVO toVO(CommentDTO commentDTO) {
+        if(commentDTO == null){
+            return null;
+        }
         return CommentVO.builder()
                 .id(commentDTO.getId())
                 .content(commentDTO.getContent())
@@ -46,6 +49,9 @@ public class MapStruct {
     }
 
     public static ProblemVO toVO(ProblemDTO problemDTO) {
+        if(problemDTO == null){
+            return null;
+        }
         return ProblemVO.builder()
                 .id(problemDTO.getId())
                 .title(problemDTO.getTitle())
@@ -68,6 +74,9 @@ public class MapStruct {
     }
 
     private static TagVO toVO(TagDTO tagDTO) {
+        if(tagDTO == null){
+            return null;
+        }
         return TagVO.builder()
                 .id(tagDTO.getId())
                 .tagName(tagDTO.getTagName())
@@ -75,6 +84,9 @@ public class MapStruct {
     }
 
     public static ProblemVO toVO(ProblemPO problemPO) {
+        if(problemPO == null){
+            return null;
+        }
         return ProblemVO.builder()
                 .id(problemPO.getId().toString())
                 .title(problemPO.getTitle())
@@ -92,21 +104,18 @@ public class MapStruct {
     }
 
     public static TagVO toVO(TagPO tagPO) {
+        if(tagPO == null){
+            return null;
+        }
         return TagVO.builder()
                 .id(tagPO.getId().toString())
                 .tagName(tagPO.getTagName()).build();
     }
 
-    public static UserVO userToVo(UserPO userPO) {
-        return UserVO.builder()
-                .username(userPO.getUsername())
-                .avatar(userPO.getAvatar())
-                .mail(userPO.getMail())
-                .id(userPO.getId().toString())
-                .build();
-    }
-
     public static UserVO toVO(UserDTO userDO) {
+        if(userDO == null){
+            return null;
+        }
         return UserVO.builder()
                 .id(userDO.getId())
                 .username(userDO.getUsername())
@@ -116,6 +125,9 @@ public class MapStruct {
     }
 
     public static UserVO toVO(UserPO userPO) {
+        if(userPO == null){
+            return null;
+        }
         return UserVO.builder()
                 .id(userPO.getId().toString())
                 .username(userPO.getUsername())
@@ -125,6 +137,9 @@ public class MapStruct {
     }
 
     public static AdminActionVO toVO(AdminActionPO adminActionPO) {
+        if(adminActionPO == null){
+            return null;
+        }
         return AdminActionVO.builder()
                 .id(adminActionPO.getId().toString())
                 .action(adminActionPO.getAdminAction())
@@ -135,6 +150,9 @@ public class MapStruct {
     }
 
     public static AdminVO toVO(AdminPO admin) {
+        if(admin == null){
+            return null;
+        }
         return AdminVO.builder()
                 .id(admin.getId().toString())
                 .name(admin.getName())
@@ -189,4 +207,20 @@ public class MapStruct {
                 .build();
     }
 
+    public static SubmitVO toVO(ProblemSubmitPO submit) {
+        if(submit == null){
+            return null;
+        }
+        return SubmitVO.builder()
+                .id(submit.getId().toString())
+                .problemId(submit.getProblemId().toString())
+                .authorId(submit.getAuthorId().toString())
+                .codeLang(submit.getCodeLang())
+                .codeBody(submit.getCodeBody())
+                .runTime(submit.getRunTime())
+                .runMemory(submit.getRunMemory())
+                .createTime(submit.getCreateTime().toString())
+                .verdict(submit.getStatus())
+                .build();
+    }
 }

@@ -1,6 +1,5 @@
 package com.hyperionoj.web.presentation.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.web.application.api.ProblemService;
 import com.hyperionoj.web.application.annotation.Cache;
 
@@ -9,9 +8,7 @@ import com.hyperionoj.web.presentation.dto.CommentDTO;
 import com.hyperionoj.web.presentation.dto.SubmitDTO;
 import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
-import com.hyperionoj.web.presentation.vo.CommentVO;
 import com.hyperionoj.web.presentation.vo.ProblemVO;
-import com.hyperionoj.web.presentation.vo.SubmitVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

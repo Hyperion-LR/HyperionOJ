@@ -411,7 +411,7 @@ public class ProblemServiceImpl implements ProblemService {
     public SubmitVO getSubmitById(Long id) {
         LambdaQueryWrapper<ProblemSubmitPO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ProblemSubmitPO::getId, id);
-        return submitToVO(problemSubmitRepo.getOne(queryWrapper), true);
+        return MapStruct.toVO(problemSubmitRepo.getOne(queryWrapper));
     }
 
     /**
@@ -428,25 +428,9 @@ public class ProblemServiceImpl implements ProblemService {
     private List<SubmitVO> submitToVOList(List<ProblemSubmitPO> submits) {
         ArrayList<SubmitVO> submitVOs = new ArrayList<>();
         for (ProblemSubmitPO submit : submits) {
-            submitVOs.add(submitToVO(submit, false));
+            submitVOs.add(MapStruct.toVO(submit));
         }
         return submitVOs;
-    }
-
-    private SubmitVO submitToVO(ProblemSubmitPO submit, boolean isBody) {
-        SubmitVO submitVO = SubmitVO.builder().build();
-        submitVO.setId(submit.getId().toString());
-        submitVO.setProblemId(submit.getProblemId().toString());
-        submitVO.setAuthorId(submit.getAuthorId().toString());
-        submitVO.setCodeLang(submit.getCodeLang());
-        submitVO.setCreateTime(dateFormat.format(submit.getCreateTime()));
-        submitVO.setRunTime(submit.getRunTime());
-        submitVO.setRunMemory(submit.getRunMemory());
-        submitVO.setVerdict(submit.getStatus());
-        if (isBody) {
-            submitVO.setCodeBody(submit.getCodeBody());
-        }
-        return submitVO;
     }
 
     /**
