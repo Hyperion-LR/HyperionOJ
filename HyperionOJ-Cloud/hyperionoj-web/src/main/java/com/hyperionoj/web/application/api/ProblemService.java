@@ -1,9 +1,6 @@
 package com.hyperionoj.web.application.api;
 
-import com.hyperionoj.web.presentation.dto.CategoryDTO;
-import com.hyperionoj.web.presentation.dto.CommentDTO;
-import com.hyperionoj.web.presentation.dto.ProblemDTO;
-import com.hyperionoj.web.presentation.dto.TagDTO;
+import com.hyperionoj.web.presentation.dto.*;
 import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,10 +32,10 @@ public interface ProblemService {
     /**
      * 提交题目
      *
-     * @param submitVo 用户提交数据
+     * @param submitDTO 用户提交数据
      * @return 本次提交情况
      */
-    Object submit(SubmitVO submitVo);
+    Object submit(SubmitDTO submitDTO);
 
     /**
      * 添加题目

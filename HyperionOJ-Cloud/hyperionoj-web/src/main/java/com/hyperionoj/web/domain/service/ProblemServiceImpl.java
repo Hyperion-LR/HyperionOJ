@@ -8,10 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.web.application.api.ProblemService;
 import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.domain.repo.*;
-import com.hyperionoj.web.presentation.dto.CategoryDTO;
-import com.hyperionoj.web.presentation.dto.CommentDTO;
-import com.hyperionoj.web.presentation.dto.ProblemDTO;
-import com.hyperionoj.web.presentation.dto.TagDTO;
+import com.hyperionoj.web.presentation.dto.*;
 import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
 import com.hyperionoj.web.infrastructure.po.*;
@@ -108,33 +105,32 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 提交题目
      *
-     * @param submitVO 用户提交数据
+     * @param submitDTO 用户提交数据
      * @return 本次提交情况
      */
     @Override
-    public Object submit(SubmitVO submitVO) {
+    public Object submit(SubmitDTO submitDTO) {
         UserPO sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
-        ProblemPO problem = problemRepo.getById(submitVO.getProblemId());
-        submitVO.setRunTime(problem.getRunTime());
-        submitVO.setRunMemory(problem.getRunMemory());
-        submitVO.setCaseNumber(problem.getCaseNumber());
-        ProblemVO problemVO = MapStruct.toVO(problemRepo.getById(submitVO.getProblemId()));
-        submitVO.setCreateTime(dateFormat.format(System.currentTimeMillis()));
-        submitVO.setCaseNumber(problemVO.getCaseNumber());
-        submitVO.setRunTime(problemVO.getRunTime());
-        submitVO.setRunMemory(problemVO.getRunMemory());
-        if (!check(submitVO)) {
+        ProblemPO problem = problemRepo.getById(submitDTO.getProblemId());
+        submitDTO.setRunTime(problem.getRunTime());
+        submitDTO.setRunMemory(problem.getRunMemory());
+        submitDTO.setCaseNumber(problem.getCaseNumber());
+        ProblemVO problemVO = MapStruct.toVO(problemRepo.getById(submitDTO.getProblemId()));
+        submitDTO.setCreateTime(dateFormat.format(System.currentTimeMillis()));
+        submitDTO.setRunTime(problemVO.getRunTime());
+        submitDTO.setRunMemory(problemVO.getRunMemory());
+        if (!check(submitDTO)) {
             RunResult runResult = new RunResult();
             runResult.setAuthorId(sysUser.getId().toString());
-            runResult.setProblemId(Long.parseLong(submitVO.getProblemId()));
+            runResult.setProblemId(Long.parseLong(submitDTO.getProblemId()));
             runResult.setMsg("请不要使用系统命令或者非法字符");
             return runResult;
         }
         RunResult result = null;
-        kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitVO));
+        kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitDTO));
         try {
             long start = System.currentTimeMillis();
-            while (null == (result = SUBMIT_RESULT.get(submitVO.getAuthorId() + UNDERLINE + submitVO.getProblemId()))) {
+            while (null == (result = SUBMIT_RESULT.get(submitDTO.getAuthorId() + UNDERLINE + submitDTO.getProblemId()))) {
                 if (System.currentTimeMillis() - start > 5000) {
                     break;
                 }
@@ -148,13 +144,13 @@ public class ProblemServiceImpl implements ProblemService {
             problemSubmit.setProblemId(result.getProblemId());
             problemSubmit.setAuthorId(sysUser.getId());
             problemSubmit.setUsername(sysUser.getUsername());
-            problemSubmit.setCodeBody(submitVO.getCodeBody());
+            problemSubmit.setCodeBody(submitDTO.getCodeBody());
             problemSubmit.setRunMemory(result.getRunMemory());
-            problemSubmit.setCodeLang(submitVO.getCodeLang());
+            problemSubmit.setCodeLang(submitDTO.getCodeLang());
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
             try {
-                problemSubmit.setCreateTime(dateFormat.parse(submitVO.getCreateTime()).getTime());
+                problemSubmit.setCreateTime(dateFormat.parse(submitDTO.getCreateTime()).getTime());
             } catch (ParseException e) {
                 log.info(e.toString());
                 problemSubmit.setCreateTime(System.currentTimeMillis());
@@ -171,7 +167,7 @@ public class ProblemServiceImpl implements ProblemService {
                 // this.updateEverydayCache(JSONObject.toJSONString(sysUser.getId()));
             }
             this.updateProblemCache(problemVO);
-            result.setSubmitTime(submitVO.getCreateTime());
+            result.setSubmitTime(submitDTO.getCreateTime());
             result.setSubmitId(problemSubmit.getId());
         }
         return result;
@@ -507,15 +503,15 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 检查用户提交参数
      *
-     * @param submitVO 用户提交数据
+     * @param submitDTO 用户提交数据
      * @return 是否通过检验
      */
-    private boolean check(SubmitVO submitVO) {
+    private boolean check(SubmitDTO submitDTO) {
         UserPO sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
-        if (sysUser.getId().equals(Long.getLong(submitVO.getAuthorId()))) {
+        if (sysUser.getId().equals(Long.getLong(submitDTO.getAuthorId()))) {
             return false;
         }
-        return !StringUtils.contains(submitVO.getCodeBody(), ILLEGAL_CHAR_SYSTEM);
+        return !StringUtils.contains(submitDTO.getCodeBody(), ILLEGAL_CHAR_SYSTEM);
     }
 
     private List<ProblemVO> copyProblemList(List<ProblemPO> problemPage) {

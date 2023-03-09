@@ -1,37 +1,36 @@
-package com.hyperionoj.web.presentation.vo;
+package com.hyperionoj.web.presentation.dto;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Hyperion
- * @date 2021/12/7
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmitVO {
+public class SubmitDTO {
 
     private String id;
 
-    private String authorId;
+    private String username;
 
     private String problemId;
+
+    private String authorId;
 
     private String codeLang;
 
     private String codeBody;
 
-    private Integer runTime;
-
-    private Integer runMemory;
+    private String status;
 
     private Integer caseNumber;
 
-    private String verdict;
+    private Integer runTime;
+
+    private Integer runMemory;
 
     private String createTime;
 

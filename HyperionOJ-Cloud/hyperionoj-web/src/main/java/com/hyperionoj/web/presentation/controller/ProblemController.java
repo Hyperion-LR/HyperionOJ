@@ -6,6 +6,7 @@ import com.hyperionoj.web.application.annotation.Cache;
 
 import com.hyperionoj.web.infrastructure.constants.ErrorCode;
 import com.hyperionoj.web.presentation.dto.CommentDTO;
+import com.hyperionoj.web.presentation.dto.SubmitDTO;
 import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
 import com.hyperionoj.web.presentation.vo.CommentVO;
@@ -90,12 +91,12 @@ public class ProblemController {
     /**
      * 提交代码
      *
-     * @param submitVo 用户提交数据
+     * @param submitDTO 用户提交数据
      * @return 本次提交情况
      */
     @PostMapping("/submit")
-    public Result submit(@RequestBody SubmitVO submitVo) {
-        Object result = problemService.submit(submitVo);
+    public Result submit(@RequestBody SubmitDTO submitDTO) {
+        Object result = problemService.submit(submitDTO);
         if (result == null) {
             return Result.fail(ErrorCode.SYSTEM_ERROR);
         } else {
@@ -140,13 +141,13 @@ public class ProblemController {
     /**
      * 对题目下该评论的点赞
      *
-     * @param commentVO 评论参数
+     * @param commentDTO 评论参数
      * @return 目前得赞数
      */
     @PostMapping("/comment/support")
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
-    public Result supportComment(@RequestBody CommentVO commentVO) {
-        return Result.success(problemService.support(Long.parseLong(commentVO.getId())));
+    public Result supportComment(@RequestBody CommentDTO commentDTO) {
+        return Result.success(problemService.support(Long.parseLong(commentDTO.getId())));
     }
 
     /**
