@@ -7,7 +7,7 @@ git pull
 
 mvn clean
 
-mvn complete
+mvn compile
 
 mvn install
 
