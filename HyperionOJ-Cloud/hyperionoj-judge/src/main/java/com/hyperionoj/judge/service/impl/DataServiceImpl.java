@@ -41,17 +41,21 @@ public class DataServiceImpl implements DataService {
         String inProblemDir = problemDir + File.separator + IN;
         String outProblemDir = problemDir + File.separator + OUT;
         File file = new File(inProblemDir);
-        if (!file.exists()) {
-            file.mkdirs();
+        //如果该题目之前存在数据全部删除重新存入数据
+        if (file.exists()) {
+            fileService.deleteFolder(file);
         }
+        file.mkdirs();
         for(int i = 0; i < inMultipartFiles.length; ++i){
             Path inPutDataPath = Paths.get(inProblemDir + File.separator + IN + (i + 1) + TXT);
             inMultipartFiles[i].transferTo(inPutDataPath);
         }
+        //如果该题目之前存在数据全部删除重新存入数据
         file = new File(outProblemDir);
-        if (!file.exists()) {
-            file.mkdirs();
+        if (file.exists()) {
+            fileService.deleteFolder(file);
         }
+        file.mkdirs();
         for(int i = 0; i < outMultipartFiles.length; ++i){
             Path outPutDataPath = Paths.get(outProblemDir + File.separator + OUT + (i + 1) + TXT);
             outMultipartFiles[i].transferTo(outPutDataPath);

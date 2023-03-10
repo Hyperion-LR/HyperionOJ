@@ -78,10 +78,10 @@ public class FileServiceImpl implements FileService {
      * @throws Exception
      */
     @Override
-    public void deleteFolder(File folder) throws Exception {
+    public void deleteFolder(File folder) throws IOException {
         if (!folder.exists()) {
             log.error("文件不存在：{}", folder.getName());
-            throw new Exception("文件不存在");
+            throw new IOException("文件不存在");
         }
         File[] files = folder.listFiles();
         if (files != null) {
