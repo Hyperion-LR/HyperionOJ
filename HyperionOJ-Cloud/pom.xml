@@ -49,6 +49,12 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
                 <version>0.2.2.RELEASE</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.netflix.ribbon</groupId>
+                        <artifactId>ribbon</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.nacos</groupId>
@@ -118,6 +124,11 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>3.0.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+                <version>2.2.9.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>

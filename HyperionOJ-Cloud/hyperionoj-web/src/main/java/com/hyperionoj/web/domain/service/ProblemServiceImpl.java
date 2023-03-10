@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.web.application.api.ProblemService;
 import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.domain.repo.*;
+import com.hyperionoj.web.infrastructure.feign.ProblemCaseFeign;
 import com.hyperionoj.web.presentation.dto.*;
 import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
@@ -24,6 +25,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -73,6 +75,9 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Resource
     private RedisUtils redisUtils;
+
+    @Resource
+    private ProblemCaseFeign problemCaseFeign;
 
     /**
      * 返回题目列表
@@ -594,8 +599,16 @@ public class ProblemServiceImpl implements ProblemService {
      * @param problemId 题目ID
      */
     @Override
-    public Boolean pushProblemCase(Long problemId, MultipartFile multipartFile) {
-        return null;
+    public Boolean pushProblemCase(Long problemId, MultipartFile[] inMultipartFiles, MultipartFile[] outMultipartFiles) {
+        Result result = problemCaseFeign.pushProblemCase(problemId, inMultipartFiles, outMultipartFiles);
+        if((Boolean) result.getData()){
+            LambdaUpdateWrapper<ProblemPO> problemPOLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            problemPOLambdaUpdateWrapper.set(ProblemPO::getCaseNumber, inMultipartFiles.length);
+            problemPOLambdaUpdateWrapper.eq(ProblemPO::getId, problemId);
+            problemRepo.update(problemPOLambdaUpdateWrapper);
+            return true;
+        }
+        return false;
     }
 
     /**

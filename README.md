@@ -12,7 +12,7 @@
 
 * oss采用七牛云
 
-# 系统模块
+# 后端系统模块
 
 ~~~
 com.hyperion
@@ -40,6 +40,5 @@ com.hyperion
 |
 ├── hyperion-judge         							    // 判题服务 [9000]
 |
-├──pom.xml                								// 公共依赖
+└── pom.xml                								// 公共依赖
 ~~~
-

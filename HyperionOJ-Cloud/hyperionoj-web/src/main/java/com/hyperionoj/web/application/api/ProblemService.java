@@ -177,8 +177,9 @@ public interface ProblemService {
     /**
      * 上传题目测试点
      *
-     * @param problemId 题目ID
+     * @param inMultipartFiles 输入测试点文件
+     * @param outMultipartFiles 输出测试点文件
      */
-    Boolean pushProblemCase(Long problemId, MultipartFile multipartFile);
+    Boolean pushProblemCase(Long problemId, MultipartFile[] inMultipartFiles, MultipartFile[] outMultipartFiles);
 
 }
