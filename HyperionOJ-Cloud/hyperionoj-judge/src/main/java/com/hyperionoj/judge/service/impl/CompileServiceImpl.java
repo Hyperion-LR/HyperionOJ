@@ -97,7 +97,7 @@ public class CompileServiceImpl implements CompileService {
             args = new ArrayList<>();
             args.add(CPP_COMPILE_CMD);
             args.add("-o");
-            args.add("Main");
+            args.add("Main.exe");
             args.add(codeFile);
         } else if ((JAVA_LANG).equals(codeLang)) {
             args = new ArrayList<>();
