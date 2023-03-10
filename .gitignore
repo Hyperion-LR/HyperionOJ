@@ -130,6 +130,9 @@ local.properties
 /judge/*
 
 HyperionOJ-Cloud/hyperionoj-web/src/main/resources/bootstrap-dev.yml
+
 HyperionOJ-Cloud/hyperionoj-web/src/main/resources/log4j2.xml
-HyperionOJ-Cloud/judge/src/main/resources/bootstrap-dev.yml
-HyperionOJ-Cloud/judge/src/main/resources/log4j2.xml
+
+HyperionOJ-Cloud/hyperionoj-judge/src/main/resources/bootstrap-dev.yml
+
+HyperionOJ-Cloud/hyperionoj-judge/src/main/resources/log4j2.xml
