@@ -7,7 +7,7 @@ then
   exit 1
 fi
 
-nohup java -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -Xms512m -Xmx1024m \
+nohup java -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms256m -Xmx512m \
 -jar ~/HyperionOJ-WEB/release/hyperionoj-web-1.0.0.jar \
 --spring.profiles.active=test > ~/HyperionOJ-WEB/logs/console.log 2>&1 &
 
