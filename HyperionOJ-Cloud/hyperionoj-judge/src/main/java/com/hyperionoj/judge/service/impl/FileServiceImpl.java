@@ -2,6 +2,8 @@ package com.hyperionoj.judge.service.impl;
 
 import com.hyperionoj.judge.config.FilePath;
 import com.hyperionoj.judge.service.FileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +23,8 @@ import static com.hyperionoj.judge.constants.Constants.*;
  */
 @Service
 public class FileServiceImpl implements FileService {
+
+    private static final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
     @Resource
     private FilePath filePath;
@@ -76,6 +80,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFolder(File folder) throws Exception {
         if (!folder.exists()) {
+            log.error("文件不存在：{}", folder.getName());
             throw new Exception("文件不存在");
         }
         File[] files = folder.listFiles();
