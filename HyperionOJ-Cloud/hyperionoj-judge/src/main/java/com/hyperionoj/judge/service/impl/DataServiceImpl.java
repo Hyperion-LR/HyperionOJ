@@ -42,18 +42,18 @@ public class DataServiceImpl implements DataService {
         String outProblemDir = problemDir + File.separator + OUT;
         File file = new File(inProblemDir);
         if (!file.exists()) {
-            file.mkdir();
+            file.mkdirs();
         }
-        for(int i = 1; i <= inMultipartFiles.length; ++i){
-            Path inPutDataPath = Paths.get(inProblemDir + File.separator + IN + i + TXT);
+        for(int i = 0; i < inMultipartFiles.length; ++i){
+            Path inPutDataPath = Paths.get(inProblemDir + File.separator + IN + (i + 1) + TXT);
             inMultipartFiles[i].transferTo(inPutDataPath);
         }
         file = new File(outProblemDir);
         if (!file.exists()) {
-            file.mkdir();
+            file.mkdirs();
         }
-        for(int i = 1; i <= outMultipartFiles.length; ++i){
-            Path outPutDataPath = Paths.get(outProblemDir + File.separator + OUT + i + TXT);
+        for(int i = 0; i < outMultipartFiles.length; ++i){
+            Path outPutDataPath = Paths.get(outProblemDir + File.separator + OUT + (i + 1) + TXT);
             outMultipartFiles[i].transferTo(outPutDataPath);
         }
         return true;
