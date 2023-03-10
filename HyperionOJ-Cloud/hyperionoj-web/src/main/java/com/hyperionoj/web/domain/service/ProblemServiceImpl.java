@@ -129,10 +129,10 @@ public class ProblemServiceImpl implements ProblemService {
         try {
             long start = System.currentTimeMillis();
             while (null == (result = SUBMIT_RESULT.get(submitDTO.getAuthorId() + UNDERLINE + submitDTO.getProblemId()))) {
-                if (System.currentTimeMillis() - start > 5000) {
+                if (System.currentTimeMillis() - start > 60 * 1000) {
                     break;
                 }
-                Thread.sleep(1000);
+                Thread.sleep(100);
             }
         } catch (Exception e) {
             log.warn(e.toString());
