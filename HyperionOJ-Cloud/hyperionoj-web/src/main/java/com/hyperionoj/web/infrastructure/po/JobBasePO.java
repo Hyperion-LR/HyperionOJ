@@ -6,19 +6,23 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+/**
+ * 作业基本信息
+ * @author Hyperion
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("job")
-public class JobPO {
+@TableName("job_base")
+public class JobBasePO {
 
     /**
      * 作业ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -70,11 +74,6 @@ public class JobPO {
      * 作业对应的grafana监控url路径
      */
     private String monitorUrl;
-
-    /**
-     * 文件夹ID,对应folder_job表中的ID字段
-     */
-    private Long folderLd;
 
     /**
      * Ingress外部暴露作业访问地址

@@ -35,6 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/problem/comment/delete")
                 .addPathPatterns("/user/update")
                 .addPathPatterns("/user/update/password")
+                .addPathPatterns("/job/*")
         ;
         registry.addInterceptor(adminLoginInterceptor)
                 .addPathPatterns("/admin/**")

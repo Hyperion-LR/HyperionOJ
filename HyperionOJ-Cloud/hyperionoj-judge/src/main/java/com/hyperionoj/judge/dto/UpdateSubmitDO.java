@@ -2,6 +2,9 @@ package com.hyperionoj.judge.dto;
 
 import lombok.Data;
 
+/**
+ * @author Hyperion
+ */
 @Data
 public class UpdateSubmitDO {
 

@@ -2,8 +2,9 @@ package com.hyperionoj.web.infrastructure.constants;
 
 /**
  * 表示job的运行状态
+ * @author Hyperion
  */
-public enum JobStatus {
+public enum JobStatusEnum {
 
     /**
      * 作业新建
@@ -32,7 +33,7 @@ public enum JobStatus {
 
     private String status;
 
-    JobStatus(String status) {
+    JobStatusEnum(String status) {
         this.status = status;
     }
 

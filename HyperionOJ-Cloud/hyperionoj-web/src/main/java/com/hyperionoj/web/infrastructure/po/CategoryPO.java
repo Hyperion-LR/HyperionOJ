@@ -22,7 +22,7 @@ public class CategoryPO {
     /**
      * 分类ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
