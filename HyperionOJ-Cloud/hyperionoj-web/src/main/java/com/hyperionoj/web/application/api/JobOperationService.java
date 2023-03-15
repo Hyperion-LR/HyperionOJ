@@ -56,12 +56,6 @@ public interface JobOperationService {
      * @param multipartFileList 资源列表
      * @return 上传是否成功
      */
-    Boolean updateResource(MultipartFile[] multipartFileList);
+    Boolean updateResource(Long jobId, MultipartFile[] multipartFileList);
 
-
-    /**
-     * @param jobActionDTO
-     * @return
-     */
-    JobActionCodeEnum jobOperate(JobActionDTO jobActionDTO);
 }

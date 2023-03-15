@@ -40,6 +40,8 @@ public class JobWorkingPO implements Serializable {
      */
     private String type;
 
+    private Integer parallelism;
+
     /**
      * Flink版本信息ID
      */

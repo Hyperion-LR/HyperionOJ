@@ -2,10 +2,19 @@ package com.hyperionoj.web.domain.service;
 
 import com.hyperionoj.web.application.api.JobResourceService;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Hyperion
@@ -13,6 +22,8 @@ import java.io.File;
  */
 @Service
 public class JobResourceServiceImpl implements JobResourceService {
+
+    private static final Logger log = LoggerFactory.getLogger(JobResourceServiceImpl.class);
 
     @Resource
     private JobResourceDirConfig jobResourceDirConfig;
@@ -27,8 +38,58 @@ public class JobResourceServiceImpl implements JobResourceService {
     public void createResourceDir(Long userId, Long jobId) {
         String resourceDir = jobResourceDirConfig.getResourceDir();
         File file = new File(resourceDir + File.separator + userId + File.separator + jobId);
-        if(!file.exists()){
-           file.mkdirs();
+        if (!file.exists()) {
+            file.mkdirs();
         }
     }
+
+    /**
+     * 更新作业资源
+     *
+     * @param multipartFileList 用户ID
+     * @return 是否更新成功
+     */
+    @Override
+    public Boolean updateResource(Long userId, Long jobId, MultipartFile[] multipartFileList) throws IOException {
+        String resourceDir = jobResourceDirConfig.getResourceDir();
+        File file = new File(resourceDir + File.separator + userId + File.separator + jobId);
+        deleteFolder(file);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        for(MultipartFile multipartFile : multipartFileList){
+            multipartFile.transferTo(Paths.get(file.getPath() + File.separator + multipartFile.getOriginalFilename()));
+        }
+        return true;
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param folder 要删除的文件
+     * @throws Exception
+     */
+    public void deleteFolder(File folder) throws IOException {
+        if (!folder.exists()) {
+            log.error("文件不存在：{}", folder.getName());
+            throw new IOException("文件不存在");
+        }
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    //递归直到目录下没有文件
+                    deleteFolder(file);
+                } else {
+                    //删除
+                    file.delete();
+                }
+            }
+        }
+        //删除
+        folder.delete();
+
+    }
+
+
 }

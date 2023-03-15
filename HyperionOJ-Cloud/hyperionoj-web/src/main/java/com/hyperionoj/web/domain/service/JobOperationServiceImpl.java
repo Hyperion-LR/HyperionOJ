@@ -2,6 +2,7 @@ package com.hyperionoj.web.domain.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hyperionoj.web.application.api.FlinkTaskService;
 import com.hyperionoj.web.application.api.JobOperationService;
 import com.hyperionoj.web.application.api.JobResourceService;
 import com.hyperionoj.web.domain.convert.MapStruct;
@@ -17,7 +18,7 @@ import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
-import org.apache.commons.lang3.StringUtils;
+import com.hyperionoj.web.presentation.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.ConstraintViolation;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.hyperionoj.web.infrastructure.constants.Constants.START;
+import static com.hyperionoj.web.infrastructure.constants.Constants.STOP;
 
 /**
  * @author Hyperion
@@ -46,6 +54,8 @@ public class JobOperationServiceImpl implements JobOperationService {
     @Resource
     private JobWorkingRepo jobWorkingRepo;
 
+    @Resource
+    private FlinkTaskService flinkTaskService;
 
     /**
      * 创建作业
@@ -145,20 +155,19 @@ public class JobOperationServiceImpl implements JobOperationService {
     /**
      * 上传资源
      *
+     * @param jobId 作业id
      * @param multipartFileList 资源列表
      * @return 上传是否成功
      */
     @Override
-    public Boolean updateResource(MultipartFile[] multipartFileList) {
-        return null;
+    public Boolean updateResource(Long jobId, MultipartFile[] multipartFileList) {
+        UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
+        try {
+            jobResourceService.updateResource(userPO.getId(), jobId, multipartFileList);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 
-    /**
-     * @param jobActionDTO
-     * @return
-     */
-    @Override
-    public JobActionCodeEnum jobOperate(JobActionDTO jobActionDTO) {
-        return null;
-    }
 }

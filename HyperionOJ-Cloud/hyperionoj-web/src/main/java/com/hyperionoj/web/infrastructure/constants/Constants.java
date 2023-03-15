@@ -146,4 +146,17 @@ public interface Constants {
 
     String SUBJECT_UPDATE_PASSWORD = "update_password";
 
+    String START = "START";
+
+    String STOP = "STOP";
+
+    String JOB_TYPE_SQL = "sql";
+
+    String JOB_TYPE_JAR = "jar";
+
+    /**
+     * 作业启动URL路径匹配
+     */
+    public static String URL_PATTERN = "JobManager Web Interface: ";
+
 }

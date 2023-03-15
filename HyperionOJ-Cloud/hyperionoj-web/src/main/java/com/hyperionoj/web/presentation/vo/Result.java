@@ -1,6 +1,7 @@
 package com.hyperionoj.web.presentation.vo;
 
 import com.hyperionoj.web.infrastructure.constants.ErrorCode;
+import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import lombok.Data;
 
 /**
@@ -43,6 +44,10 @@ public class Result<T> {
 
     public static Result fail(ErrorCode errorCode) {
         return new Result(errorCode.getCode(), null, errorCode.getMsg());
+    }
+
+    public static Result fail(JobActionCodeEnum jobActionCodeEnum) {
+        return new Result(jobActionCodeEnum.getCode(), null, jobActionCodeEnum.getMessage());
     }
 
     /**

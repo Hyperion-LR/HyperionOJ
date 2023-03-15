@@ -3,6 +3,8 @@ package com.hyperionoj.web.presentation.controller;
 import com.hyperionoj.web.application.api.AlarmService;
 import com.hyperionoj.web.application.api.FlinkTaskService;
 import com.hyperionoj.web.application.api.JobOperationService;
+import com.hyperionoj.web.infrastructure.constants.ErrorCode;
+import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
@@ -11,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.ConstraintViolation;
+import java.util.Arrays;
+import java.util.Set;
+
+import static com.hyperionoj.web.infrastructure.constants.Constants.START;
+import static com.hyperionoj.web.infrastructure.constants.Constants.STOP;
 
 /**
  * @author Hyperion
@@ -83,9 +91,9 @@ public class JobOperationController {
      * @param multipartFileList 资源列表
      * @return 上传是否成功
      */
-    @PostMapping("/resource")
-    public Result updateResource(@RequestParam("resourceList") MultipartFile[] multipartFileList){
-        return Result.success(jobOperationService.updateResource(multipartFileList));
+    @PostMapping("/resource/{jobId}")
+    public Result updateResource(@PathVariable("jobId") Long jobId, @RequestParam("resourceList") MultipartFile[] multipartFileList){
+        return Result.success(jobOperationService.updateResource(jobId, multipartFileList));
     }
 
     /**
@@ -95,6 +103,22 @@ public class JobOperationController {
      */
     @PostMapping("/action")
     public Result action(@RequestBody JobActionDTO jobActionDTO){
-        return Result.success(jobOperationService.jobOperate(jobActionDTO));
+        if (START.equals(jobActionDTO.getAction())) {
+            JobActionCodeEnum code = flinkTaskService.startJob(jobActionDTO);
+            if (JobActionCodeEnum.START_PROCESS_SUCCESS.equals(code)) {
+                return Result.success(code);
+            }
+            return Result.fail(code);
+        }
+
+        if (STOP.equals(jobActionDTO.getAction())) {
+            JobActionCodeEnum code = flinkTaskService.stopJob(jobActionDTO);
+            if (JobActionCodeEnum.STOP_PROCESS_SUCCESS.equals(code)) {
+                return Result.success(code);
+            }
+            return Result.fail(code);
+        }
+
+        return Result.fail(JobActionCodeEnum.ACTION_PARAMS_ERROR);
     }
 }
