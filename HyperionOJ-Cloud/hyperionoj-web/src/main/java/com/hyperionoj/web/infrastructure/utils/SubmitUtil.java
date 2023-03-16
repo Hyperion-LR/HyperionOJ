@@ -18,8 +18,6 @@ public class SubmitUtil {
 
     public static String[] getParamStrFromRuntime(String path, Integer parallelism, String jarName, String mainClass, String mainArgs) {
         List<String> args = new ArrayList<>();
-        args.add("cmd");
-        args.add("/c");
         args.add(path + File.separator + "flink");
         args.add("run");
         if (!Objects.isNull(parallelism)) {

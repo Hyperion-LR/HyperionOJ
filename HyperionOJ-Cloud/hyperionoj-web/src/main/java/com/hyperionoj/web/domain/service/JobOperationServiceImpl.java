@@ -8,17 +8,14 @@ import com.hyperionoj.web.application.api.JobResourceService;
 import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
 import com.hyperionoj.web.domain.repo.JobWorkingRepo;
-import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
 import com.hyperionoj.web.infrastructure.po.UserPO;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
-import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
-import com.hyperionoj.web.presentation.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,15 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.validation.ConstraintViolation;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.hyperionoj.web.infrastructure.constants.Constants.START;
-import static com.hyperionoj.web.infrastructure.constants.Constants.STOP;
 
 /**
  * @author Hyperion
