@@ -18,11 +18,10 @@ public interface JobResourceService {
 
     /**
      * 上传资源
-     * @param useId 用户id
      * @param jobId 作业id
      * @param multipartFileList 资源列表
      * @return 上传是否成功
      */
-    Boolean updateResource(Long useId, Long jobId, MultipartFile[] multipartFileList) throws IOException;
+    Boolean updateResource(Long jobId, MultipartFile[] multipartFileList) throws IOException;
 
 }

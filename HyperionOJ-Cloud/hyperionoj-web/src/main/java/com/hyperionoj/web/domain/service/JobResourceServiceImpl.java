@@ -1,19 +1,18 @@
 package com.hyperionoj.web.domain.service;
 
 import com.hyperionoj.web.application.api.JobResourceService;
+import com.hyperionoj.web.domain.repo.JobBaseRepo;
+import com.hyperionoj.web.domain.repo.UserRepo;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
+import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -27,6 +26,9 @@ public class JobResourceServiceImpl implements JobResourceService {
 
     @Resource
     private JobResourceDirConfig jobResourceDirConfig;
+
+    @Resource
+    private JobBaseRepo jobBaseRepo;
 
     /**
      * 创建作业资源目录
@@ -50,13 +52,14 @@ public class JobResourceServiceImpl implements JobResourceService {
      * @return 是否更新成功
      */
     @Override
-    public Boolean updateResource(Long userId, Long jobId, MultipartFile[] multipartFileList) throws IOException {
+    public Boolean updateResource(Long jobId, MultipartFile[] multipartFileList) throws IOException {
         String resourceDir = jobResourceDirConfig.getResourceDir();
-        File file = new File(resourceDir + File.separator + userId + File.separator + jobId);
-        deleteFolder(file);
-        if (!file.exists()) {
-            file.mkdirs();
+        JobBasePO job = jobBaseRepo.getById(jobId);
+        File file = new File(resourceDir + File.separator + job.getOwnerId() + File.separator + jobId);
+        if (file.exists()) {
+            deleteFolder(file);
         }
+        file.mkdirs();
         for(MultipartFile multipartFile : multipartFileList){
             multipartFile.transferTo(Paths.get(file.getPath() + File.separator + multipartFile.getOriginalFilename()));
         }

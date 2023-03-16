@@ -161,9 +161,8 @@ public class JobOperationServiceImpl implements JobOperationService {
      */
     @Override
     public Boolean updateResource(Long jobId, MultipartFile[] multipartFileList) {
-        UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         try {
-            jobResourceService.updateResource(userPO.getId(), jobId, multipartFileList);
+            jobResourceService.updateResource(jobId, multipartFileList);
         } catch (IOException e) {
             return false;
         }
