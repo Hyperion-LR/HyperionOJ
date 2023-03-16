@@ -157,6 +157,11 @@ public interface Constants {
     /**
      * 作业启动URL路径匹配
      */
-    public static String URL_PATTERN = "JobManager Web Interface: ";
+    String URL_PATTERN = "JobManager Web Interface: ";
+
+    /**
+     * 作业启动URL路径匹配
+     */
+    String JobID_PATTERN = "Job has been submitted with JobID ";
 
 }

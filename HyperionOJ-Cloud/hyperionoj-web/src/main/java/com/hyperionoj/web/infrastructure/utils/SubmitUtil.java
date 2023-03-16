@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.hyperionoj.web.infrastructure.constants.Constants.JobID_PATTERN;
 import static com.hyperionoj.web.infrastructure.constants.Constants.URL_PATTERN;
 
 /**
@@ -22,7 +23,7 @@ public class SubmitUtil {
         args.add("/c");
         args.add(path + File.separator + "flink");
         args.add("run");
-        if(!Objects.isNull(parallelism)){
+        if (!Objects.isNull(parallelism)) {
             args.add("-p");
             args.add(parallelism.toString());
         }
@@ -30,7 +31,7 @@ public class SubmitUtil {
         args.add(mainClass);
         args.add("-d");
         args.add(jarName + ".jar");
-        if(!Objects.isNull(mainArgs)){
+        if (!Objects.isNull(mainArgs)) {
             args.add(parseFlinkMainArgs(mainArgs));
         }
         return args.toArray(String[]::new);
@@ -63,6 +64,10 @@ public class SubmitUtil {
         return sbf.toString().trim().replaceAll("\n", " ").replaceAll(" ", "#");
     }
 
+    public static String getJobIdFromLog(String log){
+        return parseData(log, JobID_PATTERN);
+    }
+
     /**
      * 根据作业日志解析作业Web服务地址
      *
@@ -89,8 +94,6 @@ public class SubmitUtil {
         }
         return null;
     }
-
-
 
 
 }

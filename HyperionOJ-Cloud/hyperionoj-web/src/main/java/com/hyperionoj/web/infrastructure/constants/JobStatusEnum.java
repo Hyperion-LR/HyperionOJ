@@ -9,27 +9,27 @@ public enum JobStatusEnum {
     /**
      * 作业新建
      */
-    NEW("new"),
+    NEW("NEW"),
     /**
      * 作业启动中
      */
-    START("start"),
+    START("START"),
     /**
      * 作业运行中
      */
-    RUNNING("running"),
+    RUNNING("RUNNING"),
     /**
      * 作业停止中
      */
-    STOP("stop"),
+    STOP("STOP"),
     /**
      * 作业运行失败
      */
-    FAIL("fail"),
+    FAILED("FAILED"),
     /**
      * 作业结束运行
      */
-    END("end");
+    END("END");
 
     private String status;
 

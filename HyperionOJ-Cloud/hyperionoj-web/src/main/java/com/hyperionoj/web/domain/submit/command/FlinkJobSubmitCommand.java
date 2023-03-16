@@ -2,6 +2,7 @@ package com.hyperionoj.web.domain.submit.command;
 
 import com.alibaba.fastjson.JSON;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
+import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.domain.submit.component.JobEventComponent;
 import com.hyperionoj.web.infrastructure.config.FlinkConfig;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
@@ -48,6 +49,9 @@ public class FlinkJobSubmitCommand {
     private JobBaseRepo jobBaseRepo;
 
     @Resource
+    private JobWorkingRepo jobWorkingRepo;
+
+    @Resource
     private JobEventComponent jobEventComponent;
 
     /**
@@ -84,20 +88,17 @@ public class FlinkJobSubmitCommand {
                 executeLog = submitJarJobStart(job.getName(), flinkArgs, workDir, util);
             }
 
-            String flinkUrl = getJobUrlFromLog(executeLog);
-            if (Objects.isNull(flinkUrl)) {
-                throw new RuntimeException("Flink WebUrl Parse Exception~！");
+            String flinkId = getJobIdFromLog(executeLog);
+            if (Objects.isNull(flinkId)) {
+                throw new RuntimeException("Flink JobID Parse Exception~！");
             }
 
             // 更新作业基础信息
-            job.setFlinkUrl(flinkUrl);
+            jobWorking.setFlinkId(flinkId);
+            jobWorkingRepo.updateById(jobWorking);
+            job.setStartTime(System.currentTimeMillis());
+            job.setStatus(JobStatusEnum.START.getStatus());
             jobBaseRepo.updateById(job);
-
-            // 启动日志监听
-
-
-            // 心跳监听
-
 
             // 消息推送
             jobEventComponent.sendJobBaseEvent(job, JobEventEnum.STARTING);
@@ -111,14 +112,13 @@ public class FlinkJobSubmitCommand {
             startLog.append(e);
 
             // 更新作业基础信息
-            job.setStatus(JobStatusEnum.FAIL.getStatus());
+            job.setStatus(JobStatusEnum.FAILED.getStatus());
             jobBaseRepo.updateById(job);
 
             // 事件推送
 
         }
     }
-
 
 
     public static String submitJarJobStart(String jobName, String[] command, String workDir, ExecuteCommandUtil util) throws Exception {

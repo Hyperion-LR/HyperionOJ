@@ -43,9 +43,9 @@ public class JobWorkingPO implements Serializable {
     private Integer parallelism;
 
     /**
-     * Flink版本信息ID
+     * Flink里对应JobID
      */
-    private Long flinkId;
+    private String flinkId;
 
     /**
      * JAR模式用户JAR的地址

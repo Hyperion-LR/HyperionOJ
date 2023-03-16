@@ -264,7 +264,7 @@ public class MapStruct {
         return JobWorkingPO.builder()
                 .jobId(Long.parseLong(jobBaseDTO.getId()))
                 .type(jobBaseDTO.getType())
-                .flinkId(Long.parseLong(jobBaseDTO.getFlinkId()))
+                .flinkId(jobBaseDTO.getFlinkId())
                 .jarName(jobBaseDTO.getJarName())
                 .mainClass(jobBaseDTO.getMainClass())
                 .mainArgs(jobBaseDTO.getMainArgs())
