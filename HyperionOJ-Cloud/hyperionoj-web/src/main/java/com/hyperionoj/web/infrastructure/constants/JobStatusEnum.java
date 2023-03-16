@@ -29,7 +29,9 @@ public enum JobStatusEnum {
     /**
      * 作业结束运行
      */
-    END("END");
+    END("END"),
+
+    FINISHED("FINISHED");
 
     private String status;
 
@@ -39,5 +41,14 @@ public enum JobStatusEnum {
 
     public String getStatus() {
         return status;
+    }
+
+    public static JobStatusEnum getJobStatusEnum(String status){
+        for(JobStatusEnum jobStatusEnum : JobStatusEnum.values()){
+            if(jobStatusEnum.getStatus().equals(status)){
+                return jobStatusEnum;
+            }
+        }
+        return null;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Hyperion
@@ -113,12 +114,9 @@ public class JobEventListener implements Runnable{
             String jobState = jobDetail.getString("state");
             if(!JobStatusEnum.RUNNING.getStatus().equals(jobState)){
                 // 如果不是Running状态说明可能已经停止需要更新信息并告警通知
-                if(JobStatusEnum.FAILED.getStatus().equals(jobState)){
-                    // 如果没有结果可能作业已经被删除，运行失败,发送告警并更新状态
-                    jobBasePO.setStatus(JobStatusEnum.FAILED.getStatus());
-                    jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.RUN_FAILED);
-                    jobBaseRepo.updateById(jobBasePO);
-                }
+                jobBasePO.setStatus(Objects.requireNonNull(JobStatusEnum.getJobStatusEnum(jobState)).getStatus());
+                jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.RUN_FAILED);
+                jobBaseRepo.updateById(jobBasePO);
             }
         }
     }
