@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.hyperionoj.web.infrastructure.constants.Constants.JobID_PATTERN;
-import static com.hyperionoj.web.infrastructure.constants.Constants.URL_PATTERN;
+import static com.hyperionoj.web.infrastructure.constants.Constants.*;
 
 /**
  * @author Hyperion
@@ -30,7 +29,10 @@ public class SubmitUtil {
         args.add("-c");
         args.add(mainClass);
         args.add("-d");
-        args.add(jarName + ".jar");
+        if(!jarName.contains(JOB_JAR_NAME)){
+            jarName = jarName + JOB_JAR_NAME;
+        }
+        args.add(jarName);
         if (!Objects.isNull(mainArgs)) {
             args.add(parseFlinkMainArgs(mainArgs));
         }

@@ -154,6 +154,8 @@ public interface Constants {
 
     String JOB_TYPE_JAR = "jar";
 
+    String JOB_JAR_NAME = ".jar";
+
     /**
      * 作业启动URL路径匹配
      */

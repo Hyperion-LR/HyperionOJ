@@ -94,7 +94,7 @@ public class JobOperationServiceImpl implements JobOperationService {
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
         jobBaseRepo.updateById(jobBasePO);
         JobWorkingPO jobWorkingPO = MapStruct.toJobWorkingPO(jobBaseDTO);
-        jobWorkingRepo.update(new LambdaQueryWrapper<JobWorkingPO>().eq(JobWorkingPO::getJobId, jobBaseDTO.getId()));
+        jobWorkingRepo.update(jobWorkingPO ,new LambdaQueryWrapper<JobWorkingPO>().eq(JobWorkingPO::getJobId, jobBaseDTO.getId()));
         return MapStruct.toVO(jobBasePO, jobWorkingPO);
     }
 
