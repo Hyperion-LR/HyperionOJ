@@ -39,8 +39,6 @@ public class SubmitUtil {
 
    public static String[] getParamStopJarJob(String flinkPath, String flinkJobId){
        List<String> args = new ArrayList<>();
-       args.add("cmd");
-       args.add("/c");
        args.add(flinkPath + File.separator + "flink");
        args.add("cancel");
        args.add(flinkJobId);
