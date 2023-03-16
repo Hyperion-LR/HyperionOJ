@@ -6,8 +6,10 @@ import com.hyperionoj.web.application.api.FlinkTaskService;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
 import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.domain.submit.command.FlinkJobSubmitCommand;
+import com.hyperionoj.web.domain.submit.component.JobEventComponent;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
 import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
+import com.hyperionoj.web.infrastructure.constants.JobEventEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
@@ -49,6 +51,9 @@ public class FlinkTaskServiceImpl implements FlinkTaskService {
     @Resource
     private JobResourceDirConfig jobResourceDirConfig;
 
+    @Resource
+    private JobEventComponent jobEventComponent;
+
     /**
      * 启动作业
      *
@@ -65,6 +70,16 @@ public class FlinkTaskServiceImpl implements FlinkTaskService {
         JobBasePO job = jobBaseRepo.getById(jobId);
         JobWorkingPO jobWorkingPO = jobWorkingRepo.getOne(new LambdaQueryWrapper<JobWorkingPO>().eq(JobWorkingPO::getJobId, job.getId()));
         String historyStatus = job.getStatus();
+
+        //作业已经启动中
+        if(JobStatusEnum.START.getStatus().equals(historyStatus)){
+            return JobActionCodeEnum.JOB_STARTING;
+        }
+
+        //作业正在运行中
+        if(JobStatusEnum.RUNNING.getStatus().equals(historyStatus)){
+            return JobActionCodeEnum.JOB_IS_RUNNING;
+        }
 
         // 校验作业基础运行信息
         JobActionCodeEnum jobNoExist = startJobStatusCheck(job);
@@ -148,6 +163,27 @@ public class FlinkTaskServiceImpl implements FlinkTaskService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobActionCodeEnum stopJob(JobActionDTO jobActionDTO) {
-        return null;
+        UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
+        // 检查当前状态是否正在运行
+        Long jobId = jobActionDTO.getJobId();
+        JobBasePO job = jobBaseRepo.getById(jobId);
+        JobWorkingPO jobWorking = jobWorkingRepo.getOne(new LambdaQueryWrapper<JobWorkingPO>().eq(JobWorkingPO::getJobId, job.getId()));
+        if(!JobStatusEnum.RUNNING.getStatus().equals(job.getStatus())){
+            return JobActionCodeEnum.NO_RUNNING;
+        }
+
+        //TODO 判断是否savepoint当前版本没有实现
+
+
+        // 开始停止作业并等待作业成功停止
+
+        String workDir = jobResourceDirConfig.getResourceDir() + File.separator + userPO.getId() + File.separator + jobId;
+        JobActionCodeEnum jobActionCodeEnum = flinkJobSubmit.stopFlinkJob(job, jobWorking, workDir);
+        if(!JobActionCodeEnum.STOP_PROCESS_SUCCESS.equals(jobActionCodeEnum)){
+            jobEventComponent.sendJobBaseEvent(job, JobEventEnum.STOP_FAILED);
+        }else{
+            jobEventComponent.sendJobBaseEvent(job, JobEventEnum.STOP_JOB_SUCCESS);
+        }
+        return jobActionCodeEnum;
     }
 }

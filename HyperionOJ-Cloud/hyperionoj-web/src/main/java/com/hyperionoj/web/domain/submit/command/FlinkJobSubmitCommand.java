@@ -6,22 +6,20 @@ import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.domain.submit.component.JobEventComponent;
 import com.hyperionoj.web.infrastructure.config.FlinkConfig;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
+import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import com.hyperionoj.web.infrastructure.constants.JobEventEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
 import com.hyperionoj.web.infrastructure.utils.ExecuteCommandUtil;
-import com.hyperionoj.web.infrastructure.utils.SubmitUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -116,7 +114,7 @@ public class FlinkJobSubmitCommand {
             jobBaseRepo.updateById(job);
 
             // 事件推送
-
+            jobEventComponent.sendJobBaseEvent(job, JobEventEnum.START_FAILED);
         }
     }
 
@@ -137,4 +135,56 @@ public class FlinkJobSubmitCommand {
     }
 
 
+    public JobActionCodeEnum stopFlinkJob(JobBasePO job, JobWorkingPO jobWorking, String workDir) {
+        StringBuilder startLog = new StringBuilder();
+        String flinkId = jobWorking.getFlinkId();
+        String[] commands = getParamStopJarJob(flinkConfig.getPath(), flinkId);
+        String executeLog = "";
+
+        ExecuteCommandUtil util = new ExecuteCommandUtil();
+        try {
+            // 消息推送
+            jobEventComponent.sendJobBaseEvent(job, JobEventEnum.STOPPING);
+            if (JOB_TYPE_SQL.equals(jobWorking.getType())) {
+                // SQL停止job
+            } else if (JOB_TYPE_JAR.equals(jobWorking.getType())) {
+                executeLog = stopJarJob(job.getName(), commands, workDir, util);
+            }
+
+            // 更新作业基础信息
+            job.setStatus(JobStatusEnum.STOP.getStatus());
+            jobBaseRepo.updateById(job);
+        } catch (Exception e) {
+            log.error("[Job Start] [{}] Job Commit Error~！", job.getName(), e);
+            startLog.append(util.stdOut);
+            startLog.append("\n");
+            startLog.append(util.stdError);
+            startLog.append("\n");
+            startLog.append(e);
+
+            // 更新作业基础信息
+            job.setStatus(JobStatusEnum.FAILED.getStatus());
+            jobBaseRepo.updateById(job);
+
+            // 事件推送
+            jobEventComponent.sendJobBaseEvent(job, JobEventEnum.STOP_FAILED);
+            return JobActionCodeEnum.STOP_FAILED;
+        }
+        return JobActionCodeEnum.STOP_PROCESS_SUCCESS;
+    }
+
+    private String stopJarJob(String jobName, String[] commands, String workDir, ExecuteCommandUtil util) throws Exception {
+
+        log.info("[Job Start] Submit flink job => command: {}", Arrays.toString(commands));
+
+        // 执行启动命令
+        util.execCommand(commands, workDir);
+
+        log.info("[Job Start] [{}] Submit Code={}", jobName, util.exitCode);
+        log.info("[Job Start] [{}] Submit stdOut={}", jobName, util.stdOut);
+        log.info("[Job Start] [{}] Submit stdError={}", jobName, util.stdError);
+        log.info("[Job Start] [{}] Job Start Submit Success~！", jobName);
+
+        return util.stdOut + "\n" + util.stdError;
+    }
 }
