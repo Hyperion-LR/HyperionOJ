@@ -151,6 +151,8 @@ public class FlinkJobSubmitCommand {
                 executeLog = stopJarJob(job.getName(), commands, workDir, util);
             }
 
+            log.info("job " + job.getId() + " stop log {}",executeLog);
+
             // 更新作业基础信息
             job.setStatus(JobStatusEnum.STOP.getStatus());
             jobBaseRepo.updateById(job);
