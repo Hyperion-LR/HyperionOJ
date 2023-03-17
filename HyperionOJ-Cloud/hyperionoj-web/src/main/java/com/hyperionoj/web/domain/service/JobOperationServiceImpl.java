@@ -9,6 +9,7 @@ import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
 import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
+import com.hyperionoj.web.infrastructure.exception.JobResourceNotEnoughException;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
 import com.hyperionoj.web.infrastructure.po.UserPO;
@@ -56,7 +57,10 @@ public class JobOperationServiceImpl implements JobOperationService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JobBaseVO add(JobBaseDTO jobBaseDTO) {
+    public JobBaseVO add(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException {
+        if(!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)){
+            throw new JobResourceNotEnoughException();
+        }
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         jobBaseDTO.setOwnerId(userPO.getId().toString());
         jobBaseDTO.setStatus(JobStatusEnum.NEW.getStatus());
@@ -81,7 +85,10 @@ public class JobOperationServiceImpl implements JobOperationService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JobBaseVO update(JobBaseDTO jobBaseDTO) {
+    public JobBaseVO update(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException {
+        if(!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)){
+            throw new JobResourceNotEnoughException();
+        }
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
         jobBaseRepo.updateById(jobBasePO);
         JobWorkingPO jobWorkingPO = MapStruct.toJobWorkingPO(jobBaseDTO);

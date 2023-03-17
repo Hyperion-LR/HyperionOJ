@@ -18,7 +18,9 @@ public enum ErrorCode {
     NO_PERMISSION(505, "无访问权限"),
     SESSION_TIME_OUT(506, "会话超时"),
     NO_LOGIN(507, "未登录"),
-    USER_FREEZE(508, "账号已经冻结");
+    USER_FREEZE(508, "账号已经冻结"),
+    JOB_USER_RESOURCE_FULL(999, "用户资源配额已满")
+    ;
 
     private Integer code;
     private String msg;

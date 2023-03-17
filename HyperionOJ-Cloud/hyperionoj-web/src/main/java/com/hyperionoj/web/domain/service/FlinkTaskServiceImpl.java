@@ -135,7 +135,6 @@ public class FlinkTaskServiceImpl implements FlinkTaskService {
             projectMemUse = 0;
         }
         // 判断个人配额是否充足，应为作业创建修改会检查个人配额，所以一般这里是够的
-
         // 判断当前flink系统是否能够支持当前作业启动
 
         /*

@@ -1,6 +1,7 @@
 package com.hyperionoj.web.application.api;
 
 import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
+import com.hyperionoj.web.infrastructure.exception.JobResourceNotEnoughException;
 import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
@@ -20,14 +21,14 @@ public interface JobOperationService {
      * @param jobBaseDTO 新加参数
      * @return 作业视图
      */
-    JobBaseVO add(JobBaseDTO jobBaseDTO);
+    JobBaseVO add(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException;
 
     /**
      * 更新作业
      * @param jobBaseDTO 新加参数
      * @return 作业视图
      */
-    JobBaseVO update(JobBaseDTO jobBaseDTO);
+    JobBaseVO update(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException;
 
 
     /**

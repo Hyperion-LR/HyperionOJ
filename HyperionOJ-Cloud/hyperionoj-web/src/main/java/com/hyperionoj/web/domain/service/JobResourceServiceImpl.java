@@ -1,10 +1,15 @@
 package com.hyperionoj.web.domain.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.web.application.api.JobResourceService;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
+import com.hyperionoj.web.domain.repo.UserJobResourceRepo;
 import com.hyperionoj.web.domain.repo.UserRepo;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
+import com.hyperionoj.web.infrastructure.po.UserJobResourcePO;
+import com.hyperionoj.web.presentation.dto.JobBaseDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * @author Hyperion
@@ -29,6 +35,29 @@ public class JobResourceServiceImpl implements JobResourceService {
 
     @Resource
     private JobBaseRepo jobBaseRepo;
+
+    @Resource
+    private UserJobResourceRepo userJobResourceRepo;
+
+    /**
+     * 判断用户资源配额是否足够
+     * @param jobBaseDTO 作业信息
+     * @return是否足够
+     */
+    @Override
+    public Boolean jobResourceEnoughCheck(JobBaseDTO jobBaseDTO) {
+        UserJobResourcePO resourceLimit = userJobResourceRepo.getOne(new LambdaQueryWrapper<UserJobResourcePO>().eq(UserJobResourcePO::getUserId, jobBaseDTO.getOwnerId()));
+        List<JobBasePO> jobBasePOS = jobBaseRepo.list(new LambdaQueryWrapper<JobBasePO>().eq(JobBasePO::getOwnerId, jobBaseDTO.getOwnerId()));
+        Integer cpuUsage = jobBaseDTO.getCpuUsage();
+        Integer memUsage = jobBaseDTO.getMemUsage();
+        for(JobBasePO job : jobBasePOS){
+            if(StringUtils.isEmpty(jobBaseDTO.getId()) || !jobBaseDTO.getId().equals(job.getId().toString())){
+                cpuUsage += job.getCpuUsage();
+                memUsage += job.getMemUsage();
+            }
+        }
+        return cpuUsage <= resourceLimit.getCpuLimit() && memUsage <= jobBaseDTO.getMemUsage();
+    }
 
     /**
      * 创建作业资源目录
