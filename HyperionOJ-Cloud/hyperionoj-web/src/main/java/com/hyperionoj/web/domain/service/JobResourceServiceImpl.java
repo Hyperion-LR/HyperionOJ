@@ -41,6 +41,7 @@ public class JobResourceServiceImpl implements JobResourceService {
 
     /**
      * 判断用户资源配额是否足够
+     *
      * @param jobBaseDTO 作业信息
      * @return是否足够
      */
@@ -50,8 +51,8 @@ public class JobResourceServiceImpl implements JobResourceService {
         List<JobBasePO> jobBasePOS = jobBaseRepo.list(new LambdaQueryWrapper<JobBasePO>().eq(JobBasePO::getOwnerId, jobBaseDTO.getOwnerId()));
         Integer cpuUsage = jobBaseDTO.getCpuUsage();
         Integer memUsage = jobBaseDTO.getMemUsage();
-        for(JobBasePO job : jobBasePOS){
-            if(StringUtils.isEmpty(jobBaseDTO.getId()) || !jobBaseDTO.getId().equals(job.getId().toString())){
+        for (JobBasePO job : jobBasePOS) {
+            if (StringUtils.isEmpty(jobBaseDTO.getId()) || !jobBaseDTO.getId().equals(job.getId().toString())) {
                 cpuUsage += job.getCpuUsage();
                 memUsage += job.getMemUsage();
             }
@@ -89,10 +90,37 @@ public class JobResourceServiceImpl implements JobResourceService {
             deleteFolder(file);
         }
         file.mkdirs();
-        for(MultipartFile multipartFile : multipartFileList){
+        for (MultipartFile multipartFile : multipartFileList) {
             multipartFile.transferTo(Paths.get(file.getPath() + File.separator + multipartFile.getOriginalFilename()));
         }
         return true;
+    }
+
+    /**
+     * 获取资源使用情况
+     *
+     * @param parallelism 作业并发度
+     * @param jmMem       作业jm占用内存
+     * @param tmMem       作业tm占用内存
+     * @param tmSlot      每个tm的slot个数
+     * @return 当前作业使用的了多少内存
+     */
+    @Override
+    public Integer getMenUsage(Integer parallelism, Integer jmMem, Integer tmMem, Integer tmSlot) {
+        int tmn = (parallelism / tmSlot) + (((parallelism % tmSlot) > 0) ? 1 : 0);
+        return jmMem + tmn * tmMem;
+    }
+
+    /**
+     * 获取资源使用情况
+     *
+     * @param parallelism 作业并发度
+     * @param tmSlot      每个tm的slot个数
+     * @return 上传是否成功
+     */
+    @Override
+    public Integer getCpuUsage(Integer parallelism, Integer tmSlot) {
+        return 1 + parallelism / tmSlot + (parallelism % tmSlot > 0 ? 1 : 0);
     }
 
     /**

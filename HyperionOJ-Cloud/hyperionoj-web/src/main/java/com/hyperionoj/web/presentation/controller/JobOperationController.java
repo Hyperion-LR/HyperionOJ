@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.validation.ConstraintViolation;
-import java.util.Arrays;
-import java.util.Set;
 
 import static com.hyperionoj.web.infrastructure.constants.Constants.START;
 import static com.hyperionoj.web.infrastructure.constants.Constants.STOP;

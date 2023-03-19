@@ -40,6 +40,12 @@ public class JobWorkingPO implements Serializable {
      */
     private String type;
 
+    private Integer tmSlot;
+
+    private Integer jmMen;
+
+    private Integer tmMem;
+
     private Integer parallelism;
 
     /**
@@ -67,6 +73,8 @@ public class JobWorkingPO implements Serializable {
      * 作业提交运行参数
      */
     private String mainArgs;
+
+    private String applicationId;
 
 
 }

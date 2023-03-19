@@ -38,4 +38,12 @@ public class JobBaseDTO {
 
     private Integer memUsage;
 
+    private Integer tmSlot;
+
+    private Integer jmMen;
+
+    private Integer tmMem;
+
+    private Integer parallelism;
+
 }

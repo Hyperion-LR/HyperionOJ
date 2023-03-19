@@ -58,7 +58,9 @@ public class JobOperationServiceImpl implements JobOperationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobBaseVO add(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException {
-        if(!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)){
+        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
+        jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
+        if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
             throw new JobResourceNotEnoughException();
         }
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
@@ -86,13 +88,15 @@ public class JobOperationServiceImpl implements JobOperationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobBaseVO update(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException {
-        if(!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)){
+        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
+        jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
+        if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
             throw new JobResourceNotEnoughException();
         }
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
         jobBaseRepo.updateById(jobBasePO);
         JobWorkingPO jobWorkingPO = MapStruct.toJobWorkingPO(jobBaseDTO);
-        jobWorkingRepo.update(jobWorkingPO ,new LambdaQueryWrapper<JobWorkingPO>().eq(JobWorkingPO::getJobId, jobBaseDTO.getId()));
+        jobWorkingRepo.update(jobWorkingPO, new LambdaQueryWrapper<JobWorkingPO>().eq(JobWorkingPO::getJobId, jobBaseDTO.getId()));
         return MapStruct.toVO(jobBasePO, jobWorkingPO);
     }
 
@@ -153,7 +157,7 @@ public class JobOperationServiceImpl implements JobOperationService {
     /**
      * 上传资源
      *
-     * @param jobId 作业id
+     * @param jobId             作业id
      * @param multipartFileList 资源列表
      * @return 上传是否成功
      */

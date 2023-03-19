@@ -16,10 +16,18 @@ import static com.hyperionoj.web.infrastructure.constants.Constants.*;
  */
 public class SubmitUtil {
 
-    public static String[] getParamStrFromRuntime(String path, Integer parallelism, String jarName, String mainClass, String mainArgs) {
+    public static String[] getParamStrFromRuntime(String path, Integer jmMem, Integer tmMem, Integer tmSlot, Integer parallelism, String jarName, String mainClass, String mainArgs) {
         List<String> args = new ArrayList<>();
-        args.add(path + File.separator + "flink");
+        args.add(path);
         args.add("run");
+        args.add("-m");
+        args.add("yarn-cluster");
+        args.add("-yjm");
+        args.add(jmMem.toString());
+        args.add("-ytm");
+        args.add(tmMem.toString());
+        args.add("-ys");
+        args.add(tmSlot.toString());
         if (!Objects.isNull(parallelism)) {
             args.add("-p");
             args.add(parallelism.toString());
@@ -27,7 +35,7 @@ public class SubmitUtil {
         args.add("-c");
         args.add(mainClass);
         args.add("-d");
-        if(!jarName.contains(JOB_JAR_NAME)){
+        if (!jarName.contains(JOB_JAR_NAME)) {
             jarName = jarName + JOB_JAR_NAME;
         }
         args.add(jarName);
@@ -37,12 +45,15 @@ public class SubmitUtil {
         return args.toArray(String[]::new);
     }
 
-   public static String[] getParamStopJarJob(String flinkPath, String flinkJobId){
-       List<String> args = new ArrayList<>();
-       args.add(flinkPath + File.separator + "flink");
-       args.add("cancel");
-       args.add(flinkJobId);
-       return args.toArray(String[]::new);
+    public static String[] getParamStopJarJob(String flinkPath, String flinkJobId) {
+        List<String> args = new ArrayList<>();
+        //使用同目录下的yarn
+        flinkPath = flinkPath.substring (0, flinkPath.length() - 6) + "yarn";
+        args.add(flinkPath);
+        args.add("application");
+        args.add("-kill");
+        args.add(flinkJobId);
+        return args.toArray(String[]::new);
     }
 
     public static String parseFlinkMainArgs(String mainArgs) {
@@ -72,8 +83,12 @@ public class SubmitUtil {
         return sbf.toString().trim().replaceAll("\n", " ").replaceAll(" ", "#");
     }
 
-    public static String getJobIdFromLog(String log){
+    public static String getJobIdFromLog(String log) {
         return parseData(log, JobID_PATTERN);
+    }
+
+    public static String getApplicationIdFromLog(String log) {
+        return parseData(log, Application_PATTERN);
     }
 
     /**

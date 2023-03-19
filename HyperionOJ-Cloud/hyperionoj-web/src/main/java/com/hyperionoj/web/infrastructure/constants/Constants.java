@@ -166,4 +166,9 @@ public interface Constants {
      */
     String JobID_PATTERN = "Job has been submitted with JobID ";
 
+    /**
+     * 作业启动yarn application id
+     */
+    String Application_PATTERN = "Submitted application ";
+
 }

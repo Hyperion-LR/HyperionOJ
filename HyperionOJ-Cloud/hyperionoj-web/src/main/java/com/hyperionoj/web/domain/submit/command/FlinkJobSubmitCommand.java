@@ -13,6 +13,7 @@ import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
 import com.hyperionoj.web.infrastructure.utils.ExecuteCommandUtil;
 
+import com.hyperionoj.web.infrastructure.utils.SubmitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -58,15 +59,7 @@ public class FlinkJobSubmitCommand {
      * @param job 作业基本信息
      */
     public void startFlinkJob(String workDir, JobBasePO job, JobWorkingPO jobWorking) {
-
-        StringBuilder startLog = new StringBuilder();
-        String mainClass = jobWorking.getMainClass();
-        String jarName = jobWorking.getJarName();
-        String mainArgs = jobWorking.getMainArgs();
-        Integer parallelism = jobWorking.getParallelism();
-        String[] flinkArgs = getParamStrFromRuntime(flinkConfig.getPath(), parallelism, jarName, mainClass, mainArgs);
         String executeLog = "";
-
         ExecuteCommandUtil util = new ExecuteCommandUtil();
         try {
             if (JOB_TYPE_SQL.equals(jobWorking.getType())) {
@@ -83,11 +76,20 @@ public class FlinkJobSubmitCommand {
                             workDir, flinkArgs, dependJars, clusterConf.getConfigDir(), util);
                  */
             } else if (JOB_TYPE_JAR.equals(jobWorking.getType())) {
+                String mainClass = jobWorking.getMainClass();
+                String jarName = jobWorking.getJarName();
+                String mainArgs = jobWorking.getMainArgs();
+                Integer parallelism = jobWorking.getParallelism();
+                Integer jmMen = jobWorking.getJmMen();
+                Integer tmMem = jobWorking.getTmMem();
+                Integer tmSlot = jobWorking.getTmSlot();
+                String[] flinkArgs = getParamStrFromRuntime(flinkConfig.getPath(), jmMen, tmMem, tmSlot, parallelism, jarName, mainClass, mainArgs);
                 executeLog = submitJarJobStart(job.getName(), flinkArgs, workDir, util);
             }
 
-            String flinkId = getJobIdFromLog(executeLog);
-            if (Objects.isNull(flinkId)) {
+            String flinkId = SubmitUtil.getJobIdFromLog(executeLog);
+            String applicationId = SubmitUtil.getApplicationIdFromLog(executeLog);
+            if (Objects.isNull(flinkId) || Objects.isNull(applicationId)) {
                 throw new RuntimeException("Flink JobID Parse Exception~！");
             }
 
@@ -103,6 +105,7 @@ public class FlinkJobSubmitCommand {
 
         } catch (Exception e) {
             log.error("[Job Start] [{}] Job Commit Error~！", job.getName(), e);
+            StringBuilder startLog = new StringBuilder();
             startLog.append(util.stdOut);
             startLog.append("\n");
             startLog.append(util.stdError);
@@ -136,11 +139,7 @@ public class FlinkJobSubmitCommand {
 
 
     public JobActionCodeEnum stopFlinkJob(JobBasePO job, JobWorkingPO jobWorking, String workDir) {
-        StringBuilder startLog = new StringBuilder();
-        String flinkId = jobWorking.getFlinkId();
-        String[] commands = getParamStopJarJob(flinkConfig.getPath(), flinkId);
         String executeLog = "";
-
         ExecuteCommandUtil util = new ExecuteCommandUtil();
         try {
             // 消息推送
@@ -148,16 +147,19 @@ public class FlinkJobSubmitCommand {
             if (JOB_TYPE_SQL.equals(jobWorking.getType())) {
                 // SQL停止job
             } else if (JOB_TYPE_JAR.equals(jobWorking.getType())) {
+                String applicationId = jobWorking.getApplicationId();
+                String[] commands = getParamStopJarJob(flinkConfig.getPath(), applicationId);
                 executeLog = stopJarJob(job.getName(), commands, workDir, util);
             }
 
-            log.info("job " + job.getId() + " stop log {}",executeLog);
+            log.info("job " + job.getId() + " stop log {}", executeLog);
 
             // 更新作业基础信息
             job.setStatus(JobStatusEnum.STOP.getStatus());
             jobBaseRepo.updateById(job);
         } catch (Exception e) {
             log.error("[Job Start] [{}] Job Commit Error~！", job.getName(), e);
+            StringBuilder startLog = new StringBuilder();
             startLog.append(util.stdOut);
             startLog.append("\n");
             startLog.append(util.stdError);

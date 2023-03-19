@@ -24,6 +24,7 @@ import java.util.Objects;
  * @date 2023/3/15
  */
 @Component
+@Transactional(rollbackFor = Exception.class)
 public class JobEventListener implements Runnable{
 
     private static final Logger log = LoggerFactory.getLogger(JobEventListener.class);

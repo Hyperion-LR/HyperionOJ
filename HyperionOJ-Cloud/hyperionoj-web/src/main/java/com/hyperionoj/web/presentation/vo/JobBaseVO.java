@@ -33,6 +33,14 @@ public class JobBaseVO {
 
     private Integer memUsage;
 
+    private Integer jmMen;
+
+    private Integer tmMem;
+
+    private Integer parallelism;
+
+    private Integer tmSlot;
+
     private String flinkUrl;
 
     private String monitorUrl;

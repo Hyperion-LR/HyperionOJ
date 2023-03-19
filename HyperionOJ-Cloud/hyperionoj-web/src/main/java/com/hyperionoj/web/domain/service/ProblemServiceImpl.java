@@ -25,7 +25,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -362,30 +361,6 @@ public class ProblemServiceImpl implements ProblemService {
         return commentVO;
     }
 
-    private ProblemCommentPO voToComment(CommentDTO commentDTO) {
-        ProblemCommentPO problemComment = new ProblemCommentPO();
-        problemComment.setProblemId(Long.parseLong(commentDTO.getProblemId()));
-        problemComment.setContent(commentDTO.getContent());
-        problemComment.setAuthorId(Long.parseLong(commentDTO.getAuthor().getId()));
-        problemComment.setIsDelete(0);
-        problemComment.setSupportNumber(0);
-        problemComment.setCreateTime(System.currentTimeMillis());
-        problemComment.setLevel(commentDTO.getLevel());
-        problemComment.setParentId(Long.getLong(commentDTO.getParentId()));
-        if (commentDTO.getToUser() != null) {
-            problemComment.setToUid(Long.parseLong(commentDTO.getToUser().getId()));
-        }
-        if (problemComment.getLevel() == null) {
-            problemComment.setLevel(0);
-        }
-        if (problemComment.getParentId() == null) {
-            problemComment.setParentId(0L);
-        }
-        if (problemComment.getToUid() == null) {
-            problemComment.setToUid(0L);
-        }
-        return problemComment;
-    }
 
     /**
      * 获取提交列表
