@@ -42,7 +42,7 @@ public class JobWorkingPO implements Serializable {
 
     private Integer tmSlot;
 
-    private Integer jmMen;
+    private Integer jmMem;
 
     private Integer tmMem;
 
