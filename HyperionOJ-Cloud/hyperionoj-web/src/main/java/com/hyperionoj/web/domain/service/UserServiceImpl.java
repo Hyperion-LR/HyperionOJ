@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.web.application.api.UserService;
 import com.hyperionoj.web.application.api.VerCodeService;
 import com.hyperionoj.web.domain.bo.UserToken;
+import com.hyperionoj.web.domain.repo.UserJobResourceRepo;
 import com.hyperionoj.web.domain.repo.UserRepo;
+import com.hyperionoj.web.infrastructure.po.UserJobResourcePO;
 import com.hyperionoj.web.infrastructure.utils.JWTUtils;
 import com.hyperionoj.web.infrastructure.utils.RedisUtils;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private VerCodeService verCodeService;
+
+    @Resource
+    private UserJobResourceRepo userJobResourceRepo;
 
     /**
      * 登录功能
@@ -93,6 +98,12 @@ public class UserServiceImpl implements UserService {
         String token = JWTUtils.createToken(newUser.getId(), 24 * 60 * 60);
         userToken.setToken(TOKEN + token);
         redisUtils.setRedisKV(TOKEN + token, JSON.toJSONString(newUser), 3600);
+        UserJobResourcePO userJobResourcePO = UserJobResourcePO.builder()
+                .userId(newUser.getId())
+                .cpuLimit(2000)
+                .memLimit(2048)
+                .build();
+        userJobResourceRepo.save(userJobResourcePO);
         return token;
     }
 
