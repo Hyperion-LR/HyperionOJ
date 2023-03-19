@@ -8,6 +8,7 @@ then
 fi
 
 nohup java -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms256m -Xmx512m \
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5000 \
 -jar ~/HyperionOJ-WEB/release/hyperionoj-web-1.0.0.jar \
 --spring.profiles.active=test > ~/HyperionOJ-WEB/logs/console-web.log 2>&1 &
 
