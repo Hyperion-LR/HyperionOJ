@@ -107,6 +107,9 @@ public class JobResourceServiceImpl implements JobResourceService {
      */
     @Override
     public Integer getMenUsage(Integer parallelism, Integer jmMem, Integer tmMem, Integer tmSlot) {
+        if(parallelism == null || jmMem == null || tmMem == null || tmSlot == null){
+            return 0;
+        }
         int tmn = (parallelism / tmSlot) + (((parallelism % tmSlot) > 0) ? 1 : 0);
         return jmMem + tmn * tmMem;
     }
@@ -120,6 +123,9 @@ public class JobResourceServiceImpl implements JobResourceService {
      */
     @Override
     public Integer getCpuUsage(Integer parallelism, Integer tmSlot) {
+        if(parallelism == null || tmSlot == null){
+            return 0;
+        }
         return 1 + parallelism / tmSlot + (parallelism % tmSlot > 0 ? 1 : 0);
     }
 

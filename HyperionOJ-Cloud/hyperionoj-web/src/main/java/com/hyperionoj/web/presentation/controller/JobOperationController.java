@@ -11,6 +11,7 @@ import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
 import com.hyperionoj.web.presentation.vo.Result;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,6 +85,7 @@ public class JobOperationController {
      * @return 作业视图
      */
     @PostMapping("/update")
+    @Transactional(rollbackFor = Exception.class)
     public Result updateJob(@RequestBody JobBaseDTO jobBaseDTO) {
         JobBaseVO jobBaseVO = null;
         try {
