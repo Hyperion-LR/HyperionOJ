@@ -95,6 +95,7 @@ public class FlinkJobSubmitCommand {
 
             // 更新作业基础信息
             jobWorking.setFlinkId(flinkId);
+            jobWorking.setApplicationId(applicationId);
             jobWorkingRepo.updateById(jobWorking);
             job.setStartTime(System.currentTimeMillis());
             job.setStatus(JobStatusEnum.START.getStatus());
