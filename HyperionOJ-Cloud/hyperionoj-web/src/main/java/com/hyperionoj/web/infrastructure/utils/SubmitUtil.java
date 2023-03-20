@@ -1,9 +1,5 @@
 package com.hyperionoj.web.infrastructure.utils;
 
-import com.hyperionoj.web.infrastructure.po.JobBasePO;
-import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

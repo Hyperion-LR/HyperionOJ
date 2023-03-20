@@ -171,4 +171,6 @@ public interface Constants {
      */
     String Application_PATTERN = "Submitted application ";
 
+    String Application_STATE = "State : ";
+
 }
