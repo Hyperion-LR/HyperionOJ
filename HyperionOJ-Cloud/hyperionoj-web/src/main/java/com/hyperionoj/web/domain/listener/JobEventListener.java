@@ -1,14 +1,13 @@
 package com.hyperionoj.web.domain.listener;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
 import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.domain.submit.component.JobEventComponent;
 import com.hyperionoj.web.infrastructure.config.FlinkConfig;
+import com.hyperionoj.web.infrastructure.config.YarnConfig;
 import com.hyperionoj.web.infrastructure.constants.JobEventEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
-import com.hyperionoj.web.infrastructure.feign.FlinkFeign;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
 import com.hyperionoj.web.infrastructure.utils.ExecuteCommandUtil;
@@ -19,13 +18,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.hyperionoj.web.infrastructure.constants.Constants.Application_STATE;
-import static com.hyperionoj.web.infrastructure.constants.Constants.JOB_JAR_NAME;
+
 
 /**
  * @author Hyperion
@@ -47,7 +45,7 @@ public class JobEventListener implements Runnable{
     private JobEventComponent jobEventComponent;
 
     @Resource
-    private FlinkConfig flinkConfig;
+    private YarnConfig yarnConfig;
 
     /**
      * When an object implementing interface <code>Runnable</code> is used
@@ -86,7 +84,7 @@ public class JobEventListener implements Runnable{
             ExecuteCommandUtil util = new ExecuteCommandUtil();
             String[] scanAppCommand = getScanAppCommand(applicationId);
             try {
-                util.execCommand(scanAppCommand, flinkConfig.getPath());
+                util.execCommand(scanAppCommand, yarnConfig.getPath());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -122,7 +120,7 @@ public class JobEventListener implements Runnable{
             ExecuteCommandUtil util = new ExecuteCommandUtil();
             String[] scanAppCommand = getScanAppCommand(applicationId);
             try {
-                util.execCommand(scanAppCommand, flinkConfig.getPath());
+                util.execCommand(scanAppCommand, yarnConfig.getPath());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -147,9 +145,7 @@ public class JobEventListener implements Runnable{
 
     private String[] getScanAppCommand(String applicationId) {
         List<String> args = new ArrayList<>();
-        String path = flinkConfig.getPath();
-        path = path.substring(0, path.length() - 5) + "yarn";
-        args.add(path);
+        args.add(yarnConfig.getPath());
         args.add("application");
         args.add("-status");
         args.add(applicationId);

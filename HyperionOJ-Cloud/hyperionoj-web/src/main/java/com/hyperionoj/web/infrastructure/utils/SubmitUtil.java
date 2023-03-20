@@ -41,11 +41,10 @@ public class SubmitUtil {
         return args.toArray(String[]::new);
     }
 
-    public static String[] getParamStopJarJob(String flinkPath, String flinkJobId) {
+    public static String[] getParamStopJarJob(String yarnPath, String flinkJobId) {
         List<String> args = new ArrayList<>();
         //使用同目录下的yarn
-        flinkPath = flinkPath.substring (0, flinkPath.length() - 5) + "yarn";
-        args.add(flinkPath);
+        args.add(yarnPath);
         args.add("application");
         args.add("-kill");
         args.add(flinkJobId);

@@ -6,6 +6,7 @@ import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.domain.submit.component.JobEventComponent;
 import com.hyperionoj.web.infrastructure.config.FlinkConfig;
 import com.hyperionoj.web.infrastructure.config.JobResourceDirConfig;
+import com.hyperionoj.web.infrastructure.config.YarnConfig;
 import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import com.hyperionoj.web.infrastructure.constants.JobEventEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
@@ -43,6 +44,9 @@ public class FlinkJobSubmitCommand {
 
     @Resource
     private FlinkConfig flinkConfig;
+
+    @Resource
+    private YarnConfig yarnConfig;
 
     @Resource
     private JobBaseRepo jobBaseRepo;
@@ -149,7 +153,7 @@ public class FlinkJobSubmitCommand {
                 // SQL停止job
             } else if (JOB_TYPE_JAR.equals(jobWorking.getType())) {
                 String applicationId = jobWorking.getApplicationId();
-                String[] commands = getParamStopJarJob(flinkConfig.getPath(), applicationId);
+                String[] commands = getParamStopJarJob(yarnConfig.getPath(), applicationId);
                 executeLog = stopJarJob(job.getName(), commands, workDir, util);
             }
 
