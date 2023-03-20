@@ -27,6 +27,10 @@ public enum JobStatusEnum {
      */
     FAILED("FAILED"),
     /**
+     * 作业提交等待中
+     */
+    ACCEPTED("ACCEPTED"),
+    /**
      * 作业结束运行
      */
     END("END"),

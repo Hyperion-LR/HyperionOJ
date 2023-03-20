@@ -106,9 +106,9 @@ public class JobEventListener implements Runnable{
                 jobBasePO.setStatus(JobStatusEnum.RUNNING.getStatus());
                 jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.START_JOB_SUCCESS);
                 jobBaseRepo.updateById(jobBasePO);
-            } else if (JobStatusEnum.FAILED.getStatus().equals(jobState)) {
+            } else if (!JobStatusEnum.ACCEPTED.getStatus().equals(jobState)) {
                 // 启动失败
-                jobBasePO.setStatus(JobStatusEnum.FAILED.getStatus());
+                jobBasePO.setStatus(jobState);
                 jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.START_FAILED);
                 jobBaseRepo.updateById(jobBasePO);
             }
