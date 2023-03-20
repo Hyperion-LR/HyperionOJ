@@ -84,7 +84,9 @@ public class JobEventListener implements Runnable{
             ExecuteCommandUtil util = new ExecuteCommandUtil();
             String[] scanAppCommand = getScanAppCommand(applicationId);
             try {
-                util.execCommand(scanAppCommand, yarnConfig.getPath());
+                String workDir = yarnConfig.getPath();
+                workDir = workDir.substring(0, workDir.length() - 4);
+                util.execCommand(scanAppCommand, workDir);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -120,7 +122,9 @@ public class JobEventListener implements Runnable{
             ExecuteCommandUtil util = new ExecuteCommandUtil();
             String[] scanAppCommand = getScanAppCommand(applicationId);
             try {
-                util.execCommand(scanAppCommand, yarnConfig.getPath());
+                String workDir = yarnConfig.getPath();
+                workDir = workDir.substring(0, workDir.length() - 4);
+                util.execCommand(scanAppCommand, workDir);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
