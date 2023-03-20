@@ -44,7 +44,7 @@ public class SubmitUtil {
     public static String[] getParamStopJarJob(String flinkPath, String flinkJobId) {
         List<String> args = new ArrayList<>();
         //使用同目录下的yarn
-        flinkPath = flinkPath.substring (0, flinkPath.length() - 6) + "yarn";
+        flinkPath = flinkPath.substring (0, flinkPath.length() - 5) + "yarn";
         args.add(flinkPath);
         args.add("application");
         args.add("-kill");

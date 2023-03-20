@@ -151,7 +151,7 @@ public class JobEventListener implements Runnable{
     private String[] getScanAppCommand(String applicationId) {
         List<String> args = new ArrayList<>();
         String path = flinkConfig.getPath();
-        path = path.substring(0, path.length() - 6) + "yarn";
+        path = path.substring(0, path.length() - 5) + "yarn";
         args.add(path);
         args.add("application");
         args.add("-status");
