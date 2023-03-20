@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
 import com.hyperionoj.web.domain.repo.JobWorkingRepo;
 import com.hyperionoj.web.domain.submit.component.JobEventComponent;
-import com.hyperionoj.web.infrastructure.config.FlinkConfig;
 import com.hyperionoj.web.infrastructure.config.YarnConfig;
 import com.hyperionoj.web.infrastructure.constants.JobEventEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
@@ -15,7 +14,6 @@ import com.hyperionoj.web.infrastructure.utils.SubmitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ import static com.hyperionoj.web.infrastructure.constants.Constants.Application_
  * @date 2023/3/15
  */
 @Component
-@Transactional(rollbackFor = Exception.class)
 public class JobEventListener implements Runnable{
 
     private static final Logger log = LoggerFactory.getLogger(JobEventListener.class);
@@ -74,7 +71,6 @@ public class JobEventListener implements Runnable{
     /**
      * 扫描所有正在启动，运行的job判断是否正常运行并通知
      */
-    @Transactional(rollbackFor = Exception.class)
     void scanJobState(){
         // 查看START状态的是否成功启动
         List<JobBasePO> jobBasePOList = jobBaseRepo.list(new LambdaQueryWrapper<JobBasePO>().eq(JobBasePO::getStatus, JobStatusEnum.START.getStatus()));
