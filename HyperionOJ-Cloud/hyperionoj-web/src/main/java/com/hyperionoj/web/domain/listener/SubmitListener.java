@@ -1,4 +1,4 @@
-package com.hyperionoj.web.presentation.listener;
+package com.hyperionoj.web.domain.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hyperionoj.web.domain.repo.UserRepo;

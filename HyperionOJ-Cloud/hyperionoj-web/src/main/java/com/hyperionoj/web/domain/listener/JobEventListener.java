@@ -101,6 +101,7 @@ public class JobEventListener implements Runnable{
                 // 成功启动
                 jobBasePO.setStatus(JobStatusEnum.RUNNING.getStatus());
                 jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.START_JOB_SUCCESS);
+                jobBasePO.setFlinkUrl("http://39.98.181.188:18088/proxy/" + applicationId);
                 jobBaseRepo.updateById(jobBasePO);
             } else if (!JobStatusEnum.ACCEPTED.getStatus().equals(jobState)) {
                 // 启动失败
