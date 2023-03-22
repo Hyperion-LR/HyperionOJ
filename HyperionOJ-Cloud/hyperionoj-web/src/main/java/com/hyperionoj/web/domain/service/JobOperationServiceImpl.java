@@ -8,15 +8,19 @@ import com.hyperionoj.web.application.api.JobResourceService;
 import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.domain.repo.JobBaseRepo;
 import com.hyperionoj.web.domain.repo.JobWorkingRepo;
+import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import com.hyperionoj.web.infrastructure.constants.JobStatusEnum;
 import com.hyperionoj.web.infrastructure.exception.JobResourceNotEnoughException;
+import com.hyperionoj.web.infrastructure.exception.JobUserSqlCheckException;
 import com.hyperionoj.web.infrastructure.po.JobBasePO;
 import com.hyperionoj.web.infrastructure.po.JobWorkingPO;
 import com.hyperionoj.web.infrastructure.po.UserPO;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
+import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
+import org.apache.calcite.avatica.util.Casing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,12 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.flink.sql.parser.impl.FlinkSqlParserImpl;
+import org.apache.flink.sql.parser.validate.FlinkSqlConformance;
+
+import static com.hyperionoj.web.infrastructure.constants.Constants.JOB_TYPE_SQL;
+import static org.apache.calcite.avatica.util.Quoting.BACK_TICK;
 
 /**
  * @author Hyperion
@@ -87,11 +97,14 @@ public class JobOperationServiceImpl implements JobOperationService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JobBaseVO update(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException {
+    public JobBaseVO update(JobBaseDTO jobBaseDTO) throws Exception {
         jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
         jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
         if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
             throw new JobResourceNotEnoughException();
+        }
+        if(JOB_TYPE_SQL.equals(jobBaseDTO.getType()) && !parseFlinkSql(jobBaseDTO.getUserSql())){
+            throw new JobUserSqlCheckException();
         }
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
         jobBaseRepo.updateById(jobBasePO);
@@ -169,6 +182,54 @@ public class JobOperationServiceImpl implements JobOperationService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * sql语法检查
+     *
+     * @param sql sql语句
+     * @return 语法是否通过
+     */
+    @Override
+    public Boolean parseFlinkSql(String sql) {
+        if (sql != null && !sql.isEmpty()) {
+            try {
+
+                SqlParser.Config configs = SqlParser.Config.DEFAULT
+                        .withParserFactory(FlinkSqlParserImpl.FACTORY)
+                        .withQuoting(BACK_TICK)
+                        .withQuotedCasing(Casing.TO_UPPER)
+                        .withConformance(FlinkSqlConformance.DEFAULT);
+
+                SqlParser parser = SqlParser.create(sql, configs);
+                parser.parseStmtList();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 启动/暂停作业
+     *
+     * @param jobActionDTO action参数
+     * @return action结果
+     */
+    @Override
+    public JobActionCodeEnum startJob(JobActionDTO jobActionDTO) {
+        return flinkTaskService.startJob(jobActionDTO);
+    }
+
+    /**
+     * 启动/暂停作业
+     *
+     * @param jobActionDTO action参数
+     * @return action结果
+     */
+    @Override
+    public JobActionCodeEnum stopJob(JobActionDTO jobActionDTO) {
+        return flinkTaskService.stopJob(jobActionDTO);
     }
 
 }

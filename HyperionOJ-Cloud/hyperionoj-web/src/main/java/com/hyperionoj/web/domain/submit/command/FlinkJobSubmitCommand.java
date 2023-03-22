@@ -67,18 +67,7 @@ public class FlinkJobSubmitCommand {
         ExecuteCommandUtil util = new ExecuteCommandUtil();
         try {
             if (JOB_TYPE_SQL.equals(jobWorking.getType())) {
-                /*
-                    String password = UUID.randomUUID().toString();
-                    String sqlKey = SqlConstant.SQL_RUNTIME_PASSWORD.concat(String.valueOf(job.getId()));
-                    BoundValueOperations<String, String> ops = redisTemplate.boundValueOps(sqlKey);
-                    ops.set(password, 365, TimeUnit.DAYS);
-                    String configUrl = String.format("%s/api/project/%s/job/%s/version/%s/runtime", webUrl,
-                            job.getProjectId(), job.getId(), jobVersion.getId());
-                    String jarArgs = String.format("-config_url#%s#-password#%s", configUrl, password);
-                    String dependJars = getSqlJobDepend(job.getId());
-                    executeLog = submitSqlJobStart(job, checkPointPath, clusterName, flinkToolUrl, imageUrl, jarArgs,
-                            workDir, flinkArgs, dependJars, clusterConf.getConfigDir(), util);
-                 */
+                // 启动sql
             } else if (JOB_TYPE_JAR.equals(jobWorking.getType())) {
                 String mainClass = jobWorking.getMainClass();
                 String jarName = jobWorking.getJarName();
