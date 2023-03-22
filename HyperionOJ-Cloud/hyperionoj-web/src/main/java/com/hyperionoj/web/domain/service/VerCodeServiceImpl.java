@@ -35,7 +35,7 @@ public class VerCodeServiceImpl implements VerCodeService {
     @Override
     public void getCode(String userMail, String subject) {
         Random random = new Random();
-        int code = 1000 + random.nextInt(9999);
+        int code = 1000 + random.nextInt(8999);
         Mail mailBean = new Mail();
         mailBean.setSubject(subject);
         mailBean.setContent(subject + "的验证码为: " + code);

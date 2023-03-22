@@ -232,6 +232,7 @@ public class MapStruct {
     public static JobBaseVO toVO(JobBasePO jobBasePO) {
         return JobBaseVO.builder()
                 .id(jobBasePO.getId().toString())
+                .description(jobBasePO.getDescription())
                 .name(jobBasePO.getName())
                 .ownerId(jobBasePO.getOwnerId().toString())
                 .status(jobBasePO.getStatus())

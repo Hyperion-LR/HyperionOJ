@@ -96,8 +96,13 @@ public class UserController {
      */
     @PostMapping("/mail/code")
     public Result getCode(@RequestBody MailCodeParam mailCodeParam) {
-        verCodeService.getCode(mailCodeParam.getMail(), mailCodeParam.getSubject());
-        return Result.success(null);
+        try{
+            verCodeService.getCode(mailCodeParam.getMail(), mailCodeParam.getSubject());
+            return Result.success(true);
+        }catch (Exception e){
+            return Result.fail(ErrorCode.SYSTEM_ERROR);
+        }
+
     }
 
 }
