@@ -102,7 +102,20 @@ public class ProblemServiceImpl implements ProblemService {
         if (ObjectUtils.isEmpty(id)) {
             return null;
         }
-        return MapStruct.toVO(problemRepo.getById(id));
+        ProblemPO problemPO = problemRepo.getById(id);
+        ProblemVO problemVO = MapStruct.toVO(problemPO);
+        problemVO.setCategory(MapStruct.toVO(categoryRepo.getById(problemVO.getId())));
+        problemVO.setProblemBody(problemPO.getProblemBody());
+        problemVO.setProblemBodyHtml(problemPO.getProblemBodyHtml());
+        List<ProblemTagPO> tagPOList = problemTagRepo.list(new LambdaQueryWrapper<ProblemTagPO>().eq(ProblemTagPO::getProblemId, problemPO.getId()));
+        problemVO.setTags(getTagVoList(tagPOList));
+        return problemVO;
+    }
+
+    private List<TagVO> getTagVoList(List<ProblemTagPO> tagPOList) {
+        return tagPOList.stream().map(tag -> {
+            return MapStruct.toVO(tagRepo.getById(tag.getTagId()));
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -576,7 +589,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Boolean pushProblemCase(Long problemId, MultipartFile[] inMultipartFiles, MultipartFile[] outMultipartFiles) {
         Result result = problemCaseFeign.pushProblemCase(problemId, inMultipartFiles, outMultipartFiles);
-        if((Boolean) result.getData()){
+        if ((Boolean) result.getData()) {
             LambdaUpdateWrapper<ProblemPO> problemPOLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
             problemPOLambdaUpdateWrapper.set(ProblemPO::getCaseNumber, inMultipartFiles.length);
             problemPOLambdaUpdateWrapper.eq(ProblemPO::getId, problemId);
