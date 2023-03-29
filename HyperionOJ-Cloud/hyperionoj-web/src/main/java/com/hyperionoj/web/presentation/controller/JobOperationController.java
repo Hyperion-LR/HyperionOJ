@@ -9,7 +9,7 @@ import com.hyperionoj.web.infrastructure.exception.JobUserSqlCheckException;
 import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
 import com.hyperionoj.web.presentation.dto.JobWorkingDTO;
-import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
+import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
 import com.hyperionoj.web.presentation.vo.Result;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +44,7 @@ public class JobOperationController {
      */
     @GetMapping("/list")
     public Result jobList(@RequestParam String status) {
-        JobListPageParams pageParams = JobListPageParams.builder()
+        PageParams pageParams = PageParams.builder()
                 .status(status)
                 .build();
         return Result.success(jobOperationService.list(pageParams));

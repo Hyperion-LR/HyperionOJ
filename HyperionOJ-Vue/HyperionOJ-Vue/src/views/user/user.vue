@@ -129,11 +129,19 @@
 import router from "@/router";
 import useStore from "@/store";
 import { getCode } from "@/api/verCode";
+import { PageParam } from "@/api/pageParam/types";
+import { SubmitInfo } from "@/api/problem/types";
+import { getSubmitList } from "@/api/problem";
 
 const { user } = useStore();
 
 
 const data = reactive({
+    pageParam: {
+        page: 1,
+        pageSize: 10,
+    } as PageParam,
+    submitList: [] as SubmitInfo[],
     updateFormVisible: false,
     updatePasswordFormVisible: false,
     updatePasswordParam: {
@@ -147,12 +155,28 @@ const data = reactive({
     },
 });
 const {
+    pageParam,
+    submitList,
     updateFormVisible,
     updatePasswordFormVisible,
     updatePasswordParam,
     getCodeParam,
 } = toRefs(data);
 
+onMounted(() => {
+    handleSubmitList();
+})
+
+const handleSubmitList = () => {
+    pageParam.value.authorId = user.id;
+    getSubmitList(pageParam.value).then(({ data }) => {
+        if (data.code == 200) {
+            submitList.value = data.data;
+        } else {
+            console.log('获取题目数量失败' + data.msg)
+        }
+    });
+}
 
 const clickSubmit = (id: number) => {
     router.push({ path: `/submit/${id}` })
@@ -177,53 +201,6 @@ const getUpdatePasswordCode = () => {
 const updatePassword = () => {
 
 }
-
-
-const submitList = [
-    {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    }, {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    }, {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    }, {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    }, {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    }, {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    }, {
-        submitId: '123123123',
-        problemId: '1',
-        submitTime: '2023-3-25 16:16:45',
-        statu: 'ACCEPT',
-        runtime: '52ms'
-    },
-]
 
 </script>
 

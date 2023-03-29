@@ -4,7 +4,7 @@ import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
 import com.hyperionoj.web.infrastructure.exception.JobResourceNotEnoughException;
 import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
-import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
+import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +38,7 @@ public interface JobOperationService {
      * @param pageParams 分页参数
      * @return 作业列表
      */
-    List<JobBaseVO> list(JobListPageParams pageParams);
+    List<JobBaseVO> list(PageParams pageParams);
 
     /**
      * 获取作业详情

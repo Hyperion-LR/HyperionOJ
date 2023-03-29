@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="submitRecode" style="width: 100%">
+        <el-table :data="submitInfo" style="width: 100%">
             <el-table-column prop="id" label="ID" width="180">
                 <template #default="scope">
                     <span @click="clickSubmit(scope.row.id)" style="cursor: pointer;">{{ scope.row.id }}</span>
@@ -14,40 +14,34 @@
 
 <script setup lang="ts">
 
+import { PageParam } from "@/api/pageParam/types";
+import { getSubmitList } from "@/api/problem";
+import { SubmitInfo } from "@/api/problem/types";
 import router from "@/router";
 
-const submitRecode = [
-    {
-        id: '123431414132122341234',
-        state: 'ACCEPT',
-        time: '2023-3-25 10:10:32',
-    },
-    {
-        id: '412341214132411431213',
-        state: 'ACCEPT',
-        time: '2023-3-25 10:05:32',
-    },
-    {
-        id: '3123123123123112312343',
-        state: 'ACCEPT',
-        time: '2023-3-25 9:11:22',
-    },
-    {
-        id: '1233412324242312342343',
-        state: 'ACCEPT',
-        time: '2023-3-25 9:5:32',
-    },
-    {
-        id: '1231231231231231231231',
-        state: 'ACCEPT',
-        time: '2023-3-25 8:51:32',
-    },
-    {
-        id: '123233242342342434234',
-        state: 'ACCEPT',
-        time: '2023-3-25 8:51:22',
-    },
-]
+const data = reactive({
+    pageParam: {
+        page: 1,
+        pageSize: 10,
+    } as PageParam,
+    submitInfo: [] as SubmitInfo[]
+})
+const { pageParam, submitInfo } = toRefs(data);
+
+onMounted(() => {
+    handleSubmitList();
+})
+
+const handleSubmitList = () => {
+    pageParam.value.problemId = '1';
+    getSubmitList(pageParam.value).then(({ data }) => {
+        if (data.code == 200) {
+            submitInfo.value = data.data;
+        } else {
+            console.log('获取题目数量失败' + data.msg)
+        }
+    });
+}
 
 const clickSubmit = (id: number) => {
     router.push({ path: `/submit/${id}` })

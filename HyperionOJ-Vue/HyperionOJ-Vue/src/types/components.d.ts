@@ -42,6 +42,7 @@ declare module '@vue/runtime-core' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElText: typeof import('element-plus/es')['ElText']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Header: typeof import('./../components/layouts/Header/index.vue')['default']

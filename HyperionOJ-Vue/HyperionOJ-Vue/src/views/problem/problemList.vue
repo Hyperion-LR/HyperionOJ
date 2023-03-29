@@ -13,7 +13,7 @@
             <el-table :data="problemList" stripe>
                 <el-table-column prop="title" label="题目" width="360">
                     <template #default="scope">
-                        <span @click="clickProblem(scope.row.id)" style="cursor: pointer;">{{ scope.row.probelm }}</span>
+                        <span @click="clickProblem(scope.row.id)" style="cursor: pointer;">{{ scope.row.title }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="problemLevel" label="难度" width="120" />
@@ -70,7 +70,6 @@ const handleProbelmList = () => {
     getProbelmList(pageParam.value).then(({ data }) => {
         if (data.code == 200) {
             problemList.value = data.data;
-            console.log(problemList.value)
         } else {
             console.log('获取题目列表失败' + data.msg)
         }

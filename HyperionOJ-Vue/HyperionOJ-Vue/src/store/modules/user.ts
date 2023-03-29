@@ -30,6 +30,8 @@ const useUserStore = defineStore("useUserStore", {
               this.problemAcNumber = data.data.problemAcNumber;
               this.problemSubmitAcNumber = data.data.problemSubmitAcNumber;
               this.problemSubmitNumber = data.data.problemSubmitNumber;
+              this.createTime = data.data.createTime;
+              this.lastLoginTime = data.data.lastLogin;
             }
             resolve(data);
           })

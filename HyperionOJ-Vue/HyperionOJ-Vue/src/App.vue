@@ -112,8 +112,7 @@ const handleLogin = () => {
       setToken(data.data);
       user.GetUserInfo(loginParam.value.account);
       loginVisible.value = false;
-      const userId = user.id;
-      router.push({ path: `/user/${userId}` })
+      router.push({ path: `/user/${loginParam.value.account}` })
     } else {
       console.log('登陆失败')
     }

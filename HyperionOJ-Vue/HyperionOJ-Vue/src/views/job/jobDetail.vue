@@ -1,7 +1,13 @@
 <template>
     <el-form :model="job" label-width="120px">
-        <h1></h1>
-
+        <el-row>
+            <el-text>
+                {{ job.name }}
+            </el-text>
+            <el-text>
+                {{ job.status }}
+            </el-text>
+        </el-row>
         <el-form-item label="jar文件">
             <el-input v-model="job.jarFlile" />
             <el-upload class="upload-demo" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple>

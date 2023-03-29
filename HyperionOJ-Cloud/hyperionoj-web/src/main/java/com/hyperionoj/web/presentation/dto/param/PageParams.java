@@ -87,4 +87,9 @@ public class PageParams {
      */
     private String endTime;
 
+    /**
+     * 作业运行状态
+     */
+    private String status;
+
 }

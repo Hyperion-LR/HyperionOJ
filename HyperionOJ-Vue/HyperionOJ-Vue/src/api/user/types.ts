@@ -57,5 +57,5 @@ export interface UserInfo {
   /**
    * 最后一次登录时间
    */
-  lastLoginTime: string;
+  lastLogin: string;
 }

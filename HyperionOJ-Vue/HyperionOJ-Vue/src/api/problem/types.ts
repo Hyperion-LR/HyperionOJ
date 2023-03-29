@@ -27,3 +27,16 @@ export interface CategoryInfo {
     categoryName: string,
     description: string
 }
+
+export interface SubmitInfo {
+    id: string,
+    authorId: string,
+    problemId: string,
+    codeLang: string,
+    codeBody: string,
+    runTime: string,
+    runMemory: string,
+    caseNumber: string,
+    verdict: string,
+    createTime: string
+}

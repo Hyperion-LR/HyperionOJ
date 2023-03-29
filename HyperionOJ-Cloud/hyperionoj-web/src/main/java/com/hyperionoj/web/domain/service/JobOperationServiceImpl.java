@@ -18,7 +18,7 @@ import com.hyperionoj.web.infrastructure.po.UserPO;
 import com.hyperionoj.web.infrastructure.utils.ThreadLocalUtils;
 import com.hyperionoj.web.presentation.dto.JobActionDTO;
 import com.hyperionoj.web.presentation.dto.JobBaseDTO;
-import com.hyperionoj.web.presentation.dto.param.JobListPageParams;
+import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.JobBaseVO;
 import org.apache.calcite.avatica.util.Casing;
 import org.slf4j.Logger;
@@ -119,7 +119,7 @@ public class JobOperationServiceImpl implements JobOperationService {
      * @return 作业列表
      */
     @Override
-    public List<JobBaseVO> list(JobListPageParams pageParams) {
+    public List<JobBaseVO> list(PageParams pageParams) {
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         List<JobBasePO> jobBasePOS = jobBaseRepo.list(pageParams, userPO.getId());
         return jobBasePOS.stream().map(MapStruct::toVO).collect(Collectors.toList());
