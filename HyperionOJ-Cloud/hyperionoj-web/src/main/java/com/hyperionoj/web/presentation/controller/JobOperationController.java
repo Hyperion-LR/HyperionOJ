@@ -1,7 +1,6 @@
 package com.hyperionoj.web.presentation.controller;
 
 import com.hyperionoj.web.application.api.AlarmService;
-import com.hyperionoj.web.application.api.FlinkTaskService;
 import com.hyperionoj.web.application.api.JobOperationService;
 import com.hyperionoj.web.infrastructure.constants.ErrorCode;
 import com.hyperionoj.web.infrastructure.constants.JobActionCodeEnum;
@@ -44,7 +43,10 @@ public class JobOperationController {
      * @return 作业列表
      */
     @GetMapping("/list")
-    public Result jobList(@RequestBody JobListPageParams pageParams) {
+    public Result jobList(@RequestParam String status) {
+        JobListPageParams pageParams = JobListPageParams.builder()
+                .status(status)
+                .build();
         return Result.success(jobOperationService.list(pageParams));
     }
 
