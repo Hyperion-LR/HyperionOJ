@@ -11,7 +11,7 @@
                 <el-button size="default" style="width: 20%" @click="searchProblem()">搜索</el-button>
             </div>
             <el-table :data="problemList" stripe>
-                <el-table-column prop="probelm" label="题目" width="360">
+                <el-table-column prop="title" label="题目" width="360">
                     <template #default="scope">
                         <span @click="clickProblem(scope.row.id)" style="cursor: pointer;">{{ scope.row.probelm }}</span>
                     </template>
@@ -67,23 +67,20 @@ const handleProbelmNumber = () => {
 
 
 const handleProbelmList = () => {
-    getProbelmList(pageParam.value).then(( data: any ) => {
-
+    getProbelmList(pageParam.value).then(({ data }) => {
         if (data.code == 200) {
             problemList.value = data.data;
+            console.log(problemList.value)
         } else {
             console.log('获取题目列表失败' + data.msg)
         }
     });
-
 }
 
 const handleCategoryList = () => {
     getCategoryList().then(({ data }) => {
         if (data.code == 200) {
             categoryList.value = data.data;
-
-            // console.log(res);
         } else {
             console.log('获取分类列表失败' + data.msg);
         }

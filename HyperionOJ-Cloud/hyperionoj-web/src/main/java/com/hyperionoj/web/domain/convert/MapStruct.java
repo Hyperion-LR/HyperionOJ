@@ -138,6 +138,11 @@ public class MapStruct {
                 .username(userPO.getUsername())
                 .avatar(userPO.getAvatar())
                 .mail(userPO.getMail())
+                .problemAcNumber(userPO.getProblemAcNumber())
+                .problemSubmitAcNumber(userPO.getProblemSubmitAcNumber())
+                .problemSubmitNumber(userPO.getProblemSubmitNumber())
+                .lastLogin(getTime(userPO.getLastLogin()))
+                .createTime(getTime(userPO.getCreateTime()))
                 .build();
     }
 
