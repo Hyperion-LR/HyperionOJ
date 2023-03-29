@@ -1,30 +1,30 @@
 <template>
-  <div class="app-wrapper">
+    <div class="app-wrapper">
         <el-container>
-        <el-aside width="10vw">
-            <el-menu class="el-menu-vertical-demo" router>
-                <el-menu-item index="/problem">
-                    <el-icon>
-                        <setting />
-                    </el-icon>
-                    <span>问题</span>
-                </el-menu-item>
-                <el-menu-item index="/job">
-                    <el-icon>
-                        <setting />
-                    </el-icon>
-                    <span>任务</span>
-                </el-menu-item>
-            </el-menu>
-        </el-aside>
-        <el-main>
-            <router-view v-slot="{ Component, route }">
-                <keep-alive>
-                    <component :is="Component" :key="route.path" />
-                </keep-alive>
-            </router-view>
-        </el-main>
-    </el-container>
+            <el-aside width="10vw">
+                <el-menu class="el-menu-vertical-demo" router>
+                    <el-menu-item index="/problem">
+                        <el-icon>
+                            <setting />
+                        </el-icon>
+                        <span>问题</span>
+                    </el-menu-item>
+                    <el-menu-item index="/job">
+                        <el-icon>
+                            <setting />
+                        </el-icon>
+                        <span>任务</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main>
+                <router-view v-slot="{ Component, route }">
+                    <keep-alive>
+                        <component :is="Component" :key="route.path" />
+                    </keep-alive>
+                </router-view>
+            </el-main>
+        </el-container>
     </div>
 </template>
 
@@ -33,9 +33,9 @@
 
 <style scoped>
 .app-wrapper {
-  position: relative;
-  min-height: 100vh;
-  height: 100%;
-  width: 100%;
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
 }
 </style>

@@ -43,8 +43,13 @@ public class JobOperationController {
      * @return 作业列表
      */
     @GetMapping("/list")
-    public Result jobList(@RequestParam(name = "status", required = false) String status) {
+    public Result jobList(
+            @RequestParam(name = "page", required = false) Integer page,
+             @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "status", required = false) String status) {
         PageParams pageParams = PageParams.builder()
+                .page(page)
+                .pageSize(pageSize)
                 .status(status)
                 .build();
         return Result.success(jobOperationService.list(pageParams));

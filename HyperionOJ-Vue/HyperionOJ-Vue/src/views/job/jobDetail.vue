@@ -6,7 +6,7 @@
             </el-text>
             <el-text>
                 {{ job.status }}
-                {{ job. }}
+                {{ job.flinkUrl }}
             </el-text>
         </el-row>
         <el-form-item label="jar文件">
@@ -14,6 +14,9 @@
             <el-upload class="upload-demo" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple>
                 <el-button type="primary">Click to upload</el-button>
             </el-upload>
+        </el-form-item>
+        <el-form-item label="jar主类">
+            <el-input v-model="job.mainClass" type="textarea" />
         </el-form-item>
         <el-form-item label="jar运行参数">
             <el-input v-model="job.jarArgs" type="textarea" />
@@ -44,7 +47,9 @@ const job = reactive({
     id: '123123',
     name: '作业一',
     status: '运行中',
+    flinkUrl: "",
     jarFlile: 'flink.jar',
+    mainClass: "",
     jarArgs: '',
     solt: 2,
     jm: 1024,
