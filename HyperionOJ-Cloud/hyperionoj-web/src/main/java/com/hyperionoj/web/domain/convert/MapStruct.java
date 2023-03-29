@@ -295,7 +295,7 @@ public class MapStruct {
                 .memUsage(jobBasePO.getMemUsage())
                 .tmSlot(jobWorkingPO.getTmSlot())
                 .tmMem(jobWorkingPO.getTmMem())
-                .jmMen(jobWorkingPO.getJmMem())
+                .jmMem(jobWorkingPO.getJmMem())
                 .parallelism(jobWorkingPO.getParallelism())
                 .flinkUrl(jobBasePO.getFlinkUrl())
                 .monitorUrl(jobBasePO.getMonitorUrl())

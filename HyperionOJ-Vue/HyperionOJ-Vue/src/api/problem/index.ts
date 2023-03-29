@@ -56,10 +56,9 @@ export function getProblemDetail(problemId: string): AxiosPromise<Result<Problem
  * @param problemId 题目id
  * @returns 题目详情信息
  */
-export function getSubmitList(pageParam: PageParam): AxiosPromise<Result<SubmitInfo[]>>{
+export function getSubmitList(problemId: string): AxiosPromise<Result<SubmitInfo>>{
     return request({
-        url: `/problem/submits`,
-        method: "get",
-        params: pageParam
+        url: `/problem/${problemId}`,
+        method: "get"
     });
 }

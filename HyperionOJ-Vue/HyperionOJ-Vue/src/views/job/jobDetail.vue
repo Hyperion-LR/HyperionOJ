@@ -1,37 +1,37 @@
 <template>
-    <el-form :model="job" label-width="120px">
+    <el-form :model="jobInfo" label-width="120px">
         <el-row>
             <el-text>
-                {{ job.name }}
+                {{ jobInfo.name }}
             </el-text>
             <el-text>
-                {{ job.status }}
-                {{ job.flinkUrl }}
+                {{ jobInfo.status }}
+                {{ jobInfo.flinkUrl }}
             </el-text>
         </el-row>
         <el-form-item label="jar文件">
-            <el-input v-model="job.jarFlile" />
+            <el-input v-model="jobInfo.jarName" />
             <el-upload class="upload-demo" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple>
                 <el-button type="primary">Click to upload</el-button>
             </el-upload>
         </el-form-item>
         <el-form-item label="jar主类">
-            <el-input v-model="job.mainClass" type="textarea" />
+            <el-input v-model="jobInfo.mainClass" type="textarea" />
         </el-form-item>
         <el-form-item label="jar运行参数">
-            <el-input v-model="job.jarArgs" type="textarea" />
+            <el-input v-model="jobInfo.mainArgs" type="textarea" />
         </el-form-item>
         <el-form-item label="solt">
-            <el-input v-model="job.solt" />
+            <el-input v-model="jobInfo.tmSlot" />
         </el-form-item>
         <el-form-item label="job manager 内存">
-            <el-input v-model="job.jm" />
+            <el-input v-model="jobInfo.jmMem" />
         </el-form-item>
         <el-form-item label="task manager 内存">
-            <el-input v-model="job.tm" />
+            <el-input v-model="jobInfo.tmMem" />
         </el-form-item>
         <el-form-item label="并行度">
-            <el-input v-model="job.p" />
+            <el-input v-model="jobInfo.parallelism" />
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="run">运行</el-button>
@@ -40,22 +40,28 @@
 </template>
 
 <script setup lang="ts">
+import { getJobDetail } from '@/api/job';
+import { JobInfo } from '@/api/job/types';
 import { reactive } from 'vue'
-
-// do not use same name with ref
-const job = reactive({
-    id: '123123',
-    name: '作业一',
-    status: '运行中',
-    flinkUrl: "",
-    jarFlile: 'flink.jar',
-    mainClass: "",
-    jarArgs: '',
-    solt: 2,
-    jm: 1024,
-    tm: 1024,
-    p: 1
+const data = reactive({
+    jobInfo: {} as JobInfo
 })
+const { jobInfo } = toRefs(data);
+
+onMounted(() => {
+    handleProblemDetail();
+})
+
+const handleProblemDetail = () => {
+    const jobId = '1';
+    getJobDetail(jobId).then(({ data }) => {
+        if (data.code == 200) {
+            jobInfo.value = data.data;
+        } else {
+            console.log('获取题目详情失败' + data.msg)
+        }
+    });
+}
 
 const run = () => {
     console.log('开始运行!')

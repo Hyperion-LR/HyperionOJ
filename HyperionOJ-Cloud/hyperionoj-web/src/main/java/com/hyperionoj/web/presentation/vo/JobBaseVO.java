@@ -33,7 +33,7 @@ public class JobBaseVO {
 
     private Integer memUsage;
 
-    private Integer jmMen;
+    private Integer jmMem;
 
     private Integer tmMem;
 
