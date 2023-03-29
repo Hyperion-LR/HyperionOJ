@@ -43,7 +43,7 @@ public class JobOperationController {
      * @return 作业列表
      */
     @GetMapping("/list")
-    public Result jobList(@RequestParam String status) {
+    public Result jobList(@RequestParam(name = "status", required = false) String status) {
         PageParams pageParams = PageParams.builder()
                 .status(status)
                 .build();
