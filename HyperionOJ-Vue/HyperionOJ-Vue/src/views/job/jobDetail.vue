@@ -6,6 +6,7 @@
             </el-text>
             <el-text>
                 {{ job.status }}
+                {{ job. }}
             </el-text>
         </el-row>
         <el-form-item label="jar文件">
