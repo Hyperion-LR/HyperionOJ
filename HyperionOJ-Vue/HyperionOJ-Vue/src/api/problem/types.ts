@@ -2,8 +2,8 @@
  * 题目信息
  */
 export interface ProblemInfo {
-    id:string;
-    title:string,
+    id: string,
+    title: string,
     problemLevel: number,
     acNumber: number,
     submitNumber: number,
@@ -13,6 +13,17 @@ export interface ProblemInfo {
     runTime: number,
     problemBody: string,
     problemBodyHtml: string,
-    category: number,
-    tags: number
+    category: CategoryInfo,
+    tags: TagInfo[]
+}
+
+export interface TagInfo {
+    id: string,
+    tagName: string
+}
+
+export interface CategoryInfo {
+    id: string,
+    categoryName: string,
+    description: string
 }

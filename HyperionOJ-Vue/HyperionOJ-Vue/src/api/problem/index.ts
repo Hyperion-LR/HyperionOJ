@@ -2,7 +2,7 @@ import { Result } from "@/model";
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { PageParam } from "../pageParam/types";
-import { ProblemInfo } from "./types";
+import { CategoryInfo, ProblemInfo } from "./types";
 
 
 /**
@@ -22,8 +22,19 @@ export function getProbelmNumber(): AxiosPromise<Result<number>> {
  */
 export function getProbelmList(pageParam: PageParam): AxiosPromise<Result<ProblemInfo[]>> {
     return request({
-        url: `/problem/list`,
+        url: `/problem/list?`,
         method: "get",
-        data: pageParam
+        params: pageParam
+    });
+}
+
+/**
+ * 获取分类列表
+ * @returns 题目列表
+ */
+export function getCategoryList(): AxiosPromise<Result<CategoryInfo[]>> {
+    return request({
+        url: `/problem/category`,
+        method: "get"
     });
 }

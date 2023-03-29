@@ -1,6 +1,9 @@
 package com.hyperionoj.web.presentation.dto.param;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 题目分页查询参数
@@ -9,6 +12,9 @@ import lombok.Data;
  * @date 2021/12/9
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageParams {
 
     /**
