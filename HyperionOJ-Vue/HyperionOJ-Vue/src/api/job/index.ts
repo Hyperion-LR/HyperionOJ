@@ -40,3 +40,15 @@ export function createJob(jobInfo: JobInfo): AxiosPromise<Result<JobInfo>> {
         data: jobInfo
     });
 }
+
+/**
+ * 删除题目
+ * @param jobId 题目id
+ * @returns 题目详情信息
+ */
+export function deleteJob(jobId: string): AxiosPromise<Result<JobInfo>> {
+    return request({
+        url: `/job/delete/${jobId}`,
+        method: "delete"
+    });
+}

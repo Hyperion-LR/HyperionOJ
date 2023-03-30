@@ -15,6 +15,9 @@
                     <el-form-item label="描述">
                         <el-input v-model="jobInfo.description" />
                     </el-form-item>
+                    <el-form-item label="作业类型">
+                        <el-input v-model="jobInfo.type" />
+                    </el-form-item>
                     <el-form-item label="jm内存">
                         <el-input v-model="jobInfo.jmMem" />
                     </el-form-item>

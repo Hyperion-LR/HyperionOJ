@@ -37,25 +37,41 @@
             <el-button type="primary" @click="runJob">运行</el-button>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="deleteJob">删除</el-button>
+            <el-dialog v-model="deleteJobVisible">
+                <el-text>
+                    是否删除
+                </el-text>
+                <template #footer>
+                    <span class="dialog-footer">
+                        <el-button @click="deleteJobVisible = false;">取消</el-button>
+                        <el-button type="primary" @click="handeldeleteJob">确定</el-button>
+                    </span>
+                </template>
+            </el-dialog>
+            <el-button type="danger" @click="deleteJobVisible = true">删除</el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script setup lang="ts">
-import { getJobDetail } from '@/api/job';
+import { deleteJob, getJobDetail } from '@/api/job';
 import { JobInfo } from '@/api/job/types';
 import { reactive } from 'vue'
+import router from "@/router";
+
 const data = reactive({
-    jobInfo: {} as JobInfo
+    jobInfo: {} as JobInfo,
+    deleteJobVisible: false,
 })
-const { jobInfo } = toRefs(data);
+const { jobInfo, deleteJobVisible } = toRefs(data);
 
 onMounted(() => {
     handleProblemDetail();
 })
 
 const handleProblemDetail = () => {
+
+
     const jobId = '1638461422685437953';
     getJobDetail(jobId).then(({ data }) => {
         if (data.code == 200) {
@@ -71,8 +87,16 @@ const runJob = () => {
     console.log('开始运行!')
 }
 
-const deleteJob = () => {
-    console.log('开始运行!')
+const handeldeleteJob = () => {
+    const jobId = '1638461422685437953';
+    deleteJob(jobId).then(({ data }) => {
+        if (data.code == 200) {
+            console.log('删除成功' + data.msg)
+            router.push({ path: `/job` })
+        } else {
+            console.log('删除失败' + data.msg)
+        }
+    });
 }
 
 </script>

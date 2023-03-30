@@ -95,6 +95,14 @@ const {
   regiestParam,
 } = toRefs(data);
 
+onMounted(() => {
+  checkLogin();
+})
+
+const checkLogin = () => {
+  
+}
+
 const userInfo = () => {
   const userId = user.id;
   console.log(userId);

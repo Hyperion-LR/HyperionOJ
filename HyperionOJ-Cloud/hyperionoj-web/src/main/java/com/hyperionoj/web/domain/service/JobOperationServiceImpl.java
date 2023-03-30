@@ -31,6 +31,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.flink.sql.parser.impl.FlinkSqlParserImpl;
 import org.apache.flink.sql.parser.validate.FlinkSqlConformance;
@@ -103,7 +104,7 @@ public class JobOperationServiceImpl implements JobOperationService {
         if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
             throw new JobResourceNotEnoughException();
         }
-        if(JOB_TYPE_SQL.equals(jobBaseDTO.getType()) && !parseFlinkSql(jobBaseDTO.getUserSql())){
+        if (JOB_TYPE_SQL.equals(jobBaseDTO.getType()) && !parseFlinkSql(jobBaseDTO.getUserSql())) {
             throw new JobUserSqlCheckException();
         }
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
@@ -164,7 +165,9 @@ public class JobOperationServiceImpl implements JobOperationService {
     private Boolean checkDelete(Long jobId) {
         return JobStatusEnum.NEW.getStatus().equals(jobBaseRepo.getById(jobId).getStatus()) ||
                 JobStatusEnum.END.getStatus().equals(jobBaseRepo.getById(jobId).getStatus()) ||
-                JobStatusEnum.STOP.getStatus().equals(jobBaseRepo.getById(jobId).getStatus());
+                JobStatusEnum.STOP.getStatus().equals(jobBaseRepo.getById(jobId).getStatus()) ||
+                JobStatusEnum.FAILED.getStatus().equals(jobBaseRepo.getById(jobId).getStatus()) ||
+                JobStatusEnum.FINISHED.getStatus().equals(jobBaseRepo.getById(jobId).getStatus());
     }
 
     /**
