@@ -82,6 +82,10 @@ public class JobOperationServiceImpl implements JobOperationService {
         jobBaseRepo.save(jobBasePO);
         //新建状态
         JobWorkingPO jobWorkingPO = JobWorkingPO.builder()
+                .jmMem(jobBaseDTO.getJmMem())
+                .tmMem(jobBaseDTO.getTmMem())
+                .tmSlot(jobBaseDTO.getTmSlot())
+                .parallelism(jobBaseDTO.getParallelism())
                 .jobId(jobBasePO.getId())
                 .type(jobBaseDTO.getType())
                 .build();
