@@ -34,7 +34,10 @@
             <el-input v-model="jobInfo.parallelism" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="run">运行</el-button>
+            <el-button type="primary" @click="runJob">运行</el-button>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="deleteJob">删除</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -64,9 +67,14 @@ const handleProblemDetail = () => {
     });
 }
 
-const run = () => {
+const runJob = () => {
     console.log('开始运行!')
 }
+
+const deleteJob = () => {
+    console.log('开始运行!')
+}
+
 </script>
 
 <style scoped></style>

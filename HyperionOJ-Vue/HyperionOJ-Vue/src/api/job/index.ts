@@ -21,9 +21,22 @@ export function getJobList(pageParam: PageParam): AxiosPromise<Result<JobInfo[]>
  * @param jobId 题目id
  * @returns 题目详情信息
  */
-export function getJobDetail(jobId: string): AxiosPromise<Result<JobInfo>>{
+export function getJobDetail(jobId: string): AxiosPromise<Result<JobInfo>> {
     return request({
         url: `/job/${jobId}`,
         method: "get"
+    });
+}
+
+/**
+ * 获取题目详情
+ * @param jobId 题目id
+ * @returns 题目详情信息
+ */
+export function createJob(jobInfo: JobInfo): AxiosPromise<Result<JobInfo>> {
+    return request({
+        url: `/job/create`,
+        method: "post",
+        data: jobInfo
     });
 }

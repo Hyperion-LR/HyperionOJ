@@ -57,7 +57,7 @@ public class JobResourceServiceImpl implements JobResourceService {
                 memUsage += job.getMemUsage();
             }
         }
-        return cpuUsage <= resourceLimit.getCpuLimit() && memUsage <= jobBaseDTO.getMemUsage();
+        return cpuUsage <= resourceLimit.getCpuLimit() && memUsage <= resourceLimit.getMemLimit();
     }
 
     /**
