@@ -158,7 +158,7 @@ public class ProblemServiceImpl implements ProblemService {
         RunResult result = null;
         try {
             long start = System.currentTimeMillis();
-            while (null == (result = SUBMIT_RESULT.get(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getProblemId().toString())))) {
+            while (null == (result = SUBMIT_RESULT.get(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getId().toString())))) {
                 if (System.currentTimeMillis() - start > 60 * 1000) {
                     break;
                 }
@@ -168,7 +168,7 @@ public class ProblemServiceImpl implements ProblemService {
             log.warn(e.toString());
         }
         if (result != null) {
-            SUBMIT_RESULT.remove(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getProblemId().toString()));
+            SUBMIT_RESULT.remove(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getId().toString()));
             problemSubmit.setRunMemory(result.getRunMemory());
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
