@@ -25,6 +25,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -125,6 +126,7 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 本次提交情况
      */
     @Override
+    @Transactional
     public Object submit(SubmitDTO submitDTO) {
         UserPO sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         ProblemPO problem = problemRepo.getById(submitDTO.getProblemId());
@@ -139,11 +141,25 @@ public class ProblemServiceImpl implements ProblemService {
                     .problemId(submitDTO.getProblemId())
                     .msg("请不要使用系统命令或者非法字符").build();
         }
+        ProblemSubmitPO problemSubmit = new ProblemSubmitPO();
+        problemSubmit.setProblemId(problem.getId());
+        problemSubmit.setAuthorId(sysUser.getId());
+        problemSubmit.setUsername(sysUser.getUsername());
+        problemSubmit.setCodeBody(submitDTO.getCodeBody());
+        problemSubmit.setCodeLang(submitDTO.getCodeLang());
+        problemSubmitRepo.save(problemSubmit);
         RunResult result = null;
+        try {
+            problemSubmit.setCreateTime(dateFormat.parse(submitDTO.getCreateTime()).getTime());
+        } catch (ParseException e) {
+            log.info(e.toString());
+            problemSubmit.setCreateTime(System.currentTimeMillis());
+        }
+        problemSubmitRepo.save(problemSubmit);
         kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitDTO));
         try {
             long start = System.currentTimeMillis();
-            while (null == (result = SUBMIT_RESULT.get(submitDTO.getAuthorId() + UNDERLINE + submitDTO.getProblemId()))) {
+            while (null == (result = SUBMIT_RESULT.get(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getProblemId().toString())))) {
                 if (System.currentTimeMillis() - start > 60 * 1000) {
                     break;
                 }
@@ -153,14 +169,8 @@ public class ProblemServiceImpl implements ProblemService {
             log.warn(e.toString());
         }
         if (result != null) {
-            SUBMIT_RESULT.remove(submitDTO.getAuthorId() + UNDERLINE + submitDTO.getProblemId());
-            ProblemSubmitPO problemSubmit = new ProblemSubmitPO();
-            problemSubmit.setProblemId(Long.parseLong(result.getProblemId()));
-            problemSubmit.setAuthorId(sysUser.getId());
-            problemSubmit.setUsername(sysUser.getUsername());
-            problemSubmit.setCodeBody(submitDTO.getCodeBody());
+            SUBMIT_RESULT.remove(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getProblemId().toString()));
             problemSubmit.setRunMemory(result.getRunMemory());
-            problemSubmit.setCodeLang(submitDTO.getCodeLang());
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
             try {
@@ -169,7 +179,7 @@ public class ProblemServiceImpl implements ProblemService {
                 log.info(e.toString());
                 problemSubmit.setCreateTime(System.currentTimeMillis());
             }
-            problemSubmitRepo.save(problemSubmit);
+            problemSubmitRepo.updateById(problemSubmit);
             UpdateSubmitVO updateSubmitVO = UpdateSubmitVO.builder().build();
             updateSubmitVO.setProblemId(problemSubmit.getProblemId().toString());
             updateSubmitVO.setAuthorId(problemSubmit.getAuthorId().toString());
@@ -185,6 +195,10 @@ public class ProblemServiceImpl implements ProblemService {
             result.setSubmitId(problemSubmit.getId().toString());
         }
         return result;
+    }
+
+    private String getSubmitKey(String userId, String problemId, String submitId) {
+        return userId + UNDERLINE + problemId + UNDERLINE + submitId;
     }
 
     /**
@@ -384,10 +398,10 @@ public class ProblemServiceImpl implements ProblemService {
     public List<SubmitVO> getSubmitList(PageParams pageParams) {
         Page<ProblemSubmitPO> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<ProblemSubmitPO> submitList = problemSubmitRepo.getSubmitList(page,
-                StringUtils.isEmpty(pageParams.getProblemId()) ? null: pageParams.getProblemId(),
-                StringUtils.isEmpty(pageParams.getCodeLang()) ? null: pageParams.getCodeLang(),
-                StringUtils.isEmpty(pageParams.getUsername()) ? null: pageParams.getUsername(),
-                StringUtils.isEmpty(pageParams.getVerdict()) ? null: pageParams.getVerdict());
+                StringUtils.isEmpty(pageParams.getProblemId()) ? null : pageParams.getProblemId(),
+                StringUtils.isEmpty(pageParams.getCodeLang()) ? null : pageParams.getCodeLang(),
+                StringUtils.isEmpty(pageParams.getUsername()) ? null : pageParams.getUsername(),
+                StringUtils.isEmpty(pageParams.getVerdict()) ? null : pageParams.getVerdict());
         return submitToVOList(submitList.getRecords());
     }
 
