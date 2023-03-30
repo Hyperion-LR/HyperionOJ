@@ -147,8 +147,6 @@ public class ProblemServiceImpl implements ProblemService {
         problemSubmit.setUsername(sysUser.getUsername());
         problemSubmit.setCodeBody(submitDTO.getCodeBody());
         problemSubmit.setCodeLang(submitDTO.getCodeLang());
-        problemSubmitRepo.save(problemSubmit);
-        RunResult result = null;
         try {
             problemSubmit.setCreateTime(dateFormat.parse(submitDTO.getCreateTime()).getTime());
         } catch (ParseException e) {
@@ -157,6 +155,7 @@ public class ProblemServiceImpl implements ProblemService {
         }
         problemSubmitRepo.save(problemSubmit);
         kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitDTO));
+        RunResult result = null;
         try {
             long start = System.currentTimeMillis();
             while (null == (result = SUBMIT_RESULT.get(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getProblemId().toString())))) {
