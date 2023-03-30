@@ -40,7 +40,7 @@ public class JobBaseDTO {
 
     private Integer tmSlot;
 
-    private Integer jmMen;
+    private Integer jmMem;
 
     private Integer tmMem;
 
