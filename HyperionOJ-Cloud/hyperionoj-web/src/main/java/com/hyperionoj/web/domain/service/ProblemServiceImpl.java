@@ -196,10 +196,6 @@ public class ProblemServiceImpl implements ProblemService {
         return result;
     }
 
-    private String getSubmitKey(String userId, String problemId, String submitId) {
-        return userId + UNDERLINE + problemId + UNDERLINE + submitId;
-    }
-
     /**
      * 通过kafka接收消息
      *
@@ -210,10 +206,13 @@ public class ProblemServiceImpl implements ProblemService {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
             RunResult message = JSONObject.parseObject((String) kafkaMessage.get(), RunResult.class);
-            SUBMIT_RESULT.put(message.getAuthorId() + UNDERLINE + message.getProblemId(), message);
+            SUBMIT_RESULT.put(getSubmitKey(message.getAuthorId(), message.getProblemId(), message.getSubmitId()), message);
         }
     }
 
+    private String getSubmitKey(String userId, String problemId, String submitId) {
+        return userId + UNDERLINE + problemId + UNDERLINE + submitId;
+    }
 
     /**
      * 添加题目
