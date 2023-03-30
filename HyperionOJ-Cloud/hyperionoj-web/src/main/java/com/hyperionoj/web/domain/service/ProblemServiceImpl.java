@@ -154,6 +154,7 @@ public class ProblemServiceImpl implements ProblemService {
             problemSubmit.setCreateTime(System.currentTimeMillis());
         }
         problemSubmitRepo.save(problemSubmit);
+        submitDTO.setId(problemSubmit.getId().toString());
         kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitDTO));
         RunResult result = null;
         try {
