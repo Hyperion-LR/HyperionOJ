@@ -385,10 +385,10 @@ public class ProblemServiceImpl implements ProblemService {
     public List<SubmitVO> getSubmitList(PageParams pageParams) {
         Page<ProblemSubmitPO> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<ProblemSubmitPO> submitList = problemSubmitRepo.getSubmitList(page,
-                pageParams.getProblemId(),
-                pageParams.getCodeLang(),
-                pageParams.getUsername(),
-                pageParams.getVerdict());
+                StringUtils.isEmpty(pageParams.getProblemId()) ? null: pageParams.getProblemId(),
+                StringUtils.isEmpty(pageParams.getCodeLang()) ? null: pageParams.getCodeLang(),
+                StringUtils.isEmpty(pageParams.getUsername()) ? null: pageParams.getUsername(),
+                StringUtils.isEmpty(pageParams.getVerdict()) ? null: pageParams.getVerdict());
         return submitToVOList(submitList.getRecords());
     }
 
