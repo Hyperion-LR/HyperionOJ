@@ -73,10 +73,10 @@ public class FlinkJobSubmitCommand {
                 String jarName = jobWorking.getJarName();
                 String mainArgs = jobWorking.getMainArgs();
                 Integer parallelism = jobWorking.getParallelism();
-                Integer jmMen = jobWorking.getJmMem();
+                Integer jmMem = jobWorking.getJmMem();
                 Integer tmMem = jobWorking.getTmMem();
                 Integer tmSlot = jobWorking.getTmSlot();
-                String[] flinkArgs = getParamStrFromRuntime(flinkConfig.getPath(), jmMen, tmMem, tmSlot, parallelism, jarName, mainClass, mainArgs);
+                String[] flinkArgs = getParamStrFromRuntime(flinkConfig.getPath(), jmMem, tmMem, tmSlot, parallelism, jarName, mainClass, mainArgs);
                 executeLog = submitJarJobStart(job.getName(), flinkArgs, workDir, util);
             }
 

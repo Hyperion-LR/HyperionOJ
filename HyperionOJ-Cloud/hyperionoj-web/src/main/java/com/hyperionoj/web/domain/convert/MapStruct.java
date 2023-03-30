@@ -272,7 +272,7 @@ public class MapStruct {
                 .type(jobBaseDTO.getType())
                 .flinkId(jobBaseDTO.getFlinkId())
                 .tmSlot(jobBaseDTO.getTmSlot())
-                .jmMem(jobBaseDTO.getJmMen())
+                .jmMem(jobBaseDTO.getJmMem())
                 .tmMem(jobBaseDTO.getTmMem())
                 .parallelism(jobBaseDTO.getParallelism())
                 .jarName(jobBaseDTO.getJarName())

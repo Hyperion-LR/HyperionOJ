@@ -71,7 +71,7 @@ public class JobOperationServiceImpl implements JobOperationService {
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         jobBaseDTO.setOwnerId(userPO.getId().toString());
         jobBaseDTO.setStatus(JobStatusEnum.NEW.getStatus());
-        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
+        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMem(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
         jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
         jobBasePO.setCreateTime(System.currentTimeMillis());
@@ -98,7 +98,7 @@ public class JobOperationServiceImpl implements JobOperationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobBaseVO update(JobBaseDTO jobBaseDTO) throws Exception {
-        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
+        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMem(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
         jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
         if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
             throw new JobResourceNotEnoughException();
