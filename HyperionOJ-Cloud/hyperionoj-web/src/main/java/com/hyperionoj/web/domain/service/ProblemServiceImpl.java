@@ -153,6 +153,7 @@ public class ProblemServiceImpl implements ProblemService {
             log.warn(e.toString());
         }
         if (result != null) {
+            SUBMIT_RESULT.remove(submitDTO.getAuthorId() + UNDERLINE + submitDTO.getProblemId());
             ProblemSubmitPO problemSubmit = new ProblemSubmitPO();
             problemSubmit.setProblemId(Long.parseLong(result.getProblemId()));
             problemSubmit.setAuthorId(sysUser.getId());

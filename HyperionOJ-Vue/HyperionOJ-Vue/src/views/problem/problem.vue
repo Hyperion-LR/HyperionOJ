@@ -29,15 +29,15 @@
         </el-main>
 
         <el-main>
-            <el-form :model="submit" label-width="120px">
+            <el-form :model="submitInfo" label-width="120px">
                 <el-row>
-                    <el-select v-model="submit.codeLang" placeholder="语言类型" style="width: 20%">
+                    <el-select v-model="submitInfo.codeLang" placeholder="语言类型" style="width: 20%">
                         <el-option v-for="item in codeLang" :key="item.value" :label="item.label"
                             :value="item.value"></el-option>
                     </el-select>
                 </el-row>
                 <el-row>
-                    <el-input v-model="submit.codeBody" type="textarea" />
+                    <el-input v-model="submitInfo.codeBody" type="textarea" />
                 </el-row>
                 <el-row>
                     <el-button @click="handleSubmit">
@@ -51,10 +51,35 @@
 </template>
 
 <script setup lang="ts">
+import { submit } from '@/api/problem';
+import { SubmitInfo, SubmitResultInfo } from '@/api/problem/types';
+
+
+const data = reactive({
+    submitInfo: {} as SubmitInfo,
+    submitResultInfo: {} as SubmitResultInfo,
+})
+const { submitInfo, submitResultInfo } = toRefs(data);
 
 const handleSubmit = () => {
-    console.log(submit);
+    submitInfo.value.problemId = "1";
+    submit(submitInfo.value).then(({ data }) => {
+        if (data.code == 200) {
+            submitResultInfo.value = data.data;
+            console.log(submitResultInfo.value)
+        } else {
+            console.log('提交失败失败' + data.msg)
+        }
+    });
 }
+
+const handleInit = () => {
+
+}
+
+onMounted(() => {
+    handleInit();
+})
 
 const codeLang = [
     {
@@ -70,22 +95,9 @@ const codeLang = [
     {
         id: 3,
         label: "C++",
-        value: "c++"
+        value: "cpp"
     }
 ]
-
-const problem = {
-    problemId: '',
-    runTime: "1000",
-    runMemory: "128",
-}
-
-const submit = {
-    codeLang: '',
-    codeBody: '',
-    problemId: problem.problemId,
-
-}
 
 </script>
 
