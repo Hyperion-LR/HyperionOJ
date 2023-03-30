@@ -68,16 +68,16 @@ public class JobOperationServiceImpl implements JobOperationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobBaseVO add(JobBaseDTO jobBaseDTO) throws JobResourceNotEnoughException {
-        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
-        jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
-        if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
-            throw new JobResourceNotEnoughException();
-        }
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         jobBaseDTO.setOwnerId(userPO.getId().toString());
         jobBaseDTO.setStatus(JobStatusEnum.NEW.getStatus());
         JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
         jobBasePO.setCreateTime(System.currentTimeMillis());
+        jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
+        jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
+        if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
+            throw new JobResourceNotEnoughException();
+        }
         jobBaseRepo.save(jobBasePO);
         //新建状态
         JobWorkingPO jobWorkingPO = JobWorkingPO.builder()
