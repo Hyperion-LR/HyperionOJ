@@ -6,8 +6,8 @@
                     <span @click="clickSubmit(scope.row.id)" style="cursor: pointer;">{{ scope.row.id }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="state" label="结果" width="180" />
-            <el-table-column prop="time" label="time" />
+            <el-table-column prop="verdict" label="结果" width="180" />
+            <el-table-column prop="createTime" label="time" />
         </el-table>
     </div>
 </template>
@@ -34,11 +34,13 @@ onMounted(() => {
 
 const handleSubmitList = () => {
     pageParam.value.problemId = '1';
+    pageParam.value.authorId = "15570357290";
     getSubmitList(pageParam.value).then(({ data }) => {
         if (data.code == 200) {
             submitInfo.value = data.data;
+            console.log(submitInfo.value)
         } else {
-            console.log('获取题目数量失败' + data.msg)
+            console.log('获取提交列表失败' + data.msg)
         }
     });
 }

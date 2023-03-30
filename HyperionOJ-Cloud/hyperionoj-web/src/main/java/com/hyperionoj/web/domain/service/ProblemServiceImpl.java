@@ -128,10 +128,8 @@ public class ProblemServiceImpl implements ProblemService {
     public Object submit(SubmitDTO submitDTO) {
         UserPO sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         ProblemPO problem = problemRepo.getById(submitDTO.getProblemId());
-        submitDTO.setRunTime(problem.getRunTime());
-        submitDTO.setRunMemory(problem.getRunMemory());
+        ProblemVO problemVO = MapStruct.toVO(problem);
         submitDTO.setCaseNumber(problem.getCaseNumber());
-        ProblemVO problemVO = MapStruct.toVO(problemRepo.getById(submitDTO.getProblemId()));
         submitDTO.setCreateTime(dateFormat.format(System.currentTimeMillis()));
         submitDTO.setRunTime(problemVO.getRunTime());
         submitDTO.setRunMemory(problemVO.getRunMemory());

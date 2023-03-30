@@ -40,3 +40,17 @@ export interface SubmitInfo {
     verdict: string,
     createTime: string
 }
+
+
+export interface SubmitResultInfo {
+    submitId: string,
+    authorId: string,
+    problemId: string,
+    codeLang: string,
+    codeBody: string,
+    runTime: string,
+    runMemory: string,
+    caseNumber: string,
+    verdict: string,
+    submitTime: string
+}

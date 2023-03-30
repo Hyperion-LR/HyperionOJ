@@ -53,10 +53,11 @@ onMounted(() => {
 })
 
 const handleProblemDetail = () => {
-    const jobId = '1';
+    const jobId = '1638461422685437953';
     getJobDetail(jobId).then(({ data }) => {
         if (data.code == 200) {
             jobInfo.value = data.data;
+            console.log(jobInfo.value)
         } else {
             console.log('获取题目详情失败' + data.msg)
         }

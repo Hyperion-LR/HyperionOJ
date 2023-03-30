@@ -2,7 +2,7 @@ import { Result } from "@/model";
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
 import { PageParam } from "../pageParam/types";
-import { CategoryInfo, ProblemInfo, SubmitInfo } from "./types";
+import { CategoryInfo, ProblemInfo, SubmitInfo, SubmitResultInfo } from "./types";
 
 
 /**
@@ -52,13 +52,28 @@ export function getProblemDetail(problemId: string): AxiosPromise<Result<Problem
 }
 
 /**
- * 获取题目详情
+ * 获取提交列表
  * @param problemId 题目id
  * @returns 题目详情信息
  */
-export function getSubmitList(problemId: string): AxiosPromise<Result<SubmitInfo>>{
+export function getSubmitList(pageParam: PageParam): AxiosPromise<Result<SubmitInfo[]>>{
     return request({
-        url: `/problem/${problemId}`,
-        method: "get"
+        url: `/problem/submits`,
+        method: "get",
+        params: pageParam
     });
 }
+
+/**
+ * 提交代码
+ * @param problemId 题目id
+ * @returns 题目详情信息
+ */
+export function submit(submitInfo: SubmitInfo): AxiosPromise<Result<SubmitResultInfo>>{
+    return request({
+        url: `/problem/submit`,
+        method: "post",
+        data: submitInfo
+    });
+}
+

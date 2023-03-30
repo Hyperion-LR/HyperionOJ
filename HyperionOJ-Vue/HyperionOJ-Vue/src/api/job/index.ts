@@ -23,7 +23,7 @@ export function getJobList(pageParam: PageParam): AxiosPromise<Result<JobInfo[]>
  */
 export function getJobDetail(jobId: string): AxiosPromise<Result<JobInfo>>{
     return request({
-        url: `/problem/${jobId}`,
+        url: `/job/${jobId}`,
         method: "get"
     });
 }
