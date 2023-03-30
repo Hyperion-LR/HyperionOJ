@@ -71,10 +71,10 @@ public class JobOperationServiceImpl implements JobOperationService {
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         jobBaseDTO.setOwnerId(userPO.getId().toString());
         jobBaseDTO.setStatus(JobStatusEnum.NEW.getStatus());
-        JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
-        jobBasePO.setCreateTime(System.currentTimeMillis());
         jobBaseDTO.setMemUsage(jobResourceService.getMenUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getJmMen(), jobBaseDTO.getTmMem(), jobBaseDTO.getTmSlot()));
         jobBaseDTO.setCpuUsage(jobResourceService.getCpuUsage(jobBaseDTO.getParallelism(), jobBaseDTO.getTmSlot()));
+        JobBasePO jobBasePO = MapStruct.toJobBasePO(jobBaseDTO);
+        jobBasePO.setCreateTime(System.currentTimeMillis());
         if (!jobResourceService.jobResourceEnoughCheck(jobBaseDTO)) {
             throw new JobResourceNotEnoughException();
         }
