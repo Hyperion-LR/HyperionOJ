@@ -138,6 +138,7 @@ public class JobEventListener implements Runnable{
             if(!JobStatusEnum.RUNNING.getStatus().equals(jobState)){
                 // 如果不是Running状态说明可能已经停止需要更新信息并告警通知
                 jobBasePO.setFlinkUrl("");
+                jobWorkingPO.setApplicationId("");
                 jobBasePO.setStatus(Objects.requireNonNull(JobStatusEnum.getJobStatusEnum(jobState)).getStatus());
                 jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.RUN_FAILED);
                 jobBaseRepo.updateById(jobBasePO);
