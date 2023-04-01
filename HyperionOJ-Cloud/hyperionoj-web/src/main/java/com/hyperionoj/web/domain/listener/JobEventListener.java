@@ -137,7 +137,7 @@ public class JobEventListener implements Runnable{
             String jobState = SubmitUtil.parseData(stdOut, Application_STATE);
             if(!JobStatusEnum.RUNNING.getStatus().equals(jobState)){
                 // 如果不是Running状态说明可能已经停止需要更新信息并告警通知
-                jobBasePO.setFlinkUrl("http://39.98.181.188:2280/proxy/" + applicationId);
+                jobBasePO.setFlinkUrl("");
                 jobBasePO.setStatus(Objects.requireNonNull(JobStatusEnum.getJobStatusEnum(jobState)).getStatus());
                 jobEventComponent.sendJobBaseEvent(jobBasePO, JobEventEnum.RUN_FAILED);
                 jobBaseRepo.updateById(jobBasePO);
