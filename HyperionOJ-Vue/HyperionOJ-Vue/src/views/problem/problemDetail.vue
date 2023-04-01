@@ -13,6 +13,9 @@
 <script setup lang="ts">
 import { getProblemDetail } from "@/api/problem";
 import { ProblemInfo } from "@/api/problem/types";
+
+const route = useRoute();
+
 const data = reactive({
     problemInfo: {} as ProblemInfo
 })
@@ -23,7 +26,7 @@ onMounted(() => {
 })
 
 const handleProblemDetail = () => {
-    const problemId = '1';
+    const problemId = route.params.id as string;
     getProblemDetail(problemId).then(({ data }) => {
         if (data.code == 200) {
             problemInfo.value = data.data;

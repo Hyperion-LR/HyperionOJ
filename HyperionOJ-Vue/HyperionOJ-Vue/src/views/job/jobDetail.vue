@@ -10,31 +10,39 @@
             </el-text>
         </el-row>
         <el-form-item label="jar文件">
-            <el-input v-model="jobInfo.jarName" />
-            <el-upload class="upload-demo" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple>
-                <el-button type="primary">Click to upload</el-button>
+            <el-upload ref="uploadRef" class="upload-demo" :action="`/job/resource/${jobId}`" :auto-upload="false"
+                accept=".jar" :http-request="handleUpload">
+                <template #trigger>
+                    <el-button type="primary">提交jar文件</el-button>
+                </template>
             </el-upload>
         </el-form-item>
+        <el-form-item label="jar名称">
+            <el-input v-model="jobInfo.jarName" disabled />
+        </el-form-item>
         <el-form-item label="jar主类">
-            <el-input v-model="jobInfo.mainClass" type="textarea" />
+            <el-input v-model="jobUpdateInfo.mainClass" type="textarea" />
         </el-form-item>
         <el-form-item label="jar运行参数">
-            <el-input v-model="jobInfo.mainArgs" type="textarea" />
+            <el-input v-model="jobUpdateInfo.mainArgs" type="textarea" />
         </el-form-item>
         <el-form-item label="solt">
-            <el-input v-model="jobInfo.tmSlot" />
+            <el-input v-model="jobUpdateInfo.tmSlot" />
         </el-form-item>
         <el-form-item label="job manager 内存">
-            <el-input v-model="jobInfo.jmMem" />
+            <el-input v-model="jobUpdateInfo.jmMem" />
         </el-form-item>
         <el-form-item label="task manager 内存">
-            <el-input v-model="jobInfo.tmMem" />
+            <el-input v-model="jobUpdateInfo.tmMem" />
         </el-form-item>
         <el-form-item label="并行度">
-            <el-input v-model="jobInfo.parallelism" />
+            <el-input v-model="jobUpdateInfo.parallelism" />
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="runJob">运行</el-button>
+            <el-button type="primary" @click="handleSaveJob">保存</el-button>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="handleRunJob">运行</el-button>
         </el-form-item>
         <el-form-item>
             <el-dialog v-model="deleteJobVisible">
@@ -54,44 +62,122 @@
 </template>
 
 <script setup lang="ts">
-import { deleteJob, getJobDetail } from '@/api/job';
-import { JobInfo } from '@/api/job/types';
+import { actionJob, deleteJob, getJobDetail, saveJob, uploadJar } from '@/api/job';
+import { JobActionInfo, JobInfo } from '@/api/job/types';
 import { reactive } from 'vue'
 import router from "@/router";
+import { UploadRequestOptions, UploadInstance } from 'element-plus';
+
+const uploadRef = ref<UploadInstance>()
+
+const route = useRoute();
+
+const jobId = route.params.id as string;
 
 const data = reactive({
     jobInfo: {} as JobInfo,
+    jobUpdateInfo: {} as JobInfo,
+    jobActionInfo: {} as JobActionInfo,
     deleteJobVisible: false,
 })
-const { jobInfo, deleteJobVisible } = toRefs(data);
+const { jobInfo, jobUpdateInfo, jobActionInfo, deleteJobVisible } = toRefs(data);
 
 onMounted(() => {
-    handleProblemDetail();
+    handleJobDetail();
+    setInterval(() => {
+        heartbeatJob()
+    }, 3000);
 })
 
-const handleProblemDetail = () => {
-
-
-    const jobId = '1638461422685437953';
+const handleJobDetail = () => {
     getJobDetail(jobId).then(({ data }) => {
         if (data.code == 200) {
             jobInfo.value = data.data;
-            console.log(jobInfo.value)
+            jobUpdateInfo.value.id = jobInfo.value.id;
+            jobUpdateInfo.value.name = jobInfo.value.name;
+            jobUpdateInfo.value.description = jobInfo.value.description;
+            jobUpdateInfo.value.ownerId = jobInfo.value.ownerId;
+            jobUpdateInfo.value.status = jobInfo.value.status;
+            jobUpdateInfo.value.startTime = jobInfo.value.startTime;
+            jobUpdateInfo.value.createTime = jobInfo.value.createTime;
+            jobUpdateInfo.value.cpuUsage = jobInfo.value.cpuUsage;
+            jobUpdateInfo.value.memUsage = jobInfo.value.memUsage;
+            jobUpdateInfo.value.jmMem = jobInfo.value.jmMem;
+            jobUpdateInfo.value.tmMem = jobInfo.value.tmMem;
+            jobUpdateInfo.value.parallelism = jobInfo.value.parallelism;
+            jobUpdateInfo.value.tmSlot = jobInfo.value.tmSlot;
+            jobUpdateInfo.value.flinkUrl = jobInfo.value.flinkUrl;
+            jobUpdateInfo.value.monitorUrl = jobInfo.value.monitorUrl;
+            jobUpdateInfo.value.outerUrl = jobInfo.value.outerUrl;
+            jobUpdateInfo.value.type = jobInfo.value.type;
+            jobUpdateInfo.value.jarName = jobInfo.value.jarName;
+            jobUpdateInfo.value.mainClass = jobInfo.value.mainClass;
+            jobUpdateInfo.value.mainArgs = jobInfo.value.mainArgs;
+            jobUpdateInfo.value.userSql = jobInfo.value.userSql;
         } else {
-            console.log('获取题目详情失败' + data.msg)
+            console.log('获取job详情失败' + data.msg);
         }
     });
 }
 
-const runJob = () => {
-    console.log('开始运行!')
+
+const heartbeatJob = () => {
+    getJobDetail(jobId).then(({ data }) => {
+        if (data.code == 200) {
+            jobInfo.value = data.data;
+            jobActionInfo.value.jobId = jobInfo.value.id;
+            if(jobInfo.value.status != "RUNNING"){
+                jobActionInfo.value.action = "START";
+            }else{
+                jobActionInfo.value.action = "STOP";
+                jobInfo.value.flinkUrl = "";
+            }
+        } else {
+            console.log('获取job详情失败' + data.msg);
+        }
+    });
+}
+
+const handleSaveJob = () => {
+    uploadRef.value?.submit();
+    saveJob(jobUpdateInfo.value).then(({ data }) => {
+        if (data.code == 200) {
+            jobInfo.value = data.data;
+        } else {
+            console.log('获取job详情失败' + data.msg)
+        }
+    });
+}
+
+function handleUpload(options: UploadRequestOptions): XMLHttpRequest | Promise<unknown> {
+    let formData = new FormData();
+    formData.append("resourceList", options.file);
+    jobUpdateInfo.value.jarName = options.file.name;
+    uploadJar(jobUpdateInfo.value.id, formData).then(({ data }) => {
+        if (data.code == 200) {
+            console.log('上传成功' + data.msg)
+        } else {
+            console.log('上传失败' + data.msg)
+        }
+    });
+    return new XMLHttpRequest();
+}
+
+const handleRunJob = () => {
+    actionJob(jobActionInfo.value).then(({ data }) => {
+        if (data.code == 200) {
+            console.log('启动成功' + data.msg)
+        } else {
+            console.log('启动失败' + data.msg)
+        }
+    });
 }
 
 const handeldeleteJob = () => {
-    const jobId = '1638461422685437953';
-    deleteJob(jobId).then(({ data }) => {
+    deleteJob(jobInfo.value.id).then(({ data }) => {
         if (data.code == 200) {
             console.log('删除成功' + data.msg)
+            deleteJobVisible.value = false;
             router.push({ path: `/job` })
         } else {
             console.log('删除失败' + data.msg)

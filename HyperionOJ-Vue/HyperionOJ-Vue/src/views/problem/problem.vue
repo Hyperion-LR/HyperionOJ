@@ -1,20 +1,20 @@
 <template>
     <el-container>
         <el-main>
-            <el-menu default-active="3" class="el-menu-demo" mode="horizontal" router>
-                <el-menu-item index="/problem/{{router.params.id}}/detail">
+            <el-menu :default-active="route.path" class="el-menu-demo" mode="horizontal" router>
+                <el-menu-item :index="`/problem/${route.params.id}/detail`">
                     <el-icon>
                         <setting />
                     </el-icon>
                     <span>题目描述</span>
                 </el-menu-item>
-                <el-menu-item index="/problem/{{router.params.id}}/comment">
+                <el-menu-item :index="`/problem/${route.params.id}/comment`">
                     <el-icon>
                         <setting />
                     </el-icon>
                     <span>评论区</span>
                 </el-menu-item>
-                <el-menu-item index="/problem/{{router.params.id}}/submit">
+                <el-menu-item :index="`/problem/${route.params.id}/submit`">
                     <el-icon>
                         <setting />
                     </el-icon>
@@ -44,6 +44,11 @@
                         提交
                     </el-button>
                 </el-row>
+                <el-row>
+                    <el-card  class="card-box">
+                        运行结果: {{ submitResultInfo.verdict }}
+                    </el-card>
+                </el-row>
             </el-form>
 
         </el-main>
@@ -54,6 +59,10 @@
 import { submit } from '@/api/problem';
 import { SubmitInfo, SubmitResultInfo } from '@/api/problem/types';
 
+const route = useRoute();
+
+console.log(route);
+
 
 const data = reactive({
     submitInfo: {} as SubmitInfo,
@@ -62,13 +71,13 @@ const data = reactive({
 const { submitInfo, submitResultInfo } = toRefs(data);
 
 const handleSubmit = () => {
-    submitInfo.value.problemId = "1";
+    submitInfo.value.problemId = route.params.id as string;
     submit(submitInfo.value).then(({ data }) => {
         if (data.code == 200) {
             submitResultInfo.value = data.data;
             console.log(submitResultInfo.value)
         } else {
-            console.log('提交失败失败' + data.msg)
+            console.log("提交失败" + data.msg)
         }
     });
 }

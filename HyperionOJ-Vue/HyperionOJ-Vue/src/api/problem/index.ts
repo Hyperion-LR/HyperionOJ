@@ -77,3 +77,15 @@ export function submit(submitInfo: SubmitInfo): AxiosPromise<Result<SubmitResult
     });
 }
 
+/**
+ * 获取提交详情
+ * @param problemId 题目id
+ * @returns 题目详情信息
+ */
+export function getSubmit(submitId: string): AxiosPromise<Result<SubmitInfo>>{
+    return request({
+        url: `/problem/submit/${submitId}`,
+        method: "get"
+    });
+}
+

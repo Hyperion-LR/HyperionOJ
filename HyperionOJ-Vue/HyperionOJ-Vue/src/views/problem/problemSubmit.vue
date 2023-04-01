@@ -18,6 +18,11 @@ import { PageParam } from "@/api/pageParam/types";
 import { getSubmitList } from "@/api/problem";
 import { SubmitInfo } from "@/api/problem/types";
 import router from "@/router";
+import useStore from "@/store";
+
+const route = useRoute();
+
+const { user } = useStore();
 
 const data = reactive({
     pageParam: {
@@ -33,8 +38,8 @@ onMounted(() => {
 })
 
 const handleSubmitList = () => {
-    pageParam.value.problemId = '1';
-    pageParam.value.authorId = "15570357290";
+    pageParam.value.problemId = route.params.id as string;
+    pageParam.value.authorId = user.id;
     getSubmitList(pageParam.value).then(({ data }) => {
         if (data.code == 200) {
             submitInfo.value = data.data;

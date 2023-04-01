@@ -52,7 +52,7 @@ const searchProblem = () => {
 }
 
 const clickProblem = (id: number) => {
-    router.push({ path: `/problem/${id}` })
+    router.push({ path: `/problem/${id}/detail` })
 }
 
 const handleProbelmNumber = () => {

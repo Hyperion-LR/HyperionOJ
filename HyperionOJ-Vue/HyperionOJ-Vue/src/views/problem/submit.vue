@@ -4,17 +4,17 @@
             <el-card id="提交记录">
                 <el-row>
                     <el-descriptions>
-                        <el-descriptions-item label="结果">{{ submitResult.status }}</el-descriptions-item>
-                        <el-descriptions-item label="语言">{{ submitResult.codeLang }}</el-descriptions-item>
-                        <el-descriptions-item label="运行时间">{{ submitResult.runtime }}</el-descriptions-item>
-                        <el-descriptions-item label="提交时间">{{ submitResult.submitTime }}</el-descriptions-item>
+                        <el-descriptions-item label="结果">{{ submitInfo.verdict }}</el-descriptions-item>
+                        <el-descriptions-item label="语言">{{ submitInfo.codeLang }}</el-descriptions-item>
+                        <el-descriptions-item label="运行时间">{{ submitInfo.runTime }}</el-descriptions-item>
+                        <el-descriptions-item label="提交时间">{{ submitInfo.createTime }}</el-descriptions-item>
                     </el-descriptions>
                 </el-row>
                 <el-row>
                     <el-card>
                         <el-descriptions>
                             <el-descriptions-item label="代码">
-                                {{ submitResult.codeBody }}
+                                {{ submitInfo.codeBody }}
                             </el-descriptions-item>
                         </el-descriptions>
                     </el-card>
@@ -24,15 +24,31 @@
     </el-main>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts">import { getSubmit } from '@/api/problem';
+import { SubmitInfo } from '@/api/problem/types';
 
-const submitResult = {
-    status: 'ACCEPT',
-    runtime: '52ms',
-    codeLang: 'Java',
-    submitTime: '2023-3-26 16:23:12',
-    codeBody: ''
+const route = useRoute();
+
+const data = reactive({
+    submitInfo: {} as SubmitInfo,
+})
+const {  submitInfo } = toRefs(data);
+
+const handleGetSubmit = () => {
+    const submit = route.params.id as string;
+    getSubmit(submit).then(({ data }) => {
+        if (data.code == 200) {
+            submitInfo.value = data.data;
+            console.log(submitInfo.value)
+        } else {
+            console.log("获取提交详情失败" + data.msg)
+        }
+    });
 }
+
+onMounted(() => {
+    handleGetSubmit();
+})
 
 </script>
 

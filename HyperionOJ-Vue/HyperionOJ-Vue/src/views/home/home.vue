@@ -2,7 +2,7 @@
     <div class="app-wrapper">
         <el-container>
             <el-aside width="10vw">
-                <el-menu class="el-menu-vertical-demo" router>
+                <el-menu class="el-menu-vertical-demo" router :default-active="route.path">
                     <el-menu-item index="/problem">
                         <el-icon>
                             <setting />
@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute();
 </script>
 
 <style scoped>

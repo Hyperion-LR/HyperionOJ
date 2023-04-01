@@ -21,3 +21,9 @@ export interface JobInfo {
     mainArgs: string,
     userSql: string
 }
+
+export interface JobActionInfo {
+    jobId: string,
+    action: string,
+    startType: string
+}
