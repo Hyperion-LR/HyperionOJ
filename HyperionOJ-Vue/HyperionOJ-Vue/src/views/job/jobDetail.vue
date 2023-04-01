@@ -42,7 +42,7 @@
             <el-button type="primary" @click="handleSaveJob">保存</el-button>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="handleRunJob">运行</el-button>
+            <el-button type="primary" @click="handleRunJob">{{jobActionInfo.action === "STOP" ? "结束":"运行"}}</el-button>
         </el-form-item>
         <el-form-item>
             <el-dialog v-model="deleteJobVisible">
@@ -128,9 +128,9 @@ const heartbeatJob = () => {
             jobActionInfo.value.jobId = jobInfo.value.id;
             if(jobInfo.value.status != "RUNNING"){
                 jobActionInfo.value.action = "START";
+                jobInfo.value.flinkUrl = "";
             }else{
                 jobActionInfo.value.action = "STOP";
-                jobInfo.value.flinkUrl = "";
             }
         } else {
             console.log('获取job详情失败' + data.msg);
