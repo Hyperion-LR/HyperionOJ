@@ -61,7 +61,6 @@ public class FlinkTaskServiceImpl implements FlinkTaskService {
      * @return 启动结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public JobActionCodeEnum startJob(JobActionDTO jobActionDTO) {
         UserPO userPO = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         Long jobId = jobActionDTO.getJobId();
