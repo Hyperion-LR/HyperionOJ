@@ -16,6 +16,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.0.33",
     "pinia-plugin-persistedstate": "^3.1.0",
+    "stylus": "^0.59.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
