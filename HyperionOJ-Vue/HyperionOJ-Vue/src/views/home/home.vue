@@ -5,13 +5,13 @@
                 <el-menu class="el-menu-vertical-demo" router :default-active="route.path">
                     <el-menu-item index="/problem">
                         <el-icon>
-                            <setting />
+                            <Notebook />
                         </el-icon>
                         <span>问题</span>
                     </el-menu-item>
                     <el-menu-item index="/job">
                         <el-icon>
-                            <setting />
+                            <List/>
                         </el-icon>
                         <span>任务</span>
                     </el-menu-item>

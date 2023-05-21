@@ -3,7 +3,7 @@
     <el-container>
 
       <el-dialog v-model="loginVisible" title="登录">
-        <el-form :model="loginParam">
+        <el-form :model="loginParam" label-position="top">
           <el-form-item label="邮箱或手机号码">
             <el-input v-model="loginParam.account" />
           </el-form-item>
@@ -22,7 +22,7 @@
       </el-dialog>
 
       <el-dialog v-model="regiestVisible" title="注册">
-        <el-form :model="regiestParam">
+        <el-form :model="regiestParam" label-position="top">
           <el-form-item label="手机号码">
             <el-input v-model="regiestParam.account" />
           </el-form-item>
