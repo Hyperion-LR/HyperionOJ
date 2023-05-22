@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @TableName("admin")
 public class AdminPO {
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private String name;

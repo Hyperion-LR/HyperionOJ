@@ -40,11 +40,21 @@ public class ProblemController {
     /**
      * 题目列表
      *
-     * @param pageParams 分页参数
      * @return 返回查询分页
      */
     @GetMapping("/list")
-    public Result getProblemList(@RequestBody PageParams pageParams) {
+    public Result getProblemList(@RequestParam(value = "page") Integer page,
+                                 @RequestParam(value = "pageSize") Integer pageSize,
+                                 @RequestParam(value = "level", required = false) Integer level,
+                                 @RequestParam(value = "categoryId", required = false) String categoryId,
+                                 @RequestParam(value = "tagId", required = false) String tagId) {
+        PageParams pageParams = PageParams.builder()
+                .page(page)
+                .pageSize(pageSize)
+                .level(level)
+                .categoryId(categoryId)
+                .tagId(tagId)
+                .build();
         return Result.success(problemService.getProblemList(pageParams));
     }
 
@@ -104,11 +114,23 @@ public class ProblemController {
     /**
      * 获取提交列表
      *
-     * @param pageParams 分页查询参数
      * @return 根据分页参数返回简要提交信息
      */
     @GetMapping("/submits")
-    public Result getSubmitList(@RequestBody PageParams pageParams) {
+    public Result getSubmitList(@RequestParam(value = "page") Integer page,
+                                @RequestParam(value = "pageSize") Integer pageSize,
+                                @RequestParam(value = "problemId", required = false) String problemId,
+                                @RequestParam(value = "username", required = false) String username,
+                                @RequestParam(value = "codeLang", required = false) String codeLang,
+                                @RequestParam(value = "verdict", required = false) String verdict) {
+        PageParams pageParams = PageParams.builder()
+                .page(page)
+                .pageSize(pageSize)
+                .problemId(problemId)
+                .username(username)
+                .codeLang(codeLang)
+                .verdict(verdict)
+                .build();
         return Result.success(problemService.getSubmitList(pageParams));
     }
 
@@ -161,12 +183,18 @@ public class ProblemController {
     /**
      * 获取评论列表
      *
-     * @param pageParams 分页参数
      * @return 评论列表
      */
     @GetMapping("/comments")
     @Cache(name = REDIS_KAY_PROBLEM_CACHE, time = 60 * 60 * 1000)
-    public Result getComments(@RequestBody PageParams pageParams) {
+    public Result getComments(@RequestParam(value = "page") Integer page,
+                              @RequestParam(value = "pageSize") Integer pageSize,
+                              @RequestParam(value = "problemId", required = false) String problemId) {
+        PageParams pageParams = PageParams.builder()
+                .page(page)
+                .pageSize(pageSize)
+                .problemId(problemId)
+                .build();
         return Result.success(problemService.getCommentList(pageParams));
     }
 

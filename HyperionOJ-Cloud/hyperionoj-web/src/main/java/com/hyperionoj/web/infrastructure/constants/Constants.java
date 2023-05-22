@@ -146,4 +146,31 @@ public interface Constants {
 
     String SUBJECT_UPDATE_PASSWORD = "update_password";
 
+    String START = "START";
+
+    String STOP = "STOP";
+
+    String JOB_TYPE_SQL = "sql";
+
+    String JOB_TYPE_JAR = "jar";
+
+    String JOB_JAR_NAME = ".jar";
+
+    /**
+     * 作业启动URL路径匹配
+     */
+    String URL_PATTERN = "JobManager Web Interface: ";
+
+    /**
+     * 作业启动URL路径匹配
+     */
+    String JobID_PATTERN = "Job has been submitted with JobID ";
+
+    /**
+     * 作业启动yarn application id
+     */
+    String Application_PATTERN = "Submitted application ";
+
+    String Application_STATE = "State : ";
+
 }

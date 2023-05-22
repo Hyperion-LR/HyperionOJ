@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * @author Hyperion
+ */
 @RequestMapping("/admin")
 @RestController
 public class AdminController {

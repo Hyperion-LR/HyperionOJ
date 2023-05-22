@@ -23,7 +23,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:80");
+        registry.addMapping("/**")
+                .allowCredentials(true)
+                .allowedOrigins("*")
+                .allowedMethods(new String[]{"GET", "POST", "PUT", "DELETE"})
+                .allowedHeaders("*")
+                .exposedHeaders("*");
     }
 
     @Override
@@ -35,6 +40,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/problem/comment/delete")
                 .addPathPatterns("/user/update")
                 .addPathPatterns("/user/update/password")
+                .addPathPatterns("/job/*")
         ;
         registry.addInterceptor(adminLoginInterceptor)
                 .addPathPatterns("/admin/**")

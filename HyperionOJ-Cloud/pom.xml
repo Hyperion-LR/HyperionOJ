@@ -21,6 +21,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <log4j2.version>2.17.0</log4j2.version>
         <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+        <spring-cloud-alibaba.version>2.2.9.RELEASE</spring-cloud-alibaba.version>
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
         <spring.version>5.2.15.RELEASE</spring.version>
     </properties>
@@ -41,14 +42,20 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
+                <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-                <version>2.2.9.RELEASE</version>
+                <version>0.9.0.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-                <version>0.2.2.RELEASE</version>
+                <version>0.9.0.RELEASE</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.netflix.ribbon</groupId>
+                        <artifactId>ribbon</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.nacos</groupId>
@@ -111,13 +118,13 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-gateway</artifactId>
-                <version>3.0.1</version>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>2.0.0.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-openfeign</artifactId>
-                <version>3.0.4</version>
+                <artifactId>spring-cloud-loadbalancer</artifactId>
+                <version>2.2.9.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -189,6 +196,16 @@
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
                 <version>7.8.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.calcite</groupId>
+                <artifactId>calcite-linq4j</artifactId>
+                <version>1.34.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-sql-parser</artifactId>
+                <version>1.16.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

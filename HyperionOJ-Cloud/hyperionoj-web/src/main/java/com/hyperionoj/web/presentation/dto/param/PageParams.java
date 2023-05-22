@@ -1,6 +1,9 @@
 package com.hyperionoj.web.presentation.dto.param;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 题目分页查询参数
@@ -9,6 +12,9 @@ import lombok.Data;
  * @date 2021/12/9
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageParams {
 
     /**
@@ -80,5 +86,10 @@ public class PageParams {
      * 比赛结束时间
      */
     private String endTime;
+
+    /**
+     * 作业运行状态
+     */
+    private String status;
 
 }

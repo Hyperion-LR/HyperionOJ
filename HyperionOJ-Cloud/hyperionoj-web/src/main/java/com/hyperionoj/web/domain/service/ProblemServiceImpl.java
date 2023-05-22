@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyperionoj.web.application.api.ProblemService;
 import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.domain.repo.*;
+import com.hyperionoj.web.infrastructure.feign.ProblemCaseFeign;
 import com.hyperionoj.web.presentation.dto.*;
 import com.hyperionoj.web.presentation.dto.param.PageParams;
 import com.hyperionoj.web.presentation.vo.Result;
@@ -24,6 +25,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -74,6 +76,9 @@ public class ProblemServiceImpl implements ProblemService {
     @Resource
     private RedisUtils redisUtils;
 
+    @Resource
+    private ProblemCaseFeign problemCaseFeign;
+
     /**
      * 返回题目列表
      *
@@ -98,7 +103,20 @@ public class ProblemServiceImpl implements ProblemService {
         if (ObjectUtils.isEmpty(id)) {
             return null;
         }
-        return MapStruct.toVO(problemRepo.getById(id));
+        ProblemPO problemPO = problemRepo.getById(id);
+        ProblemVO problemVO = MapStruct.toVO(problemPO);
+        problemVO.setCategory(MapStruct.toVO(categoryRepo.getById(problemVO.getId())));
+        problemVO.setProblemBody(problemPO.getProblemBody());
+        problemVO.setProblemBodyHtml(problemPO.getProblemBodyHtml());
+        List<ProblemTagPO> tagPOList = problemTagRepo.list(new LambdaQueryWrapper<ProblemTagPO>().eq(ProblemTagPO::getProblemId, problemPO.getId()));
+        problemVO.setTags(getTagVoList(tagPOList));
+        return problemVO;
+    }
+
+    private List<TagVO> getTagVoList(List<ProblemTagPO> tagPOList) {
+        return tagPOList.stream().map(tag -> {
+            return MapStruct.toVO(tagRepo.getById(tag.getTagId()));
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -108,13 +126,12 @@ public class ProblemServiceImpl implements ProblemService {
      * @return 本次提交情况
      */
     @Override
+    @Transactional
     public Object submit(SubmitDTO submitDTO) {
         UserPO sysUser = JSONObject.parseObject((String) ThreadLocalUtils.get(), UserPO.class);
         ProblemPO problem = problemRepo.getById(submitDTO.getProblemId());
-        submitDTO.setRunTime(problem.getRunTime());
-        submitDTO.setRunMemory(problem.getRunMemory());
+        ProblemVO problemVO = MapStruct.toVO(problem);
         submitDTO.setCaseNumber(problem.getCaseNumber());
-        ProblemVO problemVO = MapStruct.toVO(problemRepo.getById(submitDTO.getProblemId()));
         submitDTO.setCreateTime(dateFormat.format(System.currentTimeMillis()));
         submitDTO.setRunTime(problemVO.getRunTime());
         submitDTO.setRunMemory(problemVO.getRunMemory());
@@ -124,27 +141,36 @@ public class ProblemServiceImpl implements ProblemService {
                     .problemId(submitDTO.getProblemId())
                     .msg("请不要使用系统命令或者非法字符").build();
         }
-        RunResult result = null;
+        ProblemSubmitPO problemSubmit = new ProblemSubmitPO();
+        problemSubmit.setProblemId(problem.getId());
+        problemSubmit.setAuthorId(sysUser.getId());
+        problemSubmit.setUsername(sysUser.getUsername());
+        problemSubmit.setCodeBody(submitDTO.getCodeBody());
+        problemSubmit.setCodeLang(submitDTO.getCodeLang());
+        try {
+            problemSubmit.setCreateTime(dateFormat.parse(submitDTO.getCreateTime()).getTime());
+        } catch (ParseException e) {
+            log.info(e.toString());
+            problemSubmit.setCreateTime(System.currentTimeMillis());
+        }
+        problemSubmitRepo.save(problemSubmit);
+        submitDTO.setId(problemSubmit.getId().toString());
         kafkaTemplate.send(KAFKA_TOPIC_SUBMIT, JSONObject.toJSONString(submitDTO));
+        RunResult result = null;
         try {
             long start = System.currentTimeMillis();
-            while (null == (result = SUBMIT_RESULT.get(submitDTO.getAuthorId() + UNDERLINE + submitDTO.getProblemId()))) {
-                if (System.currentTimeMillis() - start > 5000) {
+            while (null == (result = SUBMIT_RESULT.get(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getId().toString())))) {
+                if (System.currentTimeMillis() - start > 60 * 1000) {
                     break;
                 }
-                Thread.sleep(1000);
+                Thread.sleep(100);
             }
         } catch (Exception e) {
             log.warn(e.toString());
         }
         if (result != null) {
-            ProblemSubmitPO problemSubmit = new ProblemSubmitPO();
-            problemSubmit.setProblemId(Long.parseLong(result.getProblemId()));
-            problemSubmit.setAuthorId(sysUser.getId());
-            problemSubmit.setUsername(sysUser.getUsername());
-            problemSubmit.setCodeBody(submitDTO.getCodeBody());
+            SUBMIT_RESULT.remove(getSubmitKey(submitDTO.getAuthorId(), submitDTO.getProblemId(), problemSubmit.getId().toString()));
             problemSubmit.setRunMemory(result.getRunMemory());
-            problemSubmit.setCodeLang(submitDTO.getCodeLang());
             problemSubmit.setStatus(result.getVerdict());
             problemSubmit.setRunTime(result.getRunTime());
             try {
@@ -153,7 +179,7 @@ public class ProblemServiceImpl implements ProblemService {
                 log.info(e.toString());
                 problemSubmit.setCreateTime(System.currentTimeMillis());
             }
-            problemSubmitRepo.save(problemSubmit);
+            problemSubmitRepo.updateById(problemSubmit);
             UpdateSubmitVO updateSubmitVO = UpdateSubmitVO.builder().build();
             updateSubmitVO.setProblemId(problemSubmit.getProblemId().toString());
             updateSubmitVO.setAuthorId(problemSubmit.getAuthorId().toString());
@@ -181,10 +207,13 @@ public class ProblemServiceImpl implements ProblemService {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
             RunResult message = JSONObject.parseObject((String) kafkaMessage.get(), RunResult.class);
-            SUBMIT_RESULT.put(message.getAuthorId() + UNDERLINE + message.getProblemId(), message);
+            SUBMIT_RESULT.put(getSubmitKey(message.getAuthorId(), message.getProblemId(), message.getSubmitId()), message);
         }
     }
 
+    private String getSubmitKey(String userId, String problemId, String submitId) {
+        return userId + UNDERLINE + problemId + UNDERLINE + submitId;
+    }
 
     /**
      * 添加题目
@@ -357,30 +386,6 @@ public class ProblemServiceImpl implements ProblemService {
         return commentVO;
     }
 
-    private ProblemCommentPO voToComment(CommentDTO commentDTO) {
-        ProblemCommentPO problemComment = new ProblemCommentPO();
-        problemComment.setProblemId(Long.parseLong(commentDTO.getProblemId()));
-        problemComment.setContent(commentDTO.getContent());
-        problemComment.setAuthorId(Long.parseLong(commentDTO.getAuthor().getId()));
-        problemComment.setIsDelete(0);
-        problemComment.setSupportNumber(0);
-        problemComment.setCreateTime(System.currentTimeMillis());
-        problemComment.setLevel(commentDTO.getLevel());
-        problemComment.setParentId(Long.getLong(commentDTO.getParentId()));
-        if (commentDTO.getToUser() != null) {
-            problemComment.setToUid(Long.parseLong(commentDTO.getToUser().getId()));
-        }
-        if (problemComment.getLevel() == null) {
-            problemComment.setLevel(0);
-        }
-        if (problemComment.getParentId() == null) {
-            problemComment.setParentId(0L);
-        }
-        if (problemComment.getToUid() == null) {
-            problemComment.setToUid(0L);
-        }
-        return problemComment;
-    }
 
     /**
      * 获取提交列表
@@ -392,10 +397,10 @@ public class ProblemServiceImpl implements ProblemService {
     public List<SubmitVO> getSubmitList(PageParams pageParams) {
         Page<ProblemSubmitPO> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<ProblemSubmitPO> submitList = problemSubmitRepo.getSubmitList(page,
-                pageParams.getProblemId(),
-                pageParams.getCodeLang(),
-                pageParams.getUsername(),
-                pageParams.getVerdict());
+                StringUtils.isEmpty(pageParams.getProblemId()) ? null : pageParams.getProblemId(),
+                StringUtils.isEmpty(pageParams.getCodeLang()) ? null : pageParams.getCodeLang(),
+                StringUtils.isEmpty(pageParams.getUsername()) ? null : pageParams.getUsername(),
+                StringUtils.isEmpty(pageParams.getVerdict()) ? null : pageParams.getVerdict());
         return submitToVOList(submitList.getRecords());
     }
 
@@ -594,8 +599,16 @@ public class ProblemServiceImpl implements ProblemService {
      * @param problemId 题目ID
      */
     @Override
-    public Boolean pushProblemCase(Long problemId, MultipartFile multipartFile) {
-        return null;
+    public Boolean pushProblemCase(Long problemId, MultipartFile[] inMultipartFiles, MultipartFile[] outMultipartFiles) {
+        Result result = problemCaseFeign.pushProblemCase(problemId, inMultipartFiles, outMultipartFiles);
+        if ((Boolean) result.getData()) {
+            LambdaUpdateWrapper<ProblemPO> problemPOLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            problemPOLambdaUpdateWrapper.set(ProblemPO::getCaseNumber, inMultipartFiles.length);
+            problemPOLambdaUpdateWrapper.eq(ProblemPO::getId, problemId);
+            problemRepo.update(problemPOLambdaUpdateWrapper);
+            return true;
+        }
+        return false;
     }
 
     /**

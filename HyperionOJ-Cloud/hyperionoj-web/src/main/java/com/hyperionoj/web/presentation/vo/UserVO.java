@@ -21,4 +21,29 @@ public class UserVO {
 
     private String mail;
 
+    /**
+     * 用户注册时间
+     */
+    private String createTime;
+
+    /**
+     * 最后一次登录
+     */
+    private String lastLogin;
+
+    /**
+     * AC题目数量
+     */
+    private Integer problemAcNumber;
+
+    /**
+     * 题目提交次数
+     */
+    private Integer problemSubmitNumber;
+
+    /**
+     * 提交AC次数
+     */
+    private Integer problemSubmitAcNumber;
+
 }

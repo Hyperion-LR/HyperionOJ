@@ -1,6 +1,7 @@
 package com.hyperionoj.judge.service;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Hyperion
@@ -32,5 +33,5 @@ public interface FileService {
      * @param folder 要删除的文件
      * @throws Exception
      */
-    void deleteFolder(File folder) throws Exception;
+    void deleteFolder(File folder) throws IOException;
 }

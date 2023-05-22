@@ -2,6 +2,7 @@ package com.hyperionoj.web.presentation.controller;
 
 import com.hyperionoj.web.application.api.UserService;
 import com.hyperionoj.web.application.api.VerCodeService;
+import com.hyperionoj.web.domain.convert.MapStruct;
 import com.hyperionoj.web.presentation.dto.*;
 import com.hyperionoj.web.presentation.dto.param.LoginParam;
 import com.hyperionoj.web.presentation.dto.param.MailCodeParam;
@@ -61,7 +62,7 @@ public class UserController {
      */
     @GetMapping("find/{id}")
     public Result<UserVO> findUserById(@PathVariable("id") String id) {
-        return Result.success(userService.findUserById(id));
+        return Result.success(MapStruct.toVO(userService.findUserById(id)));
     }
 
     /**
@@ -96,8 +97,13 @@ public class UserController {
      */
     @PostMapping("/mail/code")
     public Result getCode(@RequestBody MailCodeParam mailCodeParam) {
-        verCodeService.getCode(mailCodeParam.getMail(), mailCodeParam.getSubject());
-        return Result.success(null);
+        try{
+            verCodeService.getCode(mailCodeParam.getMail(), mailCodeParam.getSubject());
+            return Result.success(true);
+        }catch (Exception e){
+            return Result.fail(ErrorCode.SYSTEM_ERROR);
+        }
+
     }
 
 }

@@ -18,7 +18,9 @@ public enum ErrorCode {
     NO_PERMISSION(505, "无访问权限"),
     SESSION_TIME_OUT(506, "会话超时"),
     NO_LOGIN(507, "未登录"),
-    USER_FREEZE(508, "账号已经冻结");
+    USER_FREEZE(508, "账号已经冻结"),
+    JOB_USER_RESOURCE_FULL(999, "用户资源配额已满"),
+    JOB_USER_SQL_CHECK(999, "SQL语法错误");
 
     private Integer code;
     private String msg;
@@ -32,15 +34,8 @@ public enum ErrorCode {
         return code;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 }

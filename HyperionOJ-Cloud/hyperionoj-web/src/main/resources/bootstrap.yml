@@ -75,3 +75,6 @@ qiniu:
   bucketName:
   url:
   zone:
+
+jobDir:
+  resource: D:\WorkSpace\Graduation_Design\Project\HyperionOJ\jobResource

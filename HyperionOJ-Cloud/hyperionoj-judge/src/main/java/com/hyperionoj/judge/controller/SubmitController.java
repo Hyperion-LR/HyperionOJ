@@ -1,10 +1,12 @@
 package com.hyperionoj.judge.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.hyperionoj.judge.dto.SubmitDTO;
 import com.hyperionoj.judge.service.SubmitService;
 import com.hyperionoj.judge.vo.Result;
-import com.hyperionoj.judge.dto.SubmitDTO;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 

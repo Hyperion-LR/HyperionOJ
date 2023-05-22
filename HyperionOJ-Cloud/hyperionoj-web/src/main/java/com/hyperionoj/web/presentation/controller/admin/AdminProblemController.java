@@ -110,11 +110,14 @@ public class AdminProblemController {
     /**
      * 上传题目测试点
      *
-     * @param problemId 题目ID
+     * @param inMultipartFiles 输入测试点文件
+     * @param outMultipartFiles 输出测试点文件
      */
     @PostMapping(value = "/case/{problemId}")
-    public Result pushProblemCase(Long problemId, @RequestParam("image") MultipartFile multipartFile){
-        return Result.success(problemService.pushProblemCase(problemId, multipartFile));
+    public Result pushProblemCase(@PathVariable("problemId") Long problemId,
+                                  @RequestParam("caseInList") MultipartFile[] inMultipartFiles,
+                                  @RequestParam("caseOutList") MultipartFile[] outMultipartFiles){
+        return Result.success(problemService.pushProblemCase(problemId, inMultipartFiles, outMultipartFiles));
     }
 
     /**

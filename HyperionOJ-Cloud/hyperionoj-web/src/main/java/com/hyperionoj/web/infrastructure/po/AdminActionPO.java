@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @TableName("admin_action")
 public class AdminActionPO {
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     private Long adminId;

@@ -78,6 +78,7 @@ public class SubmitServiceImpl implements SubmitService {
         }
         runResult.setAuthorId(submit.getAuthorId());
         runResult.setProblemId(Long.valueOf(submit.getProblemId()));
+        runResult.setSubmitId(Long.parseLong(submit.getId()));
         fileService.deleteFolder(new File(saveDir));
         return runResult;
     }

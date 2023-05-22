@@ -6,9 +6,14 @@ import com.hyperionoj.web.presentation.dto.param.RegisterAdminParam;
 import com.hyperionoj.web.presentation.vo.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Hyperion
+ */
 public class MapStruct {
 
     public static CategoryVO toVO(CategoryDTO categoryDTO) {
@@ -133,6 +138,11 @@ public class MapStruct {
                 .username(userPO.getUsername())
                 .avatar(userPO.getAvatar())
                 .mail(userPO.getMail())
+                .problemAcNumber(userPO.getProblemAcNumber())
+                .problemSubmitAcNumber(userPO.getProblemSubmitAcNumber())
+                .problemSubmitNumber(userPO.getProblemSubmitNumber())
+                .lastLogin(getTime(userPO.getLastLogin()))
+                .createTime(getTime(userPO.getCreateTime()))
                 .build();
     }
 
@@ -222,5 +232,83 @@ public class MapStruct {
                 .createTime(submit.getCreateTime().toString())
                 .verdict(submit.getStatus())
                 .build();
+    }
+
+    public static JobBaseVO toVO(JobBasePO jobBasePO) {
+        return JobBaseVO.builder()
+                .id(jobBasePO.getId().toString())
+                .description(jobBasePO.getDescription())
+                .name(jobBasePO.getName())
+                .ownerId(jobBasePO.getOwnerId().toString())
+                .status(jobBasePO.getStatus())
+                .startTime(getTime(jobBasePO.getStartTime()))
+                .createTime(getTime(jobBasePO.getCreateTime()))
+                .cpuUsage(jobBasePO.getCpuUsage())
+                .memUsage(jobBasePO.getMemUsage())
+                .flinkUrl(jobBasePO.getFlinkUrl())
+                .monitorUrl(jobBasePO.getMonitorUrl())
+                .outerUrl(jobBasePO.getOuterUrl())
+                .build();
+    }
+
+    public static JobBasePO toJobBasePO(JobBaseDTO jobBaseDTO) {
+        JobBasePO.JobBasePOBuilder builder = JobBasePO.builder();
+        if(!StringUtils.isEmpty(jobBaseDTO.getId())){
+            builder.id(Long.parseLong(jobBaseDTO.getId()));
+        }
+        return builder
+                .name(jobBaseDTO.getName())
+                .description(jobBaseDTO.getDescription())
+                .ownerId(Long.parseLong(jobBaseDTO.getOwnerId()))
+                .status(jobBaseDTO.getStatus())
+                .cpuUsage(jobBaseDTO.getCpuUsage())
+                .memUsage(jobBaseDTO.getMemUsage())
+                .build();
+    }
+
+    public static JobWorkingPO toJobWorkingPO(JobBaseDTO jobBaseDTO) {
+        return JobWorkingPO.builder()
+                .jobId(Long.parseLong(jobBaseDTO.getId()))
+                .type(jobBaseDTO.getType())
+                .flinkId(jobBaseDTO.getFlinkId())
+                .tmSlot(jobBaseDTO.getTmSlot())
+                .jmMem(jobBaseDTO.getJmMem())
+                .tmMem(jobBaseDTO.getTmMem())
+                .parallelism(jobBaseDTO.getParallelism())
+                .jarName(jobBaseDTO.getJarName())
+                .mainClass(jobBaseDTO.getMainClass())
+                .mainArgs(jobBaseDTO.getMainArgs())
+                .userSql(jobBaseDTO.getUserSql())
+                .build();
+    }
+
+    public static JobBaseVO toVO(JobBasePO jobBasePO, JobWorkingPO jobWorkingPO) {
+        return JobBaseVO.builder()
+                .id(jobBasePO.getId().toString())
+                .name(jobBasePO.getName())
+                .description(jobBasePO.getDescription())
+                .ownerId(jobBasePO.getOwnerId().toString())
+                .status(jobBasePO.getStatus())
+                .startTime(getTime(jobBasePO.getStartTime()))
+                .createTime(getTime(jobBasePO.getCreateTime()))
+                .cpuUsage(jobBasePO.getCpuUsage())
+                .memUsage(jobBasePO.getMemUsage())
+                .tmSlot(jobWorkingPO.getTmSlot())
+                .tmMem(jobWorkingPO.getTmMem())
+                .jmMem(jobWorkingPO.getJmMem())
+                .parallelism(jobWorkingPO.getParallelism())
+                .flinkUrl(jobBasePO.getFlinkUrl())
+                .monitorUrl(jobBasePO.getMonitorUrl())
+                .outerUrl(jobBasePO.getOuterUrl())
+                .type(jobWorkingPO.getType())
+                .jarName(jobWorkingPO.getJarName())
+                .mainClass(jobWorkingPO.getMainClass())
+                .mainArgs(jobWorkingPO.getMainArgs())
+                .userSql(jobWorkingPO.getUserSql())
+                .build();
+    }
+
+    public static String getTime(Long time){
+        return time == null ? null : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time));
     }
 }
