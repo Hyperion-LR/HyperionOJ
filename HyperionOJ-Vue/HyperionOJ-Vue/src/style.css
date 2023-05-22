@@ -27,7 +27,6 @@ a:hover {
 header{
   display: flex;
   place-items: left,center;
-  min-width: 100vw;
   min-height: 5vh;
   font-size: xx-large;
   border-bottom: 1px solid var(--el-border-color);

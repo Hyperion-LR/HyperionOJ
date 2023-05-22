@@ -1,14 +1,14 @@
 <template>
-    <div style="width: 60%">
+    <div style="width: 60%" class="job-list">
         <el-row>
-            <!--搜索框-->
-            <el-input size="default" placeholder="搜索作业" style="width: 50%" />
             <!--搜索按钮-->
-            <el-button size="default" style="width: 20%" @click="searchProblem()">搜索</el-button>
+            <el-button size="default" style="width: 15%" @click="searchProblem()">搜索</el-button>
+            <!--搜索框-->
+            <el-input size="default" placeholder="搜索作业" style="width: 50%" class="job-input"/>
             <!--创建作业按钮-->
-            <el-button size="default" style="width: 20%" @click="createJobVisible = true">创建作业</el-button>
-            <el-dialog v-model="createJobVisible" title="创建作业">
-                <el-form :model="jobInfo">
+            <el-button size="default" style="width: 20%" @click="createJobVisible = true" class="create-job">创建作业</el-button>
+            <el-dialog v-model="createJobVisible" title="创建作业" :style="{margin: 'auto',marginTop: '15px'}">
+                <el-form :model="jobInfo" label-position="top" class="job-form">
                     <el-form-item label="作业名称">
                         <el-input v-model="jobInfo.name" />
                     </el-form-item>
@@ -40,14 +40,14 @@
             </el-dialog>
 
         </el-row>
-        <el-table :data="jobList" stripe>
-            <el-table-column prop="name" label="作业" width="360">
+        <el-table :data="jobList" stripe class="job-table">
+            <el-table-column prop="name" label="作业" width="340">
                 <template #default="scope">
                     <span @click="clickProblem(scope.row.id)" style="cursor: pointer;">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="cpuUsage" label="cpu使用情况" width="120" />
-            <el-table-column prop="memUsage" label="内存使用情况" />
+            <el-table-column prop="memUsage" label="内存使用情况" width="140"/>
             <el-table-column prop="state" label="当前状态" />
         </el-table>
         <el-pagination background layout="prev, pager, next" :total="jobNumber" />

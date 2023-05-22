@@ -2,18 +2,18 @@
     <div class="problem" style="width: 100%">
         <div style="width: 60%">
             <div>
-                <el-select placeholder="选择分类" style="width: 20%">
+                <el-select placeholder="选择分类">
                     <el-option v-for="item in categoryList" :key="item.id" :label="item.categoryName" :value="item.id">
                     </el-option></el-select>
                 <!--搜索框-->
-                <el-input size="default" placeholder="搜索题目" style="width: 60%" />
+                <el-input size="default" placeholder="搜索题目"/>
                 <!--搜索按钮-->
                 <el-button size="default" style="width: 20%" @click="searchProblem()">搜索</el-button>
             </div>
             <el-table :data="problemList" stripe>
-                <el-table-column prop="title" label="题目" width="360">
+                <el-table-column prop="title" label="题目" width="360" >
                     <template #default="scope">
-                        <span @click="clickProblem(scope.row.id)" style="cursor: pointer;">{{ scope.row.title }}</span>
+                        <span @click="clickProblem(scope.row.id)" :style="{cursor: 'pointer', width: '100%', display: 'inline-block'}">{{ scope.row.title }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="problemLevel" label="难度" width="120" />

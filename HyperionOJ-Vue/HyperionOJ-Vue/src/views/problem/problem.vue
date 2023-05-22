@@ -1,22 +1,22 @@
 <template>
     <el-container>
-        <el-main>
+        <el-main style="width: 38%">
             <el-menu :default-active="route.path" class="el-menu-demo" mode="horizontal" router>
                 <el-menu-item :index="`/problem/${route.params.id}/detail`">
                     <el-icon>
-                        <setting />
+                        <Document />
                     </el-icon>
                     <span>题目描述</span>
                 </el-menu-item>
                 <el-menu-item :index="`/problem/${route.params.id}/comment`">
                     <el-icon>
-                        <setting />
+                        <ChatDotSquare />
                     </el-icon>
                     <span>评论区</span>
                 </el-menu-item>
                 <el-menu-item :index="`/problem/${route.params.id}/submit`">
                     <el-icon>
-                        <setting />
+                        <Collection />
                     </el-icon>
                     <span>提交记录</span>
                 </el-menu-item>
@@ -29,17 +29,15 @@
         </el-main>
 
         <el-main>
-            <el-form :model="submitInfo" label-width="120px">
+            <el-form :model="submitInfo" label-width="120px" class="problem-form">
+                <el-row>
+                    <el-input v-model="submitInfo.codeBody" type="textarea" rows="10" />
+                </el-row>
                 <el-row>
                     <el-select v-model="submitInfo.codeLang" placeholder="语言类型" style="width: 20%">
                         <el-option v-for="item in codeLang" :key="item.value" :label="item.label"
                             :value="item.value"></el-option>
                     </el-select>
-                </el-row>
-                <el-row>
-                    <el-input v-model="submitInfo.codeBody" type="textarea" />
-                </el-row>
-                <el-row>
                     <el-button @click="handleSubmit">
                         提交
                     </el-button>
